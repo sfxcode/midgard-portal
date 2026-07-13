@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { logout } = useMongocampAuth()
-const user = useMongocampUser()
+const mongocampStorage = useMongocampStorage()
+const profile = computed(() => mongocampStorage.value.profile)
 
 useSeoMeta({
   title: 'Secured'
@@ -38,10 +39,10 @@ function onLogout() {
           Signed in as
         </p>
         <p class="font-display text-lg text-highlighted">
-          {{ user.user }}
+          {{ profile.user }}
         </p>
         <UBadge
-          v-if="user.isAdmin"
+          v-if="profile.isAdmin"
           class="mt-2"
           color="primary"
           variant="subtle"
@@ -62,6 +63,29 @@ function onLogout() {
           to="/secured/demo"
           variant="subtle"
         />
+      </UCard>
+
+      <UCard v-if="profile.isAdmin" class="max-w-md">
+        <p class="text-sm text-muted mb-1">
+          Administration
+        </p>
+        <p class="text-highlighted mb-3">
+          Manage users and roles for this MongoCamp server.
+        </p>
+        <div class="flex gap-2">
+          <UButton
+            label="Users"
+            icon="i-lucide-users"
+            to="/secured/admin/users"
+            variant="subtle"
+          />
+          <UButton
+            label="Roles"
+            icon="i-lucide-shield"
+            to="/secured/admin/roles"
+            variant="subtle"
+          />
+        </div>
       </UCard>
     </template>
   </UDashboardPanel>

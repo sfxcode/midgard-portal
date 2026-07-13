@@ -53,44 +53,25 @@ useSeoMeta({
   padding: 0;
 }
 
-/* Vertical rhythm for the form itself. */
-.login-form :deep(.formkit-form) {
-  display: flex;
-  flex-direction: column;
-  gap: 1.125rem;
-  width: 100%;
-}
+/* Global formkit.css already handles form/label/help/message/debug styling
+   and typography — everything below is only what's specific to this page:
+   flattening the component's own nested card, and pinning colours instead
+   of theme vars because the card is transparent over a photo (theme text
+   colours would invert and go illegible the moment dark mode is active). */
 
 /* The component's own "Mongocamp Login" heading duplicates ours — hide it. */
 .login-form :deep(.formkit-form > h3) {
   display: none;
 }
 
-.login-form :deep(.formkit-outer) {
-  width: 100%;
-}
-
-.login-form :deep(.formkit-wrapper) {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  width: 100%;
-}
-
 /* FormKit's inner wrapper and Nuxt UI's inline-flex input root both shrink
    to content — stretch them so the fields span the card like the button. */
-.login-form :deep(.formkit-inner),
 .login-form :deep(.formkit-inner [data-slot='root']) {
   width: 100%;
 }
 
-/* Field labels as small engraved ledger capitals, in ink. */
+/* Field labels: pin the ink colour (font/size/spacing come from formkit.css). */
 .login-form :deep(.formkit-label) {
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
   color: #3b3025;
 }
 
@@ -105,7 +86,7 @@ useSeoMeta({
   color: #2a211a;
 }
 
-/* Login is the page's one action: full-width, engraved, wax-seal gold. */
+/* Login is the page's one action: full-width, wax-seal shadow. */
 .login-form :deep(.formkit-actions) {
   width: 100%;
   margin-top: 0.25rem;
@@ -114,33 +95,16 @@ useSeoMeta({
 .login-form :deep(.formkit-actions button[type='submit']) {
   width: 100%;
   justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  letter-spacing: 0.08em;
   padding-block: 0.625rem;
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 1px 2px rgb(46 29 10 / 0.35);
 }
 
-/* Dev-only debug accordion: keep it working, stop it competing. */
-.login-form :deep(.formkit-debug) {
-  margin-top: 0.5rem;
-  opacity: 0.45;
-  transition: opacity 150ms;
-}
-
+/* Debug accordion: pin the ink colour (opacity/hover come from formkit.css). */
 .login-form :deep(.formkit-debug [data-slot='root'] > button) {
   margin-inline: auto;
   width: auto;
   background: transparent;
-  font-size: 0.8125rem;
-  padding-block: 0.25rem;
-  color: #4e4130; /* pinned ink — theme text colours invert in dark mode */
-}
-
-.login-form :deep(.formkit-debug:hover),
-.login-form :deep(.formkit-debug:focus-within) {
-  opacity: 1;
+  color: #4e4130;
 }
 
 /* The component's error line ships as text-2xl red — restyle to a quiet

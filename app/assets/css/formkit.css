@@ -1,0 +1,66 @@
+/*
+ * Global FormKit styling for the RPG parchment/ledger theme (see main.css
+ * for the palette/font tokens). Nuxt UI's own inputs/buttons already pick
+ * up theme colors automatically via nuxtUIInput/etc — this file only styles
+ * FormKit's own wrapper elements (label, help, message, debug, spacing) so
+ * every FormKit form in the app (login, admin user/role modals, ...) reads
+ * consistently, not just the ones with page-specific overrides.
+ */
+
+.formkit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+.formkit-outer,
+.formkit-inner {
+  width: 100%;
+}
+
+.formkit-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+/* Field labels as small engraved ledger capitals. */
+.formkit-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ui-text-toned);
+}
+
+.formkit-help {
+  font-size: 0.75rem;
+  color: var(--ui-text-muted);
+}
+
+.formkit-message {
+  font-size: 0.75rem;
+  color: var(--ui-error);
+}
+
+/* Submit/action buttons read as engraved, wax-seal-style actions. */
+.formkit-actions button[type='submit'] {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* Dev-only debug accordion: keep it working, stop it competing visually. */
+.formkit-debug {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--ui-text-muted);
+  opacity: 0.45;
+  transition: opacity 150ms;
+}
+
+.formkit-debug:hover,
+.formkit-debug:focus-within {
+  opacity: 1;
+}

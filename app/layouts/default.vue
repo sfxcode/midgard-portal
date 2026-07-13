@@ -3,10 +3,12 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 
 const route = useRoute()
 const toast = useToast()
+const mongocampStorage = useMongocampStorage()
+const profile = computed(() => mongocampStorage.value.profile)
 
 const open = ref(false)
 
-const links = [[{
+const links = computed(() => [[{
   label: 'Account',
   icon: 'i-lucide-home',
   to: '/secured',
@@ -14,7 +16,26 @@ const links = [[{
   onSelect: () => {
     open.value = false
   }
-}, {
+}, ...(profile.value.isAdmin
+  ? [{
+      type: 'label' as const,
+      label: 'Administration'
+    }, {
+      label: 'Users',
+      icon: 'i-lucide-users',
+      to: '/secured/admin/users',
+      onSelect: () => {
+        open.value = false
+      }
+    }, {
+      label: 'Roles',
+      icon: 'i-lucide-shield',
+      to: '/secured/admin/roles',
+      onSelect: () => {
+        open.value = false
+      }
+    }]
+  : []), {
   type: 'label',
   label: 'Demo Dashboard'
 }, {
@@ -82,12 +103,12 @@ const links = [[{
   icon: 'i-lucide-book',
   to: 'https://github.com/nuxt-ui-templates/dashboard',
   target: '_blank'
-}]] satisfies NavigationMenuItem[][]
+}]] satisfies NavigationMenuItem[][])
 
 const groups = computed(() => [{
   id: 'links',
   label: 'Go to',
-  items: links.flat().filter(item => item.type !== 'label')
+  items: links.value.flat().filter(item => item.type !== 'label')
 }, {
   id: 'code',
   label: 'Code',
