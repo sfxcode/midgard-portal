@@ -32,13 +32,13 @@ function getRowItems(row: Row<User>) {
       label: 'Actions'
     },
     {
-      label: 'Copy customer ID',
+      label: 'Copy Member ID',
       icon: 'i-lucide-copy',
       onSelect() {
         navigator.clipboard.writeText(row.original.id.toString())
         toast.add({
           title: 'Copied to clipboard',
-          description: 'Customer ID copied to clipboard'
+          description: 'Member ID copied to clipboard'
         })
       }
     },
@@ -46,24 +46,24 @@ function getRowItems(row: Row<User>) {
       type: 'separator'
     },
     {
-      label: 'View customer details',
+      label: 'View Member Details',
       icon: 'i-lucide-list'
     },
     {
-      label: 'View customer payments',
-      icon: 'i-lucide-wallet'
+      label: 'View Member Stats',
+      icon: 'i-lucide-bar-chart'
     },
     {
       type: 'separator'
     },
     {
-      label: 'Delete customer',
+      label: 'Remove from Party',
       icon: 'i-lucide-trash',
       color: 'error',
       onSelect() {
         toast.add({
-          title: 'Customer deleted',
-          description: 'The customer has been deleted.'
+          title: 'Member removed',
+          description: 'The party member has been removed.'
         })
       }
     }
@@ -95,7 +95,7 @@ const columns: TableColumn<User>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Character Name',
     cell: ({ row }) => {
       return h('div', { class: 'flex items-center gap-3' }, [
         h(UAvatar, {
@@ -117,7 +117,7 @@ const columns: TableColumn<User>[] = [
       return h(UButton, {
         color: 'neutral',
         variant: 'ghost',
-        label: 'Email',
+        label: 'Class/Role',
         icon: isSorted
           ? isSorted === 'asc'
             ? 'i-lucide-arrow-up-narrow-wide'
@@ -130,12 +130,12 @@ const columns: TableColumn<User>[] = [
   },
   {
     accessorKey: 'location',
-    header: 'Location',
+    header: 'Level',
     cell: ({ row }) => row.original.location
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: 'Battle Status',
     filterFn: 'equals',
     cell: ({ row }) => {
       const color = {
@@ -143,10 +143,13 @@ const columns: TableColumn<User>[] = [
         unsubscribed: 'error' as const,
         bounced: 'warning' as const
       }[row.original.status]
+      const label = {
+        subscribed: 'In Battle',
+        unsubscribed: 'Resting',
+        bounced: 'Leveling Up'
+      }[row.original.status]
 
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        row.original.status
-      )
+      return h(UBadge, { variant: 'subtle', color }, () => label)
     }
   },
   {
@@ -207,9 +210,9 @@ const pagination = ref({
 </script>
 
 <template>
-  <UDashboardPanel id="customers">
+  <UDashboardPanel id="party-members">
     <template #header>
-      <UDashboardNavbar title="Customers">
+      <UDashboardNavbar title="Party Members">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -226,14 +229,14 @@ const pagination = ref({
           v-model="email"
           class="max-w-sm"
           icon="i-lucide-search"
-          placeholder="Filter emails..."
+          placeholder="Filter by class..."
         />
 
         <div class="flex flex-wrap items-center gap-1.5">
           <CustomersDeleteModal :count="table?.tableApi?.getFilteredSelectedRowModel().rows.length">
             <UButton
               v-if="table?.tableApi?.getFilteredSelectedRowModel().rows.length"
-              label="Delete"
+              label="Remove"
               color="error"
               variant="subtle"
               icon="i-lucide-trash"
@@ -250,9 +253,9 @@ const pagination = ref({
             v-model="statusFilter"
             :items="[
               { label: 'All', value: 'all' },
-              { label: 'Subscribed', value: 'subscribed' },
-              { label: 'Unsubscribed', value: 'unsubscribed' },
-              { label: 'Bounced', value: 'bounced' }
+              { label: 'In Battle', value: 'subscribed' },
+              { label: 'Resting', value: 'unsubscribed' },
+              { label: 'Leveling Up', value: 'bounced' }
             ]"
             :ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200' }"
             placeholder="Filter status"
@@ -278,7 +281,7 @@ const pagination = ref({
             :content="{ align: 'end' }"
           >
             <UButton
-              label="Display"
+              label="Columns"
               color="neutral"
               variant="outline"
               trailing-icon="i-lucide-settings-2"
@@ -313,7 +316,7 @@ const pagination = ref({
       <div class="flex items-center justify-between gap-3 border-t border-default pt-4 mt-auto">
         <div class="text-sm text-muted">
           {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0 }} of
-          {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} row(s) selected.
+          {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} member(s) selected.
         </div>
 
         <div class="flex items-center gap-1.5">

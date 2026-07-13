@@ -7,67 +7,79 @@ const toast = useToast()
 const open = ref(false)
 
 const links = [[{
-  label: 'Home',
-  icon: 'i-lucide-house',
-  to: '/',
+  label: 'Account',
+  icon: 'i-lucide-home',
+  to: '/secured',
+  exact: true,
   onSelect: () => {
     open.value = false
   }
 }, {
-  label: 'Inbox',
-  icon: 'i-lucide-inbox',
-  to: '/inbox',
+  type: 'label',
+  label: 'Demo Dashboard'
+}, {
+  label: 'Character Sheet',
+  icon: 'i-lucide-user',
+  to: '/secured/demo',
+  exact: true,
+  onSelect: () => {
+    open.value = false
+  }
+}, {
+  label: 'Quest Log',
+  icon: 'i-lucide-scroll',
+  to: '/secured/demo/inbox',
   badge: '4',
   onSelect: () => {
     open.value = false
   }
 }, {
-  label: 'Customers',
-  icon: 'i-lucide-users',
-  to: '/customers',
+  label: 'Party Members',
+  icon: 'i-lucide-users-2',
+  to: '/secured/demo/customers',
   onSelect: () => {
     open.value = false
   }
 }, {
-  label: 'Settings',
-  to: '/settings',
-  icon: 'i-lucide-settings',
+  label: 'Campaign Config',
+  to: '/secured/demo/settings',
+  icon: 'i-lucide-shield-cog',
   defaultOpen: true,
   type: 'trigger',
   children: [{
-    label: 'General',
-    to: '/settings',
+    label: 'Campaign Setup',
+    to: '/secured/demo/settings',
     exact: true,
     onSelect: () => {
       open.value = false
     }
   }, {
-    label: 'Members',
-    to: '/settings/members',
+    label: 'NPCs & Allies',
+    to: '/secured/demo/settings/members',
     onSelect: () => {
       open.value = false
     }
   }, {
-    label: 'Notifications',
-    to: '/settings/notifications',
+    label: 'Game Events',
+    to: '/secured/demo/settings/notifications',
     onSelect: () => {
       open.value = false
     }
   }, {
-    label: 'Security',
-    to: '/settings/security',
+    label: 'Campaign Access',
+    to: '/secured/demo/settings/security',
     onSelect: () => {
       open.value = false
     }
   }]
 }], [{
-  label: 'Feedback',
-  icon: 'i-lucide-message-circle',
+  label: 'Discord Community',
+  icon: 'i-lucide-message-square',
   to: 'https://github.com/nuxt-ui-templates/dashboard',
   target: '_blank'
 }, {
-  label: 'Help & Support',
-  icon: 'i-lucide-info',
+  label: 'Game Manual',
+  icon: 'i-lucide-book',
   to: 'https://github.com/nuxt-ui-templates/dashboard',
   target: '_blank'
 }]] satisfies NavigationMenuItem[][]
@@ -75,7 +87,7 @@ const links = [[{
 const groups = computed(() => [{
   id: 'links',
   label: 'Go to',
-  items: links.flat()
+  items: links.flat().filter(item => item.type !== 'label')
 }, {
   id: 'code',
   label: 'Code',
@@ -83,7 +95,7 @@ const groups = computed(() => [{
     id: 'source',
     label: 'View page source',
     icon: 'i-simple-icons-github',
-    to: `https://github.com/nuxt-ui-templates/dashboard/blob/main/app/pages${route.path === '/' ? '/index' : route.path}.vue`,
+    to: `https://github.com/nuxt-ui-templates/dashboard/blob/main/app/pages${route.path === '/secured/demo' ? '/secured/demo/index' : route.path}.vue`,
     target: '_blank'
   }]
 }])
@@ -137,6 +149,7 @@ onMounted(async () => {
           orientation="vertical"
           tooltip
           popover
+          class="font-display"
         />
 
         <UNavigationMenu
@@ -144,7 +157,7 @@ onMounted(async () => {
           :items="links[1]"
           orientation="vertical"
           tooltip
-          class="mt-auto"
+          class="mt-auto font-display"
         />
       </template>
 

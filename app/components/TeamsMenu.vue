@@ -6,22 +6,22 @@ defineProps<{
 }>()
 
 const teams = ref([{
-  label: 'Nuxt',
+  label: 'The Lost Kingdom',
   avatar: {
-    src: 'https://github.com/nuxt.png',
-    alt: 'Nuxt'
+    src: 'https://api.dicebear.com/7.x/initials/svg?seed=LK',
+    alt: 'The Lost Kingdom'
   }
 }, {
-  label: 'NuxtHub',
+  label: 'Dragon Slayers',
   avatar: {
-    src: 'https://github.com/nuxt-hub.png',
-    alt: 'NuxtHub'
+    src: 'https://api.dicebear.com/7.x/initials/svg?seed=DS',
+    alt: 'Dragon Slayers'
   }
 }, {
-  label: 'NuxtLabs',
+  label: 'Shadow Conspiracy',
   avatar: {
-    src: 'https://github.com/nuxtlabs.png',
-    alt: 'NuxtLabs'
+    src: 'https://api.dicebear.com/7.x/initials/svg?seed=SC',
+    alt: 'Shadow Conspiracy'
   }
 }])
 const selectedTeam = ref(teams.value[0])
@@ -33,10 +33,10 @@ const items = computed<DropdownMenuItem[][]>(() => {
       selectedTeam.value = team
     }
   })), [{
-    label: 'Create team',
+    label: 'Start New Campaign',
     icon: 'i-lucide-circle-plus'
   }, {
-    label: 'Manage teams',
+    label: 'Manage Campaigns',
     icon: 'i-lucide-cog'
   }]]
 })
@@ -58,7 +58,7 @@ const items = computed<DropdownMenuItem[][]>(() => {
       variant="ghost"
       block
       :square="collapsed"
-      class="data-[state=open]:bg-elevated"
+      class="data-[state=open]:bg-elevated font-display"
       :class="[!collapsed && 'py-2']"
       :ui="{
         trailingIcon: 'text-dimmed'

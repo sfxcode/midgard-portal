@@ -8,32 +8,32 @@ const state = reactive<{ [key: string]: boolean }>({
 })
 
 const sections = [{
-  title: 'Notification channels',
-  description: 'Where can we notify you?',
+  title: 'Event Channels',
+  description: 'Where should campaign events be notified?',
   fields: [{
     name: 'email',
-    label: 'Email',
-    description: 'Receive a daily email digest.'
+    label: 'In-Game Mail',
+    description: 'Receive event notifications via in-game message system.'
   }, {
     name: 'desktop',
-    label: 'Desktop',
-    description: 'Receive desktop notifications.'
+    label: 'Real-time Alerts',
+    description: 'Receive instant browser notifications for critical events.'
   }]
 }, {
-  title: 'Account updates',
-  description: 'Receive updates about Nuxt UI.',
+  title: 'Campaign Events',
+  description: 'Which events should trigger notifications?',
   fields: [{
     name: 'weekly_digest',
-    label: 'Weekly digest',
-    description: 'Receive a weekly digest of news.'
+    label: 'Campaign Updates',
+    description: 'Receive weekly summaries of campaign progress and milestones.'
   }, {
     name: 'product_updates',
-    label: 'Product updates',
-    description: 'Receive a monthly email with all new features and updates.'
+    label: 'Quest Completions',
+    description: 'Get notified when party members complete major quests.'
   }, {
     name: 'important_updates',
-    label: 'Important updates',
-    description: 'Receive emails about important updates like security fixes, maintenance, etc.'
+    label: 'Critical Events',
+    description: 'Alerts for critical story events, boss encounters, and campaign climaxes.'
   }]
 }]
 

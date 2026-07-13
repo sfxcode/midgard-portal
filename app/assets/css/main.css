@@ -1,18 +1,152 @@
-@import "tailwindcss" theme(static);
 @import "@nuxt/ui";
 
-@theme static {
-  --font-sans: 'Public Sans', sans-serif;
+:root {
+  /*
+   * Typography — "illuminated manuscript meets ledger"
+   * Cinzel: engraved Roman capitals for titles/nav (display)
+   * Alegreya Sans: warm humanist sans for body, tables and data
+   * Alegreya: matching serif for long-form reading accents
+   */
+  --font-sans: 'Alegreya Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Alegreya', ui-serif, Georgia, serif;
+  --font-display: 'Cinzel', 'Alegreya', ui-serif, serif;
 
-  --color-green-50: #EFFDF5;
-  --color-green-100: #D9FBE8;
-  --color-green-200: #B3F5D1;
-  --color-green-300: #75EDAE;
-  --color-green-400: #00DC82;
-  --color-green-500: #00C16A;
-  --color-green-600: #00A155;
-  --color-green-700: #007F45;
-  --color-green-800: #016538;
-  --color-green-900: #0A5331;
-  --color-green-950: #052E16;
+  /* Primary — sealing-wax gold / aged brass (hand-tuned, not caution-yellow) */
+  --color-gold-50: #FAF6EB;
+  --color-gold-100: #F3EAD2;
+  --color-gold-200: #E7D5A6;
+  --color-gold-300: #D9BC74;
+  --color-gold-400: #C9A254;
+  --color-gold-500: #B4883B;
+  --color-gold-600: #96691F;
+  --color-gold-700: #7A5219;
+  --color-gold-800: #63421A;
+  --color-gold-900: #523619;
+  --color-gold-950: #2E1D0A;
+
+  /* Neutral — parchment lights, worn-leather darks */
+  --color-parchment-50: #FAF5EA;
+  --color-parchment-100: #F2EAD8;
+  --color-parchment-200: #E4D7BC;
+  --color-parchment-300: #D0BE9C;
+  --color-parchment-400: #A8916C;
+  --color-parchment-500: #7E6B4F;
+  --color-parchment-600: #62523C;
+  --color-parchment-700: #4E4130;
+  --color-parchment-800: #3B3025;
+  --color-parchment-900: #2A211A;
+  --color-parchment-950: #1B140D;
+
+  /* Error — wax-seal crimson (deep, not neon red) */
+  --color-crimson-50: #FBF0EC;
+  --color-crimson-100: #F6DCD4;
+  --color-crimson-200: #ECBBAF;
+  --color-crimson-300: #E09A8E;
+  --color-crimson-400: #D3776C;
+  --color-crimson-500: #AC3E37;
+  --color-crimson-600: #932928;
+  --color-crimson-700: #7A2124;
+  --color-crimson-800: #641E21;
+  --color-crimson-900: #531C1E;
+  --color-crimson-950: #320E0F;
+
+  /* Success — map-moss green (hand-drawn forest, not signal green) */
+  --color-moss-50: #F3F6EC;
+  --color-moss-100: #E3ECD2;
+  --color-moss-200: #C9D9A8;
+  --color-moss-300: #ABC17D;
+  --color-moss-400: #8CA75A;
+  --color-moss-500: #6E8B3F;
+  --color-moss-600: #556F2F;
+  --color-moss-700: #445827;
+  --color-moss-800: #374720;
+  --color-moss-900: #2C3A1D;
+  --color-moss-950: #17200D;
+
+  /* Shadows — warm umber ink, "paper resting on a table" not SaaS elevation */
+  --shadow-2xs: 0 1px 0 rgb(63 46 25 / 0.06);
+  --shadow-xs: 0 1px 2px rgb(63 46 25 / 0.07);
+  --shadow-sm: 0 1px 2px rgb(63 46 25 / 0.08), 0 2px 4px -1px rgb(63 46 25 / 0.06);
+  --shadow-md: 0 2px 4px rgb(63 46 25 / 0.08), 0 5px 12px -3px rgb(63 46 25 / 0.10);
+  --shadow-lg: 0 3px 6px rgb(63 46 25 / 0.09), 0 12px 24px -6px rgb(63 46 25 / 0.12);
+  --shadow-xl: 0 4px 8px rgb(63 46 25 / 0.10), 0 20px 36px -8px rgb(63 46 25 / 0.16);
+  --shadow-2xl: 0 24px 48px -10px rgb(63 46 25 / 0.24);
+
+  /* Squared, ledger-like corners */
+  --ui-radius: 0.125rem;
+}
+
+/* Light — parchment sheet instead of clinical white */
+:root,
+.light {
+  --ui-bg: var(--ui-color-neutral-50);
+  --ui-bg-muted: var(--ui-color-neutral-100);
+  --ui-bg-elevated: var(--ui-color-neutral-100);
+  --ui-bg-accented: var(--ui-color-neutral-200);
+  --ui-text-inverted: #FDFBF3;
+
+  /* darker shades for AA contrast of white-on-primary/error/success actions */
+  --ui-primary: var(--ui-color-primary-600);
+  --ui-error: var(--ui-color-error-600);
+  --ui-success: var(--ui-color-success-600);
+}
+
+/* Dark — tavern at night: deep leather, candle-warm text */
+.dark {
+  --ui-bg: var(--ui-color-neutral-950);
+  --ui-bg-muted: var(--ui-color-neutral-900);
+  --ui-bg-elevated: var(--ui-color-neutral-900);
+  --ui-bg-accented: var(--ui-color-neutral-800);
+  --ui-border: var(--ui-color-neutral-800);
+  --ui-border-muted: var(--ui-color-neutral-800);
+  --ui-border-accented: var(--ui-color-neutral-700);
+  --ui-text-highlighted: #F6EFDF;
+
+  --ui-primary: var(--ui-color-primary-400);
+  --ui-error: var(--ui-color-error-400);
+  --ui-success: var(--ui-color-success-400);
+}
+
+@layer base {
+  /* Titles and section headings carry the engraved display face */
+  h1, h2, h3, h4,
+  [data-slot='title'] {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+  }
+
+  /* Table headers read like ledger column rules */
+  thead th {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.045em;
+  }
+
+  /* Parchment mottling (light) / candlelight vignette (dark) — pure CSS, very subtle */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 90% at 18% 0%, rgb(180 136 59 / 0.045), transparent 60%),
+      radial-gradient(130% 100% at 85% 100%, rgb(88 59 25 / 0.05), transparent 65%);
+  }
+
+  .dark body::after {
+    background:
+      radial-gradient(110% 70% at 50% 0%, rgb(201 162 84 / 0.05), transparent 60%),
+      radial-gradient(140% 90% at 50% 118%, rgb(0 0 0 / 0.22), transparent 68%);
+  }
+
+  ::selection {
+    background-color: var(--ui-color-primary-200);
+    color: var(--ui-color-neutral-900);
+  }
+
+  .dark ::selection {
+    background-color: var(--ui-color-primary-800);
+    color: var(--ui-color-neutral-50);
+  }
 }

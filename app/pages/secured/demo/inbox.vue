@@ -4,10 +4,10 @@ import { breakpointsTailwind } from '@vueuse/core'
 import type { Mail } from '~/types'
 
 const tabItems = [{
-  label: 'All',
+  label: 'Active Quests',
   value: 'all'
 }, {
-  label: 'Unread',
+  label: 'Available',
   value: 'unread'
 }]
 const selectedTab = ref('all')
@@ -25,7 +25,7 @@ const filteredMails = computed(() => {
 
 const selectedMail = ref<Mail | null>()
 
-const isMailPanelOpen = computed({
+const isQuestPanelOpen = computed({
   get() {
     return !!selectedMail.value
   },
@@ -49,13 +49,13 @@ const isMobile = breakpoints.smaller('lg')
 
 <template>
   <UDashboardPanel
-    id="inbox-1"
+    id="quest-log"
     :default-size="25"
     :min-size="20"
     :max-size="30"
     resizable
   >
-    <UDashboardNavbar title="Inbox">
+    <UDashboardNavbar title="Quest Log">
       <template #leading>
         <UDashboardSidebarCollapse />
       </template>
@@ -77,11 +77,11 @@ const isMobile = breakpoints.smaller('lg')
 
   <InboxMail v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
   <div v-else class="hidden lg:flex flex-1 items-center justify-center">
-    <UIcon name="i-lucide-inbox" class="size-32 text-dimmed" />
+    <UIcon name="i-lucide-scroll" class="size-32 text-dimmed" />
   </div>
 
   <ClientOnly>
-    <USlideover v-if="isMobile" v-model:open="isMailPanelOpen">
+    <USlideover v-if="isMobile" v-model:open="isQuestPanelOpen">
       <template #content>
         <InboxMail v-if="selectedMail" :mail="selectedMail" @close="selectedMail = null" />
       </template>

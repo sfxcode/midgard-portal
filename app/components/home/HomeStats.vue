@@ -15,30 +15,30 @@ function formatCurrency(value: number): string {
 }
 
 const baseStats = [{
-  title: 'Customers',
-  icon: 'i-lucide-users',
-  minValue: 400,
-  maxValue: 1000,
+  title: 'Health Points',
+  icon: 'i-lucide-heart',
+  minValue: 50,
+  maxValue: 100,
   minVariation: -15,
   maxVariation: 25
 }, {
-  title: 'Conversions',
-  icon: 'i-lucide-chart-pie',
+  title: 'Mana Pool',
+  icon: 'i-lucide-droplet',
   minValue: 1000,
   maxValue: 2000,
   minVariation: -10,
   maxVariation: 20
 }, {
-  title: 'Revenue',
-  icon: 'i-lucide-circle-dollar-sign',
+  title: 'Experience',
+  icon: 'i-lucide-star',
   minValue: 200000,
   maxValue: 500000,
   minVariation: -20,
   maxVariation: 30,
   formatter: formatCurrency
 }, {
-  title: 'Orders',
-  icon: 'i-lucide-shopping-cart',
+  title: 'Inventory Items',
+  icon: 'i-lucide-backpack',
   minValue: 100,
   maxValue: 300,
   minVariation: -5,
@@ -70,7 +70,7 @@ const { data: stats } = await useAsyncData<Stat[]>('stats', async () => {
       :key="index"
       :icon="stat.icon"
       :title="stat.title"
-      to="/customers"
+      to="/secured/demo/customers"
       variant="subtle"
       :ui="{
         container: 'gap-y-1.5',

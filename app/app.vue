@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
 
-const color = computed(() => colorMode.value === 'dark' ? '#1b1718' : 'white')
+const color = computed(() => colorMode.value === 'dark' ? '#1b140d' : '#faf5ea')
 
 useHead({
   meta: [
@@ -17,8 +17,8 @@ useHead({
   }
 })
 
-const title = 'Nuxt Dashboard Template'
-const description = 'A professional dashboard template built with Nuxt UI, featuring multiple pages, data visualization, and comprehensive management capabilities for creating powerful admin interfaces.'
+const title = 'RPG Campaign Manager'
+const description = 'An epic campaign management tool built with Nuxt UI, featuring character sheets, quest logs, party management, and comprehensive campaign configuration for immersive tabletop RPG experiences.'
 
 useSeoMeta({
   title,
@@ -32,7 +32,7 @@ useSeoMeta({
 
 <template>
   <UApp>
-    <NuxtLoadingIndicator />
+    <NuxtLoadingIndicator color="var(--ui-primary)" />
 
     <NuxtLayout>
       <NuxtPage />

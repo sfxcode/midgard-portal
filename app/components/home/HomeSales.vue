@@ -11,11 +11,11 @@ const props = defineProps<{
 const UBadge = resolveComponent('UBadge')
 
 const sampleEmails = [
-  'james.anderson@example.com',
-  'mia.white@example.com',
-  'william.brown@example.com',
-  'emma.davis@example.com',
-  'ethan.harris@example.com'
+  'dragon.hoard@dungeon.com',
+  'lich.treasure@undead.com',
+  'goblin.loot@cave.com',
+  'noble.reward@kingdom.com',
+  'merchant.coin@trade.com'
 ]
 
 const { data } = await useAsyncData('sales', async () => {
@@ -29,7 +29,7 @@ const { data } = await useAsyncData('sales', async () => {
     sales.push({
       id: (4600 - i).toString(),
       date: date.toISOString(),
-      status: randomFrom(['paid', 'failed', 'refunded']),
+      status: randomFrom(['collected', 'cursed', 'lost']),
       email: randomFrom(sampleEmails),
       amount: randomInt(100, 1000)
     })
@@ -44,12 +44,12 @@ const { data } = await useAsyncData('sales', async () => {
 const columns: TableColumn<Sale>[] = [
   {
     accessorKey: 'id',
-    header: 'ID',
+    header: 'Loot ID',
     cell: ({ row }) => `#${row.getValue('id')}`
   },
   {
     accessorKey: 'date',
-    header: 'Date',
+    header: 'Encounter Date',
     cell: ({ row }) => {
       return new Date(row.getValue('date')).toLocaleString('en-US', {
         day: 'numeric',
@@ -62,12 +62,12 @@ const columns: TableColumn<Sale>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: 'Loot Status',
     cell: ({ row }) => {
       const color = {
-        paid: 'success' as const,
-        failed: 'error' as const,
-        refunded: 'neutral' as const
+        collected: 'success' as const,
+        cursed: 'error' as const,
+        lost: 'neutral' as const
       }[row.getValue('status') as string]
 
       return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
@@ -77,11 +77,11 @@ const columns: TableColumn<Sale>[] = [
   },
   {
     accessorKey: 'email',
-    header: 'Email'
+    header: 'Source'
   },
   {
     accessorKey: 'amount',
-    header: () => h('div', { class: 'text-right' }, 'Amount'),
+    header: () => h('div', { class: 'text-right' }, 'Gold Value'),
     cell: ({ row }) => {
       const amount = Number.parseFloat(row.getValue('amount'))
 

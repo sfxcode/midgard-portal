@@ -2,24 +2,24 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 
 const links = [[{
-  label: 'General',
-  icon: 'i-lucide-user',
-  to: '/settings',
+  label: 'Campaign Setup',
+  icon: 'i-lucide-map',
+  to: '/secured/demo/settings',
   exact: true
 }, {
-  label: 'Members',
-  icon: 'i-lucide-users',
-  to: '/settings/members'
+  label: 'NPCs & Allies',
+  icon: 'i-lucide-users-2',
+  to: '/secured/demo/settings/members'
 }, {
-  label: 'Notifications',
+  label: 'Game Events',
   icon: 'i-lucide-bell',
-  to: '/settings/notifications'
+  to: '/secured/demo/settings/notifications'
 }, {
-  label: 'Security',
-  icon: 'i-lucide-shield',
-  to: '/settings/security'
+  label: 'Campaign Access',
+  icon: 'i-lucide-key',
+  to: '/secured/demo/settings/security'
 }], [{
-  label: 'Documentation',
+  label: 'Game Wiki',
   icon: 'i-lucide-book-open',
   to: 'https://ui.nuxt.com/docs/getting-started/installation/nuxt',
   target: '_blank'
@@ -27,16 +27,15 @@ const links = [[{
 </script>
 
 <template>
-  <UDashboardPanel id="settings" :ui="{ body: 'lg:py-12' }">
+  <UDashboardPanel id="campaign-config" :ui="{ body: 'lg:py-12' }">
     <template #header>
-      <UDashboardNavbar title="Settings">
+      <UDashboardNavbar title="Campaign Config">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
       </UDashboardNavbar>
 
       <UDashboardToolbar>
-        <!-- NOTE: The `-mx-1` class is used to align with the `DashboardSidebarCollapse` button here. -->
         <UNavigationMenu :items="links" highlight class="-mx-1 flex-1" />
       </UDashboardToolbar>
     </template>

@@ -4,7 +4,7 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 
 const fileRef = ref<HTMLInputElement>()
 
-const profileSchema = z.object({
+const campaignSchema = z.object({
   name: z.string().min(2, 'Too short'),
   email: z.string().email('Invalid email'),
   username: z.string().min(2, 'Too short'),
@@ -12,20 +12,20 @@ const profileSchema = z.object({
   bio: z.string().optional()
 })
 
-type ProfileSchema = z.output<typeof profileSchema>
+type CampaignSchema = z.output<typeof campaignSchema>
 
-const profile = reactive<Partial<ProfileSchema>>({
-  name: 'Benjamin Canac',
-  email: 'ben@nuxtlabs.com',
-  username: 'benjamincanac',
+const campaign = reactive<Partial<CampaignSchema>>({
+  name: 'The Lost Kingdom',
+  email: 'master@campaign.com',
+  username: 'dungeonmaster',
   avatar: undefined,
   bio: undefined
 })
 const toast = useToast()
-async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
+async function onSubmit(event: FormSubmitEvent<CampaignSchema>) {
   toast.add({
     title: 'Success',
-    description: 'Your settings have been updated.',
+    description: 'Campaign settings have been updated.',
     icon: 'i-lucide-check',
     color: 'success'
   })
@@ -39,7 +39,7 @@ function onFileChange(e: Event) {
     return
   }
 
-  profile.avatar = URL.createObjectURL(input.files[0]!)
+  campaign.avatar = URL.createObjectURL(input.files[0]!)
 }
 
 function onFileClick() {
@@ -49,20 +49,20 @@ function onFileClick() {
 
 <template>
   <UForm
-    id="settings"
-    :schema="profileSchema"
-    :state="profile"
+    id="campaign-setup"
+    :schema="campaignSchema"
+    :state="campaign"
     @submit="onSubmit"
   >
     <UPageCard
-      title="Profile"
-      description="These informations will be displayed publicly."
+      title="Campaign Profile"
+      description="These details define your campaign's identity."
       variant="naked"
       orientation="horizontal"
       class="mb-4"
     >
       <UButton
-        form="settings"
+        form="campaign-setup"
         label="Save changes"
         color="neutral"
         type="submit"
@@ -73,26 +73,26 @@ function onFileClick() {
     <UPageCard variant="subtle">
       <UFormField
         name="name"
-        label="Name"
-        description="Will appear on receipts, invoices, and other communication."
+        label="Campaign Name"
+        description="The epic name of your campaign or world."
         required
         class="flex max-sm:flex-col justify-between items-start gap-4"
       >
         <UInput
-          v-model="profile.name"
+          v-model="campaign.name"
           autocomplete="off"
         />
       </UFormField>
       <USeparator />
       <UFormField
         name="email"
-        label="Email"
-        description="Used to sign in, for email receipts and product updates."
+        label="Master Contact"
+        description="Email for campaign master/administrator contact."
         required
         class="flex max-sm:flex-col justify-between items-start gap-4"
       >
         <UInput
-          v-model="profile.email"
+          v-model="campaign.email"
           type="email"
           autocomplete="off"
         />
@@ -100,13 +100,13 @@ function onFileClick() {
       <USeparator />
       <UFormField
         name="username"
-        label="Username"
-        description="Your unique username for logging in and your profile URL."
+        label="Dungeon Master"
+        description="Your unique DM alias for authorization and roleplay."
         required
         class="flex max-sm:flex-col justify-between items-start gap-4"
       >
         <UInput
-          v-model="profile.username"
+          v-model="campaign.username"
           type="username"
           autocomplete="off"
         />
@@ -114,14 +114,14 @@ function onFileClick() {
       <USeparator />
       <UFormField
         name="avatar"
-        label="Avatar"
-        description="JPG, GIF or PNG. 1MB Max."
+        label="Campaign Banner"
+        description="JPG, GIF or PNG. 1MB Max. Campaign emblem or banner."
         class="flex max-sm:flex-col justify-between sm:items-center gap-4"
       >
         <div class="flex flex-wrap items-center gap-3">
           <UAvatar
-            :src="profile.avatar"
-            :alt="profile.name"
+            :src="campaign.avatar"
+            :alt="campaign.name"
             size="lg"
           />
           <UButton
@@ -141,13 +141,13 @@ function onFileClick() {
       <USeparator />
       <UFormField
         name="bio"
-        label="Bio"
-        description="Brief description for your profile. URLs are hyperlinked."
+        label="Campaign Lore"
+        description="Rich description of your campaign setting and story. URLs are hyperlinked."
         class="flex max-sm:flex-col justify-between items-start gap-4"
         :ui="{ container: 'w-full' }"
       >
         <UTextarea
-          v-model="profile.bio"
+          v-model="campaign.bio"
           :rows="5"
           autoresize
           class="w-full"
