@@ -141,6 +141,8 @@ export interface ZauberLernen {
   art: string
   stufe: number
   ap: string
+  zauberdauer: string
+  prozess: string
 }
 
 export interface FertigkeitLernen {

@@ -10,6 +10,7 @@ dist
 node_modules
 
 brain
+scratch
 
 # Logs
 logs
@@ -19,6 +20,7 @@ logs
 .DS_Store
 .fleet
 .idea
+.iml
 
 # Local env files
 .env

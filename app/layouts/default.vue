@@ -16,6 +16,30 @@ const links = computed(() => [[{
   onSelect: () => {
     open.value = false
   }
+}, {
+  type: 'label' as const,
+  label: 'Stammdaten'
+}, {
+  label: 'Zauber',
+  icon: 'i-lucide-wand-sparkles',
+  to: '/secured/stamm/zauber',
+  onSelect: () => {
+    open.value = false
+  }
+}, {
+  label: 'Fertigkeiten',
+  icon: 'i-lucide-swords',
+  to: '/secured/stamm/fertigkeiten',
+  onSelect: () => {
+    open.value = false
+  }
+}, {
+  label: 'Typen',
+  icon: 'i-lucide-shapes',
+  to: '/secured/stamm/typen',
+  onSelect: () => {
+    open.value = false
+  }
 }, ...(profile.value.isAdmin
   ? [{
       type: 'label' as const,
