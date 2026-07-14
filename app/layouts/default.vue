@@ -108,7 +108,7 @@ const links = computed(() => [[{
 const groups = computed(() => [{
   id: 'links',
   label: 'Go to',
-  items: links.value.flat().filter(item => item.type !== 'label')
+  items: links.value.flat().filter((item: NavigationMenuItem) => item.type !== 'label')
 }, {
   id: 'code',
   label: 'Code',
