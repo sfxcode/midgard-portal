@@ -6,7 +6,8 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@vueuse/nuxt',
     '@pinia/nuxt',
-    '@pinia/colada-nuxt'
+    '@pinia/colada-nuxt',
+    'nuxt-pdfmake'
   ],
 
   devtools: {
@@ -29,6 +30,15 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-07-11',
+
+  vite: {
+    optimizeDeps: {
+      include: [
+        'pdfmake/build/pdfmake',
+        'pdfmake/build/vfs_fonts'
+      ]
+    }
+  },
 
   eslint: {
     config: {

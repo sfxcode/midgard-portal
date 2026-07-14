@@ -3,6 +3,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import type { ZauberLernen } from '~/models'
 import { useZauber } from '~/composables/stamm/useZauber'
+import { useZauberExport } from '~/composables/stamm/useZauberExport'
 
 const props = defineProps<{
   typName: string
@@ -20,6 +21,7 @@ const { zauber, zauberLerneinheiten, zauberLerneinheitenByTyp } = useZauberStore
 const { zauberLernenByTyp } = useZauber()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
+const { exportZauberData } = useZauberExport()
 const { sortableHeader } = useSortableColumn()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
@@ -125,6 +127,12 @@ function exportData() {
     { key: 'gold', label: 'Gold' }
   ], 'zauber')
 }
+
+function exportPdf() {
+  const rows = (table.value?.tableApi?.getFilteredRowModel().rows ?? []).map(r => r.original)
+  const title = typ.value ? `Zauber Blatt - ${typ.value.name}` : 'Zauber Blatt'
+  exportZauberData(rows.map(r => r.name), title)
+}
 </script>
 
 <template>
@@ -177,13 +185,22 @@ function exportData() {
     </UTable>
 
     <div class="flex items-center justify-between gap-3 border-t border-default pt-4">
-      <UButton
-        label="Export"
-        icon="i-lucide-download"
-        color="neutral"
-        variant="subtle"
-        @click="exportData"
-      />
+      <div class="flex items-center gap-1.5">
+        <UButton
+          label="CSV"
+          icon="i-lucide-download"
+          color="neutral"
+          variant="subtle"
+          @click="exportData"
+        />
+        <UButton
+          label="PDF"
+          icon="i-lucide-file-text"
+          color="neutral"
+          variant="subtle"
+          @click="exportPdf"
+        />
+      </div>
 
       <UPagination
         :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
