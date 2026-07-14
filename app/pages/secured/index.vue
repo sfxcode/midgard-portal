@@ -34,6 +34,7 @@ function onLogout() {
     </template>
 
     <template #body>
+      <div class="flex flex-col gap-4">
       <UCard class="max-w-md">
         <p class="text-sm text-muted mb-1">
           Signed in as
@@ -50,7 +51,7 @@ function onLogout() {
         />
       </UCard>
 
-      <UCard class="max-w-md">
+      <UCard  v-if="false" class="max-w-md">
         <p class="text-sm text-muted mb-1">
           Sample content
         </p>
@@ -87,6 +88,16 @@ function onLogout() {
           />
         </div>
       </UCard>
+      <UCard class="max-w-md">
+        <p class="text-sm text-muted mb-1">
+          Stammdaten
+        </p>
+        <p class="text-highlighted mb-3">
+          The original dashboard sample lives here, separate from your account.
+        </p>
+       <StammdatenBox/>
+      </UCard>
+      </div>
     </template>
   </UDashboardPanel>
 </template>

@@ -2,10 +2,11 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxt/ui',
-    '@nuxt/fonts',
     '@sfxcode/nuxt-ui-mongocamp',
-    '@vueuse/nuxt'
+    '@nuxt/fonts',
+    '@vueuse/nuxt',
+    '@pinia/nuxt',
+    '@pinia/colada-nuxt'
   ],
 
   devtools: {
@@ -15,7 +16,9 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css', '~/assets/css/formkit.css'],
 
   mongocamp: {
-    url: process.env.MONGOCAMP_URL
+    url: 'https://midgard-server.sfxcode.com',
+    paginationSize: 1000,
+    tokenRefreshIntervall: 60 * 1000,
   },
 
   fonts: {
