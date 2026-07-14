@@ -6,7 +6,7 @@ const route = useRoute()
 const nameParameter = `${route.params.name}`
 
 const { zauber } = useZauberStore()
-const { beschreibung, loadBeschreibung } = useBeschreibung()
+const { beschreibung, beschreibungContent, loadBeschreibung, saveBeschreibung } = useBeschreibung()
 
 const zauberData = computed(() => zauber.value?.find((z: Zauber) => z.name === nameParameter))
 
@@ -44,8 +44,12 @@ useSeoMeta({
         <UCard v-if="zauberData">
           <StammdatenZauberView :zauber="zauberData" />
         </UCard>
-        <UCard v-if="beschreibung">
-          <StammdatenBeschreibungView :beschreibung="beschreibung" />
+        <UCard>
+          <StammdatenBeschreibungView
+            v-model:content="beschreibungContent"
+            :beschreibung="beschreibung"
+            :on-save="() => saveBeschreibung(nameParameter, 'Zauber')"
+          />
         </UCard>
       </div>
     </template>

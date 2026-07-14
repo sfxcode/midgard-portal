@@ -7,7 +7,7 @@ const kategorieParameter = `${route.params.kategorie}`
 const fertigkeitParameter = `${route.params.fertigkeit}`
 
 const { fertigkeiten } = useFertigkeitenStore()
-const { beschreibung, loadBeschreibung } = useBeschreibung()
+const { beschreibung, beschreibungContent, loadBeschreibung, saveBeschreibung } = useBeschreibung()
 
 const fertigkeit = computed(() => {
   return fertigkeiten.value?.find((f: Fertigkeit) => f.name === fertigkeitParameter && f.kategorie === kategorieParameter)
@@ -47,8 +47,12 @@ useSeoMeta({
         <UCard v-if="fertigkeit">
           <StammdatenFertigkeitView :fertigkeit="fertigkeit" />
         </UCard>
-        <UCard v-if="beschreibung">
-          <StammdatenBeschreibungView :beschreibung="beschreibung" />
+        <UCard>
+          <StammdatenBeschreibungView
+            v-model:content="beschreibungContent"
+            :beschreibung="beschreibung"
+            :on-save="() => saveBeschreibung(fertigkeitParameter, 'Fertigkeit')"
+          />
         </UCard>
       </div>
     </template>

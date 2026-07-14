@@ -8,7 +8,7 @@ const param = `${route.params.typ}`
 const { typen } = useStammdatenStore()
 const { zauberLerneinheiten, zauberLerneinheitenByTyp } = useZauberStore()
 const { fertigkeitenLerneinheiten, fertigkeitenLerneinheitenByTyp } = useFertigkeitenStore()
-const { beschreibung, loadBeschreibung } = useBeschreibung()
+const { beschreibung, beschreibungContent, loadBeschreibung, saveBeschreibung } = useBeschreibung()
 const { sortableHeader } = useSortableColumn()
 
 const typ = computed(() => typen.value?.find(t => t.name === param))
@@ -92,8 +92,12 @@ useSeoMeta({
           </div>
         </div>
 
-        <UCard v-if="beschreibung">
-          <StammdatenBeschreibungView :beschreibung="beschreibung" />
+        <UCard>
+          <StammdatenBeschreibungView
+            v-model:content="beschreibungContent"
+            :beschreibung="beschreibung"
+            :on-save="() => saveBeschreibung(param, 'Typ')"
+          />
         </UCard>
       </div>
     </template>
