@@ -20,7 +20,7 @@ logs
 .DS_Store
 .fleet
 .idea
-.iml
+*.iml
 
 # Local env files
 .env
