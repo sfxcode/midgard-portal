@@ -5,26 +5,15 @@ const { fertigkeiten } = useFertigkeitenStore()
 </script>
 
 <template>
-  <div class="gap-1 grid grid-cols-2 lg:grid-cols-3">
-    <AdvertiseBox header="Zauber" icon="mdi-information" color="blue-200">
-      {{ zauber?.length }}
-      <NuxtLink to="/secured/stamm/zauber">
-        <span>Zaubersprüche</span>
-      </NuxtLink> gefunden
+  <div class="grid gap-2 sm:grid-cols-3">
+    <AdvertiseBox header="Zauber" icon="i-lucide-wand-sparkles" to="/secured/stamm/zauber">
+      {{ zauber?.length ?? 0 }}
     </AdvertiseBox>
-    <AdvertiseBox header="Fertigkeiten" color="blue-200">
-      {{ fertigkeiten?.length }}
-      <NuxtLink to="/secured/stamm/fertigkeiten">
-        <span>Fertigkeiten</span>
-      </NuxtLink>  gefunden
+    <AdvertiseBox header="Fertigkeiten" icon="i-lucide-swords" to="/secured/stamm/fertigkeiten">
+      {{ fertigkeiten?.length ?? 0 }}
     </AdvertiseBox>
-    <AdvertiseBox header="Typen" icon="prime-check-circle" color="blue-200">
-      {{ typen?.length }}
-      <NuxtLink to="/secured/stamm/typen">
-        <span>Typen</span>
-      </NuxtLink>  gefunden
+    <AdvertiseBox header="Typen" icon="i-lucide-shapes" to="/secured/stamm/typen">
+      {{ typen?.length ?? 0 }}
     </AdvertiseBox>
   </div>
 </template>
-
-<style scoped></style>

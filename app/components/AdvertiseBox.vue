@@ -4,7 +4,11 @@ defineProps({
     type: String,
     default: null
   },
-  color: {
+  icon: {
+    type: String,
+    default: null
+  },
+  to: {
     type: String,
     default: null
   }
@@ -12,16 +16,20 @@ defineProps({
 </script>
 
 <template>
-  <div class="mb-4 px-5">
-    <div :class="`mb-3 text-2xl dark:text-${color}`">
-      {{ header }}
-    </div>
-    <div>
+  <UPageCard
+    :icon="icon"
+    :title="header"
+    :to="to"
+    variant="subtle"
+    :ui="{
+      container: 'p-4 sm:p-4 gap-y-1.5',
+      wrapper: 'items-start',
+      leading: 'p-2.5 rounded-full bg-primary/10 ring ring-inset ring-primary/25 flex-col',
+      title: 'font-normal text-muted text-xs uppercase'
+    }"
+  >
+    <span class="text-2xl font-semibold text-highlighted">
       <slot />
-    </div>
-  </div>
+    </span>
+  </UPageCard>
 </template>
-
-<style scoped>
-
-</style>

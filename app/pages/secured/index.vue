@@ -93,7 +93,7 @@ function onLogout() {
             Stammdaten
           </p>
           <p class="text-highlighted mb-3">
-            The original dashboard sample lives here, separate from your account.
+            Reference data for this campaign: spells, skills and types.
           </p>
           <StammdatenBox />
         </UCard>
