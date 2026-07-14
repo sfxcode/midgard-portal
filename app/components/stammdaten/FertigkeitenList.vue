@@ -3,6 +3,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import type { Fertigkeit, FertigkeitLernen } from '~/models'
 import { useFertigkeit } from '~/composables/stamm/useFertigkeit'
+import { useFertigkeitenExport } from '~/composables/stamm/useFertigkeitenExport'
 
 const props = defineProps<{
   typName: string
@@ -20,6 +21,7 @@ const { fertigkeiten, fertigkeitenLerneinheiten, fertigkeitenLerneinheitenByTyp 
 const { calculateFertigkeitEpKosten, calculateFertigkeitLernKosten } = useFertigkeit()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
+const { exportFertigkeitenData } = useFertigkeitenExport()
 const { sortableHeader } = useSortableColumn()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
@@ -126,6 +128,12 @@ function exportData() {
     { key: 'gold', label: 'Gold' }
   ], 'fertigkeiten')
 }
+
+function exportPdf() {
+  const rows = (table.value?.tableApi?.getFilteredRowModel().rows ?? []).map(r => r.original)
+  const title = typ.value ? `Fertigkeiten Blatt - ${typ.value.name}` : 'Fertigkeiten Blatt'
+  exportFertigkeitenData(rows.map(r => r.fertigkeit), title)
+}
 </script>
 
 <template>
@@ -171,13 +179,22 @@ function exportData() {
     </UTable>
 
     <div class="flex items-center justify-between gap-3 border-t border-default pt-4">
-      <UButton
-        label="Export"
-        icon="i-lucide-download"
-        color="neutral"
-        variant="subtle"
-        @click="exportData"
-      />
+      <div class="flex items-center gap-1.5">
+        <UButton
+          label="CSV"
+          icon="i-lucide-download"
+          color="neutral"
+          variant="subtle"
+          @click="exportData"
+        />
+        <UButton
+          label="PDF"
+          icon="i-lucide-file-text"
+          color="neutral"
+          variant="subtle"
+          @click="exportPdf"
+        />
+      </div>
 
       <UPagination
         :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"

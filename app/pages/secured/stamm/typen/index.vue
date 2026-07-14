@@ -2,12 +2,14 @@
 import type { TableColumn } from '@nuxt/ui'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import type { Typ } from '~/models'
+import { useTypenExport } from '~/composables/stamm/useTypenExport'
 
 const table = useTemplateRef('table')
 
 const { typen } = useStammdatenStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
+const { exportTypenData } = useTypenExport()
 const { sortableHeader } = useSortableColumn()
 
 const kategorien = computed(() => uniqueValues(typen.value, v => v.kategorie))
@@ -42,6 +44,11 @@ function exportData() {
     { key: 'kategorie', label: 'Kategorie' },
     { key: 'buch', label: 'Buch' }
   ], 'typen')
+}
+
+function exportPdf() {
+  const rows = (table.value?.tableApi?.getFilteredRowModel().rows ?? []).map(r => r.original)
+  exportTypenData(rows, 'Typen Blatt')
 }
 
 const items = [
@@ -109,13 +116,22 @@ useSeoMeta({
         </UTable>
 
         <div class="flex items-center justify-between gap-3 border-t border-default pt-4">
-          <UButton
-            label="Export"
-            icon="i-lucide-download"
-            color="neutral"
-            variant="subtle"
-            @click="exportData"
-          />
+          <div class="flex items-center gap-1.5">
+            <UButton
+              label="CSV"
+              icon="i-lucide-download"
+              color="neutral"
+              variant="subtle"
+              @click="exportData"
+            />
+            <UButton
+              label="PDF"
+              icon="i-lucide-file-text"
+              color="neutral"
+              variant="subtle"
+              @click="exportPdf"
+            />
+          </div>
 
           <UPagination
             :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
