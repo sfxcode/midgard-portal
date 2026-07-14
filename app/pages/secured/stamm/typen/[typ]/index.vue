@@ -1,17 +1,25 @@
 <script setup lang="ts">
-import type { FertigkeitLerneinheit, ZauberLerneinheit } from '~/models'
+import type { FertigkeitLerneinheit, Typ, ZauberLerneinheit } from '~/models'
 import { useBeschreibung } from '~/composables/stamm/useBeschreibung'
+import { useStammEdit } from '~/composables/stamm/useStammEdit'
 
 const route = useRoute()
 const param = `${route.params.typ}`
 
-const { typen } = useStammdatenStore()
+const { typen, refetchTypen } = useStammdatenStore()
 const { zauberLerneinheiten, zauberLerneinheitenByTyp } = useZauberStore()
 const { fertigkeitenLerneinheiten, fertigkeitenLerneinheitenByTyp } = useFertigkeitenStore()
 const { beschreibung, beschreibungContent, loadBeschreibung, saveBeschreibung } = useBeschreibung()
+const { saveStammDocument } = useStammEdit()
 const { sortableHeader } = useSortableColumn()
 
 const typ = computed(() => typen.value?.find(t => t.name === param))
+
+async function handleTypSave(data: Partial<Typ>) {
+  if (!typ.value) return
+  await saveStammDocument('ms_typen', { ...typ.value, ...data })
+  await refetchTypen()
+}
 
 const zauberLE = computed(() => (zauberLerneinheiten.value ? zauberLerneinheitenByTyp(param) : []))
 const fertigkeitenLE = computed(() => (fertigkeitenLerneinheiten.value ? fertigkeitenLerneinheitenByTyp(param) : []))
@@ -62,7 +70,7 @@ useSeoMeta({
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div class="flex flex-col gap-6">
           <UCard v-if="typ">
-            <StammdatenTypView :typ="typ" />
+            <StammdatenTypView :typ="typ" :on-save="handleTypSave" />
           </UCard>
 
           <div class="flex flex-col gap-6 sm:flex-row">

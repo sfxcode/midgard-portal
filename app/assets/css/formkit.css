@@ -64,3 +64,30 @@
 .formkit-debug:focus-within {
   opacity: 1;
 }
+
+/*
+ * Stamm data-edit forms (see useStammSchemas.ts): fields stack in a single
+ * column on narrow screens, then flow into a responsive 2-up flex layout on
+ * wider ones. The child-combinator selector is needed to out-specificity the
+ * blanket ".formkit-outer { width: 100% }" rule above.
+ */
+.stamm-form-grid {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stamm-form-grid {
+    flex-direction: row;
+  }
+
+  .stamm-form-grid > .formkit-outer {
+    width: calc(50% - 0.5rem);
+  }
+
+  .stamm-form-grid > .formkit-outer.stamm-form-field-full {
+    width: 100%;
+  }
+}

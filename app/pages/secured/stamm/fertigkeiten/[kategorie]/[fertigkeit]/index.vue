@@ -1,17 +1,25 @@
 <script setup lang="ts">
 import type { Fertigkeit } from '~/models'
 import { useBeschreibung } from '~/composables/stamm/useBeschreibung'
+import { useStammEdit } from '~/composables/stamm/useStammEdit'
 
 const route = useRoute()
 const kategorieParameter = `${route.params.kategorie}`
 const fertigkeitParameter = `${route.params.fertigkeit}`
 
-const { fertigkeiten } = useFertigkeitenStore()
+const { fertigkeiten, refetchFertigkeiten } = useFertigkeitenStore()
 const { beschreibung, beschreibungContent, loadBeschreibung, saveBeschreibung } = useBeschreibung()
+const { saveStammDocument } = useStammEdit()
 
 const fertigkeit = computed(() => {
   return fertigkeiten.value?.find((f: Fertigkeit) => f.name === fertigkeitParameter && f.kategorie === kategorieParameter)
 })
+
+async function handleFertigkeitSave(data: Partial<Fertigkeit>) {
+  if (!fertigkeit.value) return
+  await saveStammDocument('ms_fertigkeiten', { ...fertigkeit.value, ...data })
+  await refetchFertigkeiten()
+}
 
 onMounted(async () => {
   await loadBeschreibung(fertigkeitParameter, 'Fertigkeit')
@@ -45,7 +53,7 @@ useSeoMeta({
     <template #body>
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <UCard v-if="fertigkeit">
-          <StammdatenFertigkeitView :fertigkeit="fertigkeit" />
+          <StammdatenFertigkeitView :fertigkeit="fertigkeit" :on-save="handleFertigkeitSave" />
         </UCard>
         <UCard>
           <StammdatenBeschreibungView
