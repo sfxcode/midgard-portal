@@ -2,12 +2,12 @@
 defineProps({
   header: {
     type: String,
-    default: null,
+    default: null
   },
   color: {
     type: String,
-    default: null,
-  },
+    default: null
+  }
 })
 </script>
 

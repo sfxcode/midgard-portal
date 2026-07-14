@@ -8,14 +8,14 @@ export function useZauberStore() {
 
   const { data: zauber, refetch: refetchZauber } = useQuery({
     key: () => ['ms_zauber'],
-    query: () => findAll('ms_zauber').then((res: any) => res as Zauber[]),
-    staleTime,
+    query: () => findAll('ms_zauber').then(res => res as unknown as Zauber[]),
+    staleTime
   })
 
   function filterZauberByName(name: string): SearchResult[] {
     const result: SearchResult[] = []
     if (zauber.value) {
-      zauber.value.filter((zauber: any) => {
+      zauber.value.filter((zauber) => {
         return zauber.name.toLowerCase().includes(name.toLowerCase())
       }).forEach((zauber: Zauber) => result.push({ collection: 'Zauber', kategorie: zauber.kategorie, name: zauber.name }))
     }
@@ -32,23 +32,22 @@ export function useZauberStore() {
   const zauberNamen = computed(() => {
     if (zauber.value) {
       return Array.from(new Set(zauber.value.map(t => t.name))).sort()
-    }
-    else {
+    } else {
       return []
     }
   })
 
   const { data: zauberLerneinheiten, refetch: refetchZauberLerneinheiten } = useQuery({
     key: () => ['ms_zauber_lerneinheiten'],
-    query: () => findAll('ms_zauber_lerneinheiten').then((res: any) => res as ZauberLerneinheit[]),
-    staleTime,
+    query: () => findAll('ms_zauber_lerneinheiten').then(res => res as unknown as ZauberLerneinheit[]),
+    staleTime
   })
 
   function zauberLerneinheitenByTyp(typ: string): ZauberLerneinheit[] {
     if (!zauberLerneinheiten.value) {
       return []
     }
-    return sortArray(zauberLerneinheiten.value.filter((le: any) => {
+    return sortArray(zauberLerneinheiten.value.filter((le) => {
       return le.typ === typ && le.kosten > 0
     }), 'kategorie')
   }

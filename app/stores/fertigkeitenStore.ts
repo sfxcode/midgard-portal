@@ -8,14 +8,14 @@ export function useFertigkeitenStore() {
 
   const { data: fertigkeiten, refetch: refetchFertigkeiten } = useQuery({
     key: () => ['ms_fertigkeiten'],
-    query: () => findAll('ms_fertigkeiten').then((res: any) => res as Fertigkeit[]),
-    staleTime,
+    query: () => findAll('ms_fertigkeiten').then(res => res as unknown as Fertigkeit[]),
+    staleTime
   })
 
   function filterFertigkeitenByName(name: string): SearchResult[] {
     const result: SearchResult[] = []
     if (fertigkeiten.value) {
-      fertigkeiten.value.filter((fertigkeit: any) => {
+      fertigkeiten.value.filter((fertigkeit) => {
         return fertigkeit.name.toLowerCase().includes(name.toLowerCase())
       }).forEach((fertigkeit: Fertigkeit) => result.push({ collection: 'Fertigkeit', kategorie: fertigkeit.kategorie, name: fertigkeit.name }))
     }
@@ -25,23 +25,22 @@ export function useFertigkeitenStore() {
   const fertigkeitenNamen = computed(() => {
     if (fertigkeiten.value) {
       return Array.from(new Set(fertigkeiten.value.map(t => t.name))).sort()
-    }
-    else {
+    } else {
       return []
     }
   })
 
   const { data: fertigkeitenLerneinheiten, refetch: refetchFertigkeitenLerneinheiten } = useQuery({
     key: () => ['ms_fertigkeiten_lerneinheiten'],
-    query: () => findAll('ms_fertigkeiten_lerneinheiten').then((res: any) => res as FertigkeitLerneinheit[]),
-    staleTime,
+    query: () => findAll('ms_fertigkeiten_lerneinheiten').then(res => res as unknown as FertigkeitLerneinheit[]),
+    staleTime
   })
 
   function fertigkeitenLerneinheitenByTyp(typ: string): FertigkeitLerneinheit[] {
     if (!fertigkeitenLerneinheiten.value) {
       return []
     }
-    return sortArray(fertigkeitenLerneinheiten.value.filter((le: any) => {
+    return sortArray(fertigkeitenLerneinheiten.value.filter((le) => {
       return le.typ === typ && le.kosten > 0
     }), 'kategorie')
   }

@@ -20,7 +20,7 @@ export interface Abenteurer {
   zauberAngeboren: Array<string>
   fertigkeiten: Array<AbenteurerFertigkeit>
   fertigkeitenAngeboren: Array<AbenteurerFertigkeit>
-  werte: { [key: string]: any }
+  werte: { [key: string]: unknown }
   metaData: MetaData
   _id?: string
 }

@@ -15,20 +15,6 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css', '~/assets/css/formkit.css'],
 
-  mongocamp: {
-    url: 'https://midgard-server.sfxcode.com',
-    paginationSize: 1000,
-    tokenRefreshIntervall: 60 * 1000,
-  },
-
-  fonts: {
-    families: [
-      { name: 'Cinzel', provider: 'google', global: true, weights: [400, 500, 600, 700, 800] },
-      { name: 'Alegreya', provider: 'google', global: true, weights: [400, 500, 600, 700, 800], styles: ['normal', 'italic'] },
-      { name: 'Alegreya Sans', provider: 'google', global: true, weights: [400, 500, 700], styles: ['normal', 'italic'] }
-    ]
-  },
-
   routeRules: {
     '/api/**': {
       cors: true
@@ -51,5 +37,19 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+
+  fonts: {
+    families: [
+      { name: 'Cinzel', provider: 'google', global: true, weights: [400, 500, 600, 700, 800] },
+      { name: 'Alegreya', provider: 'google', global: true, weights: [400, 500, 600, 700, 800], styles: ['normal', 'italic'] },
+      { name: 'Alegreya Sans', provider: 'google', global: true, weights: [400, 500, 700], styles: ['normal', 'italic'] }
+    ]
+  },
+
+  mongocamp: {
+    url: 'https://midgard-server.sfxcode.com',
+    paginationSize: 1000,
+    tokenRefreshIntervall: 60 * 1000
   }
 })
