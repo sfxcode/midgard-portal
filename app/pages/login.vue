@@ -25,7 +25,7 @@ useSeoMeta({
       </p>
     </div>
 
-    <MongocampLogin />
+    <MongocampLogin redirect-path="/secured" />
   </div>
 </template>
 
