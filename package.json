@@ -15,10 +15,10 @@
     "@iconify-json/simple-icons": "^1.2.90",
     "@internationalized/date": "^3.12.2",
     "@nuxt/fonts": "^0.14.0",
-    "@nuxt/ui": "^4.9.0",
-    "@pinia/colada-nuxt": "^1.0.1",
-    "@pinia/nuxt": "^0.11.3",
-    "@sfxcode/nuxt-ui-mongocamp": "^1.1.2",
+    "@nuxt/ui": "^4.10.0",
+    "@pinia/colada-nuxt": "^1.0.2",
+    "@pinia/nuxt": "^1.0.1",
+    "@sfxcode/nuxt-ui-mongocamp": "^1.2.2",
     "@tanstack/table-core": "^8.21.3",
     "@unovis/ts": "^1.6.7",
     "@unovis/vue": "^1.6.7",
@@ -28,7 +28,7 @@
     "nuxt": "^4.4.8",
     "nuxt-pdfmake": "^0.1.1",
     "scule": "^1.3.0",
-    "vue": "^3.5.39",
+    "vue": "^3.5.40",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -36,8 +36,8 @@
     "@types/pdfmake": "^0.3.3",
     "eslint": "^10.7.0",
     "pdfmake": "^0.3.11",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vue-tsc": "^3.3.7"
   },
-  "packageManager": "pnpm@11.12.0+sha512.820a6fbd0d9f04c226638002aead1e45340a9139dd5dc077c1d83ef44aa2481c8eb6637b4c9aa696a3c7e35ba818e49cf27213e5f2b91138d09b7a3e26e898ba"
+  "packageManager": "pnpm@11.14.0+sha512.66c1ac4c7d4762d6d7dde44c7f3e5a73591ed0a0806e751d4ed32d4f004f25b2285a906b1fd8a9e3e621df3b4e2858bf88e50e0cf626bedbe977fe434a5caf85"
 }

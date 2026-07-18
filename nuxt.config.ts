@@ -60,6 +60,17 @@ export default defineNuxtConfig({
   mongocamp: {
     url: 'https://midgard-server.sfxcode.com',
     paginationSize: 1000,
-    tokenRefreshIntervall: 60 * 1000
+    tokenRefreshInterval: 60 * 1000
+  },
+
+  nuxtUiMongocamp: {
+    logoutPath: 'logout',
+    notAllowedPath: '/',
+    managerRoles: ['manager'],
+    securedRouteParts: ['/secured/**'],
+    managementRouteParts: ['/secured/manager/**'],
+    adminRouteParts: ['/secured/admin/**'],
+    useGlobalAuthMiddleware: false,
+    useServerProxy: false,
   }
 })

@@ -5,3 +5,5 @@ allowBuilds:
   maplibre-gl: false
   unrs-resolver: false
   vue-demi: false
+minimumReleaseAgeExclude:
+  - '@sfxcode/nuxt-ui-mongocamp'
