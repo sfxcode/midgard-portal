@@ -38,12 +38,12 @@ onMounted(async () => {
   await loadBeschreibung(param, 'Typ')
 })
 
-const lerntabelleZauber = `/secured/stamm/typen/${param}/zauber`
-const lerntabelleFertigkeiten = `/secured/stamm/typen/${param}/fertigkeiten`
+const lerntabelleZauber = `/secured/manager/stamm/typen/${param}/zauber`
+const lerntabelleFertigkeiten = `/secured/manager/stamm/typen/${param}/fertigkeiten`
 
 const items = [
-  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/stamm' },
-  { label: 'Typen', icon: 'i-lucide-list', to: '/secured/stamm/typen' },
+  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/manager/stamm' },
+  { label: 'Typen', icon: 'i-lucide-list', to: '/secured/manager/stamm/typen' },
   { label: param }
 ]
 

@@ -18,7 +18,7 @@ const columns: TableColumn<Typ>[] = [
   {
     accessorKey: 'name',
     header: sortableHeader<Typ>('Name'),
-    cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/stamm/typen/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
+    cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/typen/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
   { accessorKey: 'nameKurz', header: sortableHeader<Typ>('Bez.') },
   { accessorKey: 'kategorie', header: sortableHeader<Typ>('Kategorie') },
@@ -52,7 +52,7 @@ function exportPdf() {
 }
 
 const items = [
-  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/stamm' },
+  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/manager/stamm' },
   { label: 'Typen' }
 ]
 

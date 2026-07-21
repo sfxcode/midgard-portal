@@ -6,13 +6,13 @@ const { fertigkeiten } = useFertigkeitenStore()
 
 <template>
   <div class="grid gap-2 sm:grid-cols-3">
-    <AdvertiseBox header="Zauber" icon="i-lucide-wand-sparkles" to="/secured/stamm/zauber">
+    <AdvertiseBox header="Zauber" icon="i-lucide-wand-sparkles" to="/secured/manager/stamm/zauber">
       {{ zauber?.length ?? 0 }}
     </AdvertiseBox>
-    <AdvertiseBox header="Fertigkeiten" icon="i-lucide-swords" to="/secured/stamm/fertigkeiten">
+    <AdvertiseBox header="Fertigkeiten" icon="i-lucide-swords" to="/secured/manager/stamm/fertigkeiten">
       {{ fertigkeiten?.length ?? 0 }}
     </AdvertiseBox>
-    <AdvertiseBox header="Typen" icon="i-lucide-shapes" to="/secured/stamm/typen">
+    <AdvertiseBox header="Typen" icon="i-lucide-shapes" to="/secured/manager/stamm/typen">
       {{ typen?.length ?? 0 }}
     </AdvertiseBox>
   </div>

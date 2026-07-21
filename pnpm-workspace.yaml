@@ -7,3 +7,9 @@ allowBuilds:
   vue-demi: false
 minimumReleaseAgeExclude:
   - '@sfxcode/nuxt-ui-mongocamp'
+  - '@nuxt/kit@4.5.0'
+  - '@nuxt/nitro-server@4.5.0'
+  - '@nuxt/schema@4.5.0'
+  - '@nuxt/vite-builder@4.5.0'
+  - nuxt@4.5.0
+  - '@sfxcode/nuxt-ui-formkit@1.2.8'

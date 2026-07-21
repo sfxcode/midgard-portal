@@ -52,7 +52,7 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
     {
       accessorKey: 'name',
       header: sortableHeader<ZauberLernen>('Name'),
-      cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/stamm/zauber/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
+      cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/zauber/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
     }
   ]
 

@@ -23,8 +23,8 @@ onMounted(async () => {
 })
 
 const items = [
-  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/stamm' },
-  { label: 'Zauber', icon: 'i-lucide-list', to: '/secured/stamm/zauber' },
+  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/manager/stamm' },
+  { label: 'Zauber', icon: 'i-lucide-list', to: '/secured/manager/stamm/zauber' },
   { label: nameParameter }
 ]
 

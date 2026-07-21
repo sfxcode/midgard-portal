@@ -5,6 +5,7 @@ const route = useRoute()
 const toast = useToast()
 const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
+const { isManager } = useMongocampRoles()
 
 const open = ref(false)
 
@@ -13,30 +14,6 @@ const links = computed(() => [[{
   icon: 'i-lucide-home',
   to: '/secured',
   exact: true,
-  onSelect: () => {
-    open.value = false
-  }
-}, {
-  type: 'label' as const,
-  label: 'Stammdaten'
-}, {
-  label: 'Zauber',
-  icon: 'i-lucide-wand-sparkles',
-  to: '/secured/stamm/zauber',
-  onSelect: () => {
-    open.value = false
-  }
-}, {
-  label: 'Fertigkeiten',
-  icon: 'i-lucide-swords',
-  to: '/secured/stamm/fertigkeiten',
-  onSelect: () => {
-    open.value = false
-  }
-}, {
-  label: 'Typen',
-  icon: 'i-lucide-shapes',
-  to: '/secured/stamm/typen',
   onSelect: () => {
     open.value = false
   }
@@ -59,7 +36,57 @@ const links = computed(() => [[{
         open.value = false
       }
     }]
+  : []), ...(isManager.value
+  ? [{
+      type: 'label' as const,
+      label: 'Management'
+    }, {
+      label: 'Stamm',
+      icon: 'i-lucide-database',
+      to: '/secured/manager/stamm',
+      defaultOpen: true,
+      type: 'trigger',
+      children: [{
+        label: 'Zauber',
+        icon: 'i-lucide-wand-sparkles',
+        to: '/secured/manager/stamm/zauber',
+        onSelect: () => {
+          open.value = false
+        }
+      }, {
+        label: 'Fertigkeiten',
+        icon: 'i-lucide-swords',
+        to: '/secured/manager/stamm/fertigkeiten',
+        onSelect: () => {
+          open.value = false
+        }
+      }, {
+        label: 'Typen',
+        icon: 'i-lucide-shapes',
+        to: '/secured/manager/stamm/typen',
+        onSelect: () => {
+          open.value = false
+        }
+      }]
+    }]
   : []), {
+  type: 'label' as const,
+  label: 'DM'
+}, {
+  label: 'NPC',
+  icon: 'i-lucide-skull',
+  to: '/secured/dm/npc',
+  defaultOpen: true,
+  type: 'trigger',
+  children: [{
+    label: 'Bestiarium',
+    icon: 'i-lucide-list',
+    to: '/secured/dm/npc/bestiarium',
+    onSelect: () => {
+      open.value = false
+    }
+  }]
+}, {
   type: 'label',
   label: 'Demo Dashboard'
 }, {

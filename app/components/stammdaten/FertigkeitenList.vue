@@ -72,7 +72,7 @@ const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
     {
       accessorKey: 'name',
       header: sortableHeader<FertigkeitLernen>('Name'),
-      cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/stamm/fertigkeiten/${row.original.kategorie}/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
+      cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/fertigkeiten/${row.original.kategorie}/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
     }
   ]
 

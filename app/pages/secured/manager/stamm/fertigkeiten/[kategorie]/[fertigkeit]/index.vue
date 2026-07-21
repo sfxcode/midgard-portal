@@ -26,8 +26,8 @@ onMounted(async () => {
 })
 
 const items = [
-  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/stamm' },
-  { label: 'Fertigkeiten', icon: 'i-lucide-list', to: '/secured/stamm/fertigkeiten' },
+  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/manager/stamm' },
+  { label: 'Fertigkeiten', icon: 'i-lucide-list', to: '/secured/manager/stamm/fertigkeiten' },
   { label: fertigkeitParameter }
 ]
 

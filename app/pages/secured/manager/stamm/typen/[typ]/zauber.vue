@@ -4,21 +4,21 @@ const param = `${route.params.typ}`
 const isElf = !!route.query.elf
 
 const items = [
-  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/stamm' },
-  { label: 'Typen', icon: 'i-lucide-list', to: '/secured/stamm/typen' },
-  { label: param, to: `/secured/stamm/typen/${param}` },
-  { label: 'Fertigkeiten' }
+  { label: 'Stammdaten', icon: 'i-lucide-database', to: '/secured/manager/stamm' },
+  { label: 'Typen', icon: 'i-lucide-list', to: '/secured/manager/stamm/typen' },
+  { label: param, to: `/secured/manager/stamm/typen/${param}` },
+  { label: 'Zauber' }
 ]
 
 useSeoMeta({
-  title: `${param} · Fertigkeiten`
+  title: `${param} · Zauber`
 })
 </script>
 
 <template>
-  <UDashboardPanel :id="`stamm-typ-${param}-fertigkeiten`">
+  <UDashboardPanel :id="`stamm-typ-${param}-zauber`">
     <template #header>
-      <UDashboardNavbar :title="`${param} · Fertigkeiten`">
+      <UDashboardNavbar :title="`${param} · Zauber`">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -30,7 +30,7 @@ useSeoMeta({
     </template>
 
     <template #body>
-      <StammdatenFertigkeitenList :typ-name="param" :is-elf="isElf" />
+      <StammdatenZauberList :typ-name="param" :is-elf="isElf" />
     </template>
   </UDashboardPanel>
 </template>

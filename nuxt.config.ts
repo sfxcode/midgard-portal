@@ -70,7 +70,7 @@ export default defineNuxtConfig({
     securedRouteParts: ['/secured/**'],
     managementRouteParts: ['/secured/manager/**'],
     adminRouteParts: ['/secured/admin/**'],
-    useGlobalAuthMiddleware: false,
+    useGlobalAuthMiddleware: true,
     useServerProxy: false,
   }
 })
