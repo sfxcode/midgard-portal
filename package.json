@@ -31,6 +31,7 @@
     "vue": "^3.5.40",
     "zod": "^4.4.3",
     "@3d-dice/dice-box": "^1.1.4",
+    "@3d-dice/dice-ui": "^0.5.2",
     "@3d-dice/theme-wooden": "0.2.0",
     "@dice-roller/rpg-dice-roller": "^5.5.1"
   },

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useDiceBox } from '~/composables/tools/useDiceBox'
+import type { DiceRoll } from '~/types'
 
 const { logout } = useMongocampAuth()
 const mongocampStorage = useMongocampStorage()
@@ -15,14 +16,16 @@ function onLogout() {
 }
 
 const { initDiceBox, roll } = useDiceBox()
-const defaultRoll = [{ qty: 1, sides: 100 }, { qty: 1, sides: 6 }, { qty: 1, sides: 20 }]
-
+const defaultRoll = [{ qty: 1, sides: 100 }, { qty: 1, sides: 20 }, { qty: 1, sides: 6 }]
+const result = ref<DiceRoll[]>()
 function rollDice() {
   roll(defaultRoll)
 }
 
 onMounted(() => {
-  initDiceBox('#dice-box', 16)
+  initDiceBox('#dice-box', 12, (groups: { rolls: DiceRoll[] }[]) => {
+    result.value = groups.flatMap(group => group.rolls)
+  })
 })
 </script>
 
@@ -50,7 +53,7 @@ onMounted(() => {
 
     <template #body>
       <div class="grid cols-1 l:cols-2 xl:cols-3 gap-4">
-        <UCard class="max-w-md">
+        <UCard class="max-w">
           <p class="text-sm text-muted mb-1">
             Signed in as
           </p>
@@ -81,7 +84,7 @@ onMounted(() => {
           />
         </UCard>
 
-        <UCard v-if="profile.isAdmin" class="max-w-md">
+        <UCard v-if="profile.isAdmin" class="max-w">
           <p class="text-sm text-muted mb-1">
             Administration
           </p>
@@ -103,7 +106,7 @@ onMounted(() => {
             />
           </div>
         </UCard>
-        <UCard class="max-w-md">
+        <UCard class="max-w">
           <p class="text-sm text-muted mb-1">
             Stammdaten
           </p>
@@ -112,7 +115,7 @@ onMounted(() => {
           </p>
           <StammdatenBox />
         </UCard>
-        <UCard class="max-w-md">
+        <UCard class="max-w">
           <p class="text-sm text-muted mb-1">
             DM
           </p>
@@ -121,16 +124,32 @@ onMounted(() => {
           </p>
           <DMBox />
         </UCard>
-        <UCard class="max-w-md">
+        <UCard class="max-w">
           <p class="text-sm text-muted mb-1">
             Dice
           </p>
           <p class="text-highlighted mb-3">
             Click the box to roll d100, d6 and d20.
           </p>
-          <div id="dice-box" class="h-40" @click="rollDice" />
+          <DiceResultDisplay v-if="result" :results="result" class="mb-3" />
+          <div id="dice-box" class="" @click="rollDice" />
         </UCard>
       </div>
     </template>
   </UDashboardPanel>
 </template>
+
+<style >
+
+.dice-box-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-image: url('/images/heroes/abenteurer.svg');
+  opacity: 0.50;
+  background-size: 70%;
+  background-repeat: no-repeat;
+}
+
+</style>
+
