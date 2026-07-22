@@ -16,6 +16,10 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css', '~/assets/css/formkit.css'],
 
+  build: {
+    transpile: ['@3d-dice/dice-box', '@dice-roller/rpg-dice-roller']
+  },
+
   routeRules: {
     '/api/**': {
       cors: true
@@ -30,10 +34,6 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-07-11',
-
-  build: {
-    transpile: ['@3d-dice/dice-box', '@dice-roller/rpg-dice-roller']
-  },
 
   vite: {
     optimizeDeps: {
@@ -75,6 +75,6 @@ export default defineNuxtConfig({
     managementRouteParts: ['/secured/manager/**'],
     adminRouteParts: ['/secured/admin/**'],
     useGlobalAuthMiddleware: true,
-    useServerProxy: false,
+    useServerProxy: false
   }
 })

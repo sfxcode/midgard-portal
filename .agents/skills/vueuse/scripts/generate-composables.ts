@@ -51,7 +51,7 @@ const PACKAGE_MAP: Record<string, string> = {
   rxjs: '@vueuse/rxjs',
   firebase: '@vueuse/firebase',
   electron: '@vueuse/electron',
-  math: '@vueuse/math',
+  math: '@vueuse/math'
 }
 
 // Convert camelCase to kebab-case
@@ -123,7 +123,7 @@ function extractOptions(tsContent: string, composableName: string): OptionInfo[]
   const pascalName = composableName.charAt(0).toUpperCase() + composableName.slice(1)
   const interfacePatterns = [
     new RegExp(`interface\\s+${pascalName}Options[^{]*\\{([^}]+(?:\\{[^}]*\\}[^}]*)*)\\}`, 's'),
-    new RegExp(`interface\\s+${pascalName}Option[^{]*\\{([^}]+(?:\\{[^}]*\\}[^}]*)*)\\}`, 's'),
+    new RegExp(`interface\\s+${pascalName}Option[^{]*\\{([^}]+(?:\\{[^}]*\\}[^}]*)*)\\}`, 's')
   ]
 
   let interfaceContent = ''
@@ -139,7 +139,6 @@ function extractOptions(tsContent: string, composableName: string): OptionInfo[]
     return options
 
   // Parse each property with JSDoc comments
-  // eslint-disable-next-line regexp/no-super-linear-backtracking
   const propRegex = /\/\*\*\s*([\s\S]*?)\*\/\s*(\w+)\??:\s*([^;\n]+)/g
 
   for (const match of interfaceContent.matchAll(propRegex)) {
@@ -155,7 +154,7 @@ function extractOptions(tsContent: string, composableName: string): OptionInfo[]
       name,
       type: type.trim().replace(/\s+/g, ' '),
       description: descMatch,
-      default: defaultMatch,
+      default: defaultMatch
     })
   }
 
@@ -268,7 +267,7 @@ function parseComposable(filePath: string): ComposableInfo | null {
     package: PACKAGE_MAP[pkg] || `@vueuse/${pkg}`,
     usage: extractUsage(content),
     options,
-    returns,
+    returns
   }
 }
 

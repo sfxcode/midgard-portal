@@ -139,8 +139,7 @@ onMounted(() => {
   </UDashboardPanel>
 </template>
 
-<style >
-
+<style>
 .dice-box-canvas {
   width: 100%;
   height: 100%;
@@ -150,6 +149,4 @@ onMounted(() => {
   background-size: 70%;
   background-repeat: no-repeat;
 }
-
 </style>
-

@@ -48,7 +48,12 @@ useSeoMeta({
 
     <template #body>
       <div class="mb-6 flex items-center gap-2">
-        <UInput v-model="name" placeholder="Name des neuen Wesens" @keyup.enter="createNewWesen" class="w-50" />
+        <UInput
+          v-model="name"
+          placeholder="Name des neuen Wesens"
+          class="w-50"
+          @keyup.enter="createNewWesen"
+        />
         <UButton
           label="Eintrag anlegen"
           icon="i-lucide-plus"

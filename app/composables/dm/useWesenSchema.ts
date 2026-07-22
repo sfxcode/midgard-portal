@@ -18,7 +18,7 @@ export function useWesenSchema() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function flexRow(fields: any[], fieldClass: string, columnCount = 0, rowClass = '') {
     const styled = fields.map(field => ({ ...field, outerClass: fieldClass }))
-    const filler = () => addElement('div', [], { class: fieldClass, 'aria-hidden': 'true' })
+    const filler = () => addElement('div', [], { 'class': fieldClass, 'aria-hidden': 'true' })
     const padded = columnCount > styled.length
       ? [...styled, ...Array.from({ length: columnCount - styled.length }, filler)]
       : styled

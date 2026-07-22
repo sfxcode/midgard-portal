@@ -4,7 +4,12 @@ const { wesen } = useBestiariumStore()
 
 <template>
   <div class="grid gap-2 sm:grid-cols-3">
-    <AdvertiseBox v-if="wesen" header="Bestiarium" icon="i-lucide-skull" to="/secured/dm/npc/bestiarium">
+    <AdvertiseBox
+      v-if="wesen"
+      header="Bestiarium"
+      icon="i-lucide-skull"
+      to="/secured/dm/npc/bestiarium"
+    >
       {{ wesen.length ?? 0 }}
     </AdvertiseBox>
   </div>

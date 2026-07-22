@@ -57,7 +57,7 @@ const facts = computed(() => [
 </script>
 
 <template>
-  <div >
+  <div>
     <div class="flex items-center justify-between mb-1">
       <p class="font-display text-xl text-highlighted">
         {{ wesen.name }} <span class="text-sm text-muted">(Grad {{ wesen.grad }})</span>

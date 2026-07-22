@@ -4,7 +4,6 @@ useSeoMeta({
 })
 
 const { wesen } = useBestiariumStore()
-
 </script>
 
 <template>
@@ -18,7 +17,12 @@ const { wesen } = useBestiariumStore()
     </template>
 
     <template #body>
-      <AdvertiseBox v-if="wesen" header="Bestiarium" icon="i-lucide-skull" to="/secured/dm/npc/bestiarium">
+      <AdvertiseBox
+        v-if="wesen"
+        header="Bestiarium"
+        icon="i-lucide-skull"
+        to="/secured/dm/npc/bestiarium"
+      >
         {{ wesen.length ?? 0 }}
       </AdvertiseBox>
     </template>
