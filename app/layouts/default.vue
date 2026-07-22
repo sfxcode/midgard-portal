@@ -17,6 +17,16 @@ const links = computed(() => [[{
   onSelect: () => {
     open.value = false
   }
+}, {
+  type: 'label' as const,
+  label: 'Spieler'
+}, {
+  label: 'Abenteurer',
+  icon: 'i-lucide-user',
+  to: '/secured/spieler/abenteurer',
+  onSelect: () => {
+    open.value = false
+  }
 }, ...(profile.value.isAdmin
   ? [{
       type: 'label' as const,
@@ -45,7 +55,7 @@ const links = computed(() => [[{
       icon: 'i-lucide-database',
       to: '/secured/manager/stamm',
       defaultOpen: true,
-      type: 'trigger',
+      type: 'trigger' as const,
       children: [{
         label: 'Zauber',
         icon: 'i-lucide-wand-sparkles',
@@ -77,7 +87,7 @@ const links = computed(() => [[{
   icon: 'i-lucide-skull',
   to: '/secured/dm/npc',
   defaultOpen: true,
-  type: 'trigger',
+  type: 'trigger' as const,
   children: [{
     label: 'Bestiarium',
     icon: 'i-lucide-list',
@@ -87,7 +97,7 @@ const links = computed(() => [[{
     }
   }]
 }, {
-  type: 'label',
+  type: 'label' as const,
   label: 'Demo Dashboard'
 }, {
   label: 'Character Sheet',
@@ -117,7 +127,7 @@ const links = computed(() => [[{
   to: '/secured/demo/settings',
   icon: 'i-lucide-shield-cog',
   defaultOpen: true,
-  type: 'trigger',
+  type: 'trigger' as const,
   children: [{
     label: 'Campaign Setup',
     to: '/secured/demo/settings',

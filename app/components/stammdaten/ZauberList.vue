@@ -8,6 +8,7 @@ import { useZauberExport } from '~/composables/stamm/useZauberExport'
 const props = defineProps<{
   typName: string
   isElf?: boolean
+  zauberFilter?: string[]
 }>()
 
 const UButton = resolveComponent('UButton')
@@ -30,7 +31,8 @@ const tableData = computed<ZauberLernen[]>(() => {
   if (!zauber.value || !zauberLerneinheiten.value) {
     return []
   }
-  return zauberLernenByTyp(zauber.value, props.typName, !!props.isElf, zauberLerneinheitenByTyp)
+  const result = zauberLernenByTyp(zauber.value, props.typName, !!props.isElf, zauberLerneinheitenByTyp)
+  return props.zauberFilter ? result.filter(z => props.zauberFilter!.includes(z.name)) : result
 })
 
 const kategorien = computed(() => uniqueValues(tableData.value, v => v.kategorie))
