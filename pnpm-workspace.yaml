@@ -1,4 +1,5 @@
 allowBuilds:
+  '@3d-dice/dice-box': false
   '@parcel/watcher': false
   '@tailwindcss/oxide': false
   esbuild: false
@@ -13,3 +14,5 @@ minimumReleaseAgeExclude:
   - '@nuxt/vite-builder@4.5.0'
   - nuxt@4.5.0
   - '@sfxcode/nuxt-ui-formkit@1.2.8'
+  - '@vue/language-core@3.3.8'
+  - vue-tsc@3.3.8

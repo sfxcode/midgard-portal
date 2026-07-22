@@ -18,8 +18,8 @@ const { wesen } = useBestiariumStore()
     </template>
 
     <template #body>
-      <AdvertiseBox header="Bestiarium" icon="i-lucide-skull" to="/secured/dm/npc/bestiarium">
-        {{ wesen?.length ?? 0 }}
+      <AdvertiseBox v-if="wesen" header="Bestiarium" icon="i-lucide-skull" to="/secured/dm/npc/bestiarium">
+        {{ wesen.length ?? 0 }}
       </AdvertiseBox>
     </template>
   </UDashboardPanel>

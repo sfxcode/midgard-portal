@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useDiceBox } from '~/composables/tools/useDiceBox'
+
 const { logout } = useMongocampAuth()
 const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
@@ -11,6 +13,17 @@ function onLogout() {
   logout()
   navigateTo('/login')
 }
+
+const { initDiceBox, roll } = useDiceBox()
+const defaultRoll = [{ qty: 1, sides: 100 }, { qty: 1, sides: 6 }, { qty: 1, sides: 20 }]
+
+function rollDice() {
+  roll(defaultRoll)
+}
+
+onMounted(() => {
+  initDiceBox('#dice-box', 16)
+})
 </script>
 
 <template>
@@ -22,6 +35,8 @@ function onLogout() {
         </template>
 
         <template #right>
+          <UColorModeSelect />
+
           <UButton
             label="Logout"
             icon="i-lucide-log-out"
@@ -34,7 +49,7 @@ function onLogout() {
     </template>
 
     <template #body>
-      <div class="flex flex-col gap-4">
+      <div class="grid cols-1 l:cols-2 xl:cols-3 gap-4">
         <UCard class="max-w-md">
           <p class="text-sm text-muted mb-1">
             Signed in as
@@ -96,6 +111,24 @@ function onLogout() {
             Reference data for this campaign: spells, skills and types.
           </p>
           <StammdatenBox />
+        </UCard>
+        <UCard class="max-w-md">
+          <p class="text-sm text-muted mb-1">
+            DM
+          </p>
+          <p class="text-highlighted mb-3">
+            Tools for the dungeon master: NPCs and bestiary.
+          </p>
+          <DMBox />
+        </UCard>
+        <UCard class="max-w-md">
+          <p class="text-sm text-muted mb-1">
+            Dice
+          </p>
+          <p class="text-highlighted mb-3">
+            Click the box to roll d100, d6 and d20.
+          </p>
+          <div id="dice-box" class="h-40" @click="rollDice" />
         </UCard>
       </div>
     </template>

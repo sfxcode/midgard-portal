@@ -31,6 +31,10 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-07-11',
 
+  build: {
+    transpile: ['@3d-dice/dice-box', '@dice-roller/rpg-dice-roller']
+  },
+
   vite: {
     optimizeDeps: {
       include: [

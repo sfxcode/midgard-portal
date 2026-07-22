@@ -1,0 +1,22 @@
+{
+  "name": "Rock",
+  "systemName": "rock",
+  "author": "Frank Ali",
+  "version": 0.1,
+  "meshName": "smoothDice",
+  "meshFile": "smoothDice.json",
+  "diceAvailable": ["d4","d6","d8","d10","d12","d20","d100"],
+  "material": {
+    "type": "color",
+    "diffuseTexture": {
+      "light": "diffuse-light.png",
+      "dark": "diffuse-dark.png"
+    },
+    "bumpTexture": "normal.png",
+    "specularTexture": "specularity.jpg",
+    "diffuseLevel": 1,
+    "bumpLevel": 0.5,
+    "specularPower": 0.5
+  },
+  "themeColor": "#6742c5"
+}
