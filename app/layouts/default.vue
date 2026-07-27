@@ -21,9 +21,24 @@ const links = computed(() => [[{
   type: 'label' as const,
   label: 'Spieler'
 }, {
+  label: 'Meine Daten',
+  icon: 'i-lucide-id-card',
+  to: '/secured/spieler',
+  exact: true,
+  onSelect: () => {
+    open.value = false
+  }
+}, {
   label: 'Abenteurer',
   icon: 'i-lucide-user',
   to: '/secured/spieler/abenteurer',
+  onSelect: () => {
+    open.value = false
+  }
+}, {
+  label: 'Kampagnen',
+  icon: 'i-lucide-scroll',
+  to: '/secured/spieler/kampagnen',
   onSelect: () => {
     open.value = false
   }
@@ -78,6 +93,20 @@ const links = computed(() => [[{
           open.value = false
         }
       }]
+    }, {
+      label: 'Spieler',
+      icon: 'i-lucide-user-cog',
+      to: '/secured/manager/spieler',
+      onSelect: () => {
+        open.value = false
+      }
+    }, {
+      label: 'Spielergruppen',
+      icon: 'i-lucide-users',
+      to: '/secured/manager/spielergruppen',
+      onSelect: () => {
+        open.value = false
+      }
     }]
   : []), {
   type: 'label' as const,
@@ -96,6 +125,13 @@ const links = computed(() => [[{
       open.value = false
     }
   }]
+}, {
+  label: 'Kampagnen',
+  icon: 'i-lucide-scroll',
+  to: '/secured/dm/kampagnen',
+  onSelect: () => {
+    open.value = false
+  }
 }, {
   type: 'label' as const,
   label: 'Demo Dashboard'
