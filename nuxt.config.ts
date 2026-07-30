@@ -64,7 +64,8 @@ export default defineNuxtConfig({
   mongocamp: {
     url: 'https://midgard-server.sfxcode.com',
     paginationSize: 1000,
-    tokenRefreshInterval: 60 * 1000
+    tokenRefreshInterval: 60 * 1000,
+    refreshToken: true
   },
 
   nuxtUiMongocamp: {
