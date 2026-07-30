@@ -23,7 +23,7 @@ const { zauberLernenByTyp } = useZauber()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportZauberData } = useZauberExport()
-const { sortableHeader } = useSortableColumn()
+const { sortableHeader, filterableHeader } = useSortableColumn()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
 
@@ -71,18 +71,22 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
     })
   }
 
-  cols.push({ accessorKey: 'stufe', header: sortableHeader<ZauberLernen>('Stufe'), filterFn: 'equals' })
+  cols.push({
+    accessorKey: 'stufe',
+    header: filterableHeader<ZauberLernen>('Stufe', () => stufen.map(s => ({ label: s, value: s })), { allLabel: 'Alle Stufen', toValue: Number }),
+    filterFn: 'equals'
+  })
 
   if (typ.value) {
     cols.push({ accessorKey: 'epKosten', header: sortableHeader<ZauberLernen>('EP') })
   }
 
-  cols.push({ accessorKey: 'zauberdauer', header: sortableHeader<ZauberLernen>('Dauer') })
-  cols.push({ accessorKey: 'kategorie', header: sortableHeader<ZauberLernen>('Kategorie') })
-  cols.push({ accessorKey: 'prozess', header: sortableHeader<ZauberLernen>('Prozess') })
+  cols.push({ accessorKey: 'zauberdauer', header: filterableHeader<ZauberLernen>('Dauer', () => zauberdauern.value.map(z => ({ label: z, value: z })), { allLabel: 'Alle Dauern' }), filterFn: 'equals' })
+  cols.push({ accessorKey: 'kategorie', header: filterableHeader<ZauberLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' })
+  cols.push({ accessorKey: 'prozess', header: filterableHeader<ZauberLernen>('Prozess', () => prozesse.value.map(p => ({ label: p, value: p })), { allLabel: 'Alle Prozesse' }), filterFn: 'equals' })
 
   if (!typ.value) {
-    cols.push({ accessorKey: 'art', header: sortableHeader<ZauberLernen>('Art') })
+    cols.push({ accessorKey: 'art', header: filterableHeader<ZauberLernen>('Art', () => arten.value.map(a => ({ label: a, value: a })), { allLabel: 'Alle Arten' }), filterFn: 'equals' })
     cols.push({ accessorKey: 'ap', header: sortableHeader<ZauberLernen>('AP') })
   }
 
@@ -90,27 +94,6 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
 })
 
 const globalFilter = ref('')
-const kategorieFilter = ref('all')
-const prozessFilter = ref('all')
-const artFilter = ref('all')
-const zauberdauerFilter = ref('all')
-const stufeFilter = ref('all')
-
-function applyFilter(columnId: string, value: string) {
-  const column = table.value?.tableApi?.getColumn(columnId)
-  if (!column) return
-  column.setFilterValue(value === 'all' ? undefined : value)
-}
-
-watch(kategorieFilter, v => applyFilter('kategorie', v))
-watch(prozessFilter, v => applyFilter('prozess', v))
-watch(artFilter, v => applyFilter('art', v))
-watch(zauberdauerFilter, v => applyFilter('zauberdauer', v))
-watch(stufeFilter, (v) => {
-  const column = table.value?.tableApi?.getColumn('stufe')
-  if (!column) return
-  column.setFilterValue(v === 'all' ? undefined : Number(v))
-})
 
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
 
@@ -149,19 +132,6 @@ function exportPdf() {
         placeholder="Globale Suche"
         class="max-w-xs"
       />
-    </div>
-
-    <div class="flex flex-wrap items-center gap-1.5">
-      <USelect v-model="stufeFilter" :items="[{ label: 'Alle Stufen', value: 'all' }, ...stufen.map(s => ({ label: s, value: s }))]" class="min-w-32" />
-      <USelect v-model="kategorieFilter" :items="[{ label: 'Alle Kategorien', value: 'all' }, ...kategorien.map(k => ({ label: k, value: k }))]" class="min-w-36" />
-      <USelect v-model="prozessFilter" :items="[{ label: 'Alle Prozesse', value: 'all' }, ...prozesse.map(p => ({ label: p, value: p }))]" class="min-w-36" />
-      <USelect
-        v-if="!typ"
-        v-model="artFilter"
-        :items="[{ label: 'Alle Arten', value: 'all' }, ...arten.map(a => ({ label: a, value: a }))]"
-        class="min-w-32"
-      />
-      <USelect v-model="zauberdauerFilter" :items="[{ label: 'Alle Dauern', value: 'all' }, ...zauberdauern.map(z => ({ label: z, value: z }))]" class="min-w-32" />
     </div>
 
     <UTable

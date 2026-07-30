@@ -10,7 +10,7 @@ const { typen } = useStammdatenStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportTypenData } = useTypenExport()
-const { sortableHeader } = useSortableColumn()
+const { sortableHeader, filterableHeader } = useSortableColumn()
 
 const kategorien = computed(() => uniqueValues(typen.value, v => v.kategorie))
 
@@ -21,18 +21,11 @@ const columns: TableColumn<Typ>[] = [
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/typen/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
   { accessorKey: 'nameKurz', header: sortableHeader<Typ>('Bez.') },
-  { accessorKey: 'kategorie', header: sortableHeader<Typ>('Kategorie') },
+  { accessorKey: 'kategorie', header: filterableHeader<Typ>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' },
   { accessorKey: 'buch', header: sortableHeader<Typ>('Buch') }
 ]
 
 const globalFilter = ref('')
-const kategorieFilter = ref('all')
-
-watch(kategorieFilter, (value) => {
-  const column = table.value?.tableApi?.getColumn('kategorie')
-  if (!column) return
-  column.setFilterValue(value === 'all' ? undefined : value)
-})
 
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
 
@@ -87,10 +80,6 @@ useSeoMeta({
             placeholder="Globale Suche"
             class="max-w-xs"
           />
-        </div>
-
-        <div class="flex flex-wrap items-center gap-1.5">
-          <USelect v-model="kategorieFilter" :items="[{ label: 'Alle Kategorien', value: 'all' }, ...kategorien.map(k => ({ label: k, value: k }))]" class="min-w-36" />
         </div>
 
         <UTable

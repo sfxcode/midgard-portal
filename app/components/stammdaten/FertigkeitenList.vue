@@ -22,7 +22,7 @@ const { calculateFertigkeitEpKosten, calculateFertigkeitLernKosten } = useFertig
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportFertigkeitenData } = useFertigkeitenExport()
-const { sortableHeader } = useSortableColumn()
+const { sortableHeader, filterableHeader } = useSortableColumn()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
 
@@ -90,8 +90,8 @@ const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
     cols.push({ accessorKey: 'epKosten', header: sortableHeader<FertigkeitLernen>('EP') })
   }
 
-  cols.push({ accessorKey: 'kategorie', header: sortableHeader<FertigkeitLernen>('Kategorie') })
-  cols.push({ accessorKey: 'schwierigkeit', header: sortableHeader<FertigkeitLernen>('Schwierigkeit') })
+  cols.push({ accessorKey: 'kategorie', header: filterableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' })
+  cols.push({ accessorKey: 'schwierigkeit', header: filterableHeader<FertigkeitLernen>('Schwierigkeit', () => schwierigkeiten.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Schwierigkeiten' }), filterFn: 'equals' })
   cols.push({ accessorKey: 'lerneinheiten', header: sortableHeader<FertigkeitLernen>('LE') })
   cols.push({ accessorKey: 'ungelernt', header: sortableHeader<FertigkeitLernen>('Ungelernt') })
   cols.push({ accessorKey: 'gelernt', header: sortableHeader<FertigkeitLernen>('Gelernt') })
@@ -100,17 +100,6 @@ const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
 })
 
 const globalFilter = ref('')
-const kategorieFilter = ref('all')
-const schwierigkeitFilter = ref('all')
-
-function applyFilter(columnId: string, value: string) {
-  const column = table.value?.tableApi?.getColumn(columnId)
-  if (!column) return
-  column.setFilterValue(value === 'all' ? undefined : value)
-}
-
-watch(kategorieFilter, v => applyFilter('kategorie', v))
-watch(schwierigkeitFilter, v => applyFilter('schwierigkeit', v))
 
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
 
@@ -148,11 +137,6 @@ function exportPdf() {
         placeholder="Globale Suche"
         class="max-w-xs"
       />
-    </div>
-
-    <div class="flex flex-wrap items-center gap-1.5">
-      <USelect v-model="kategorieFilter" :items="[{ label: 'Alle Kategorien', value: 'all' }, ...kategorien.map(k => ({ label: k, value: k }))]" class="min-w-36" />
-      <USelect v-model="schwierigkeitFilter" :items="[{ label: 'Alle Schwierigkeiten', value: 'all' }, ...schwierigkeiten.map(s => ({ label: s, value: s }))]" class="min-w-40" />
     </div>
 
     <UTable

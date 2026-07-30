@@ -14,7 +14,7 @@ const { wesen } = useBestiariumStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { vorkommenToString } = useWesen()
-const { sortableHeader } = useSortableColumn()
+const { sortableHeader, filterableHeader } = useSortableColumn()
 
 const tableData = computed<Wesen[]>(() => wesen.value ?? [])
 
@@ -34,7 +34,7 @@ const columns = computed<TableColumn<Wesen>[]>(() => [
     header: sortableHeader<Wesen>('Name'),
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/dm/npc/bestiarium/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
-  { accessorKey: 'kategorie', header: sortableHeader<Wesen>('Gruppe') },
+  { accessorKey: 'kategorie', header: filterableHeader<Wesen>('Gruppe', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Gruppen' }), filterFn: 'equals' },
   { accessorKey: 'grad', header: sortableHeader<Wesen>('Grad') },
   { accessorKey: 'gf', header: sortableHeader<Wesen>('Gf') },
   {
@@ -46,15 +46,6 @@ const columns = computed<TableColumn<Wesen>[]>(() => [
 ])
 
 const globalFilter = ref('')
-const kategorieFilter = ref('all')
-
-function applyFilter(columnId: string, value: string) {
-  const column = table.value?.tableApi?.getColumn(columnId)
-  if (!column) return
-  column.setFilterValue(value === 'all' ? undefined : value)
-}
-
-watch(kategorieFilter, v => applyFilter('kategorie', v))
 
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
 
@@ -82,10 +73,6 @@ function exportData() {
         placeholder="Globale Suche"
         class="max-w-xs"
       />
-    </div>
-
-    <div class="flex flex-wrap items-center gap-1.5">
-      <USelect v-model="kategorieFilter" :items="[{ label: 'Alle Gruppen', value: 'all' }, ...kategorien.map(k => ({ label: k, value: k }))]" class="min-w-36" />
     </div>
 
     <UTable
