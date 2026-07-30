@@ -22,7 +22,7 @@
     "@nuxt/ui": "^4.10.0",
     "@pinia/colada-nuxt": "^1.0.2",
     "@pinia/nuxt": "^1.0.1",
-    "@sfxcode/nuxt-ui-mongocamp": "^1.2.4",
+    "@sfxcode/nuxt-ui-mongocamp": "^1.2.5",
     "@tanstack/table-core": "^8.21.3",
     "@unovis/ts": "^1.6.7",
     "@unovis/vue": "^1.6.7",

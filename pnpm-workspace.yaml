@@ -17,4 +17,4 @@ minimumReleaseAgeExclude:
   - '@vue/language-core@3.3.8'
   - vue-tsc@3.3.8
   - '@nuxtjs/i18n@10.6.0'
-  - '@sfxcode/nuxt-mongocamp-server@1.5.1'
+  - '@sfxcode/nuxt-mongocamp-server@1.5.1 || 1.5.2'
