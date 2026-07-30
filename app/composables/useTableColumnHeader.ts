@@ -1,17 +1,21 @@
 import type { Column } from '@tanstack/table-core'
-import { UButton, USelect } from '#components'
+import { UButton, UInput, USelect } from '#components'
 
-export interface FilterableHeaderItem {
+export interface SelectableHeaderItem {
   label: string
   value: string
 }
 
-export interface FilterableHeaderOptions {
+export interface SelectableHeaderOptions {
   allLabel?: string
   toValue?: (value: string) => unknown
 }
 
-export function useSortableColumn() {
+export interface SearchableHeaderOptions {
+  placeholder?: string
+}
+
+export function useTableColumnHeader() {
   function sortToggle<T>(column: Column<T, unknown>, label: string) {
     const isSorted = column.getIsSorted()
     return h(UButton, {
@@ -28,7 +32,7 @@ export function useSortableColumn() {
     return ({ column }: { column: Column<T, unknown> }) => sortToggle(column, label)
   }
 
-  function filterableHeader<T>(label: string, items: () => FilterableHeaderItem[], options?: FilterableHeaderOptions) {
+  function selectableHeader<T>(label: string, items: () => SelectableHeaderItem[], options?: SelectableHeaderOptions) {
     const allLabel = options?.allLabel ?? 'Alle'
     const toValue = options?.toValue ?? ((value: string) => value)
 
@@ -47,5 +51,23 @@ export function useSortableColumn() {
     }
   }
 
-  return { sortableHeader, filterableHeader }
+  function searchableHeader<T>(label: string, options?: SearchableHeaderOptions) {
+    return ({ column }: { column: Column<T, unknown> }) => {
+      const filterValue = column.getFilterValue()
+      return h('div', { class: 'flex flex-col gap-1' }, [
+        sortToggle(column, label),
+        h(UInput, {
+          'modelValue': (filterValue as string) ?? '',
+          'onUpdate:modelValue': (value: string) => column.setFilterValue(value === '' ? undefined : value),
+          'size': 'xs',
+          'placeholder': options?.placeholder ?? label,
+          'class': 'w-full',
+          'onClick': (event: Event) => event.stopPropagation()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+      ])
+    }
+  }
+
+  return { sortableHeader, selectableHeader, searchableHeader }
 }

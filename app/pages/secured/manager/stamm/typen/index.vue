@@ -10,7 +10,7 @@ const { typen } = useStammdatenStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportTypenData } = useTypenExport()
-const { sortableHeader, filterableHeader } = useSortableColumn()
+const { sortableHeader, selectableHeader } = useTableColumnHeader()
 
 const kategorien = computed(() => uniqueValues(typen.value, v => v.kategorie))
 
@@ -21,7 +21,7 @@ const columns: TableColumn<Typ>[] = [
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/typen/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
   { accessorKey: 'nameKurz', header: sortableHeader<Typ>('Bez.') },
-  { accessorKey: 'kategorie', header: filterableHeader<Typ>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' },
+  { accessorKey: 'kategorie', header: selectableHeader<Typ>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' },
   { accessorKey: 'buch', header: sortableHeader<Typ>('Buch') }
 ]
 
@@ -93,7 +93,7 @@ useSeoMeta({
             base: 'table-fixed border-separate border-spacing-0',
             thead: '[&>tr]:bg-elevated/50 [&>tr]:after:content-none',
             tbody: '[&>tr]:last:[&>td]:border-b-0',
-            th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
+            th: 'py-2 align-top first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
             td: 'border-b border-default'
           }"
         >
@@ -120,6 +120,7 @@ useSeoMeta({
               variant="subtle"
               @click="exportPdf"
             />
+            <TableResetFiltersButton :table-api="table?.tableApi" />
           </div>
 
           <UPagination

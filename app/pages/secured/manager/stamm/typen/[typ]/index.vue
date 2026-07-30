@@ -11,7 +11,7 @@ const { zauberLerneinheiten, zauberLerneinheitenByTyp } = useZauberStore()
 const { fertigkeitenLerneinheiten, fertigkeitenLerneinheitenByTyp } = useFertigkeitenStore()
 const { beschreibung, beschreibungContent, loadBeschreibung, saveBeschreibung } = useBeschreibung()
 const { saveStammDocument } = useStammEdit()
-const { sortableHeader } = useSortableColumn()
+const { sortableHeader } = useTableColumnHeader()
 
 const typ = computed(() => typen.value?.find(t => t.name === param))
 

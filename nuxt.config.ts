@@ -35,6 +35,34 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-07-11',
 
+  icon: {
+    clientBundle: {
+      // Nav icons are assembled dynamically (computed array of objects), so
+      // @nuxt/icon's static scanner can't detect them from template literals.
+      // List them explicitly to avoid a runtime API fetch (and the
+      // "[Icon] failed to load icon" warning it produces on a cold cache).
+      icons: [
+        'lucide:book',
+        'lucide:database',
+        'lucide:home',
+        'lucide:id-card',
+        'lucide:list',
+        'lucide:message-square',
+        'lucide:scroll',
+        'lucide:shapes',
+        'lucide:shield',
+        'lucide:shield-cog',
+        'lucide:skull',
+        'lucide:swords',
+        'lucide:user',
+        'lucide:user-cog',
+        'lucide:users',
+        'lucide:users-2',
+        'lucide:wand-sparkles'
+      ]
+    }
+  },
+
   vite: {
     optimizeDeps: {
       include: [

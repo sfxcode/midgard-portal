@@ -23,7 +23,7 @@ const { zauberLernenByTyp } = useZauber()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportZauberData } = useZauberExport()
-const { sortableHeader, filterableHeader } = useSortableColumn()
+const { sortableHeader, selectableHeader } = useTableColumnHeader()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
 
@@ -73,7 +73,7 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
 
   cols.push({
     accessorKey: 'stufe',
-    header: filterableHeader<ZauberLernen>('Stufe', () => stufen.map(s => ({ label: s, value: s })), { allLabel: 'Alle Stufen', toValue: Number }),
+    header: selectableHeader<ZauberLernen>('Stufe', () => stufen.map(s => ({ label: s, value: s })), { allLabel: 'Alle Stufen', toValue: Number }),
     filterFn: 'equals'
   })
 
@@ -81,17 +81,19 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
     cols.push({ accessorKey: 'epKosten', header: sortableHeader<ZauberLernen>('EP') })
   }
 
-  cols.push({ accessorKey: 'zauberdauer', header: filterableHeader<ZauberLernen>('Dauer', () => zauberdauern.value.map(z => ({ label: z, value: z })), { allLabel: 'Alle Dauern' }), filterFn: 'equals' })
-  cols.push({ accessorKey: 'kategorie', header: filterableHeader<ZauberLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' })
-  cols.push({ accessorKey: 'prozess', header: filterableHeader<ZauberLernen>('Prozess', () => prozesse.value.map(p => ({ label: p, value: p })), { allLabel: 'Alle Prozesse' }), filterFn: 'equals' })
+  cols.push({ accessorKey: 'zauberdauer', header: selectableHeader<ZauberLernen>('Dauer', () => zauberdauern.value.map(z => ({ label: z, value: z })), { allLabel: 'Alle Dauern' }), filterFn: 'equals' })
+  cols.push({ accessorKey: 'kategorie', header: selectableHeader<ZauberLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' })
+  cols.push({ accessorKey: 'prozess', header: selectableHeader<ZauberLernen>('Prozess', () => prozesse.value.map(p => ({ label: p, value: p })), { allLabel: 'Alle Prozesse' }), filterFn: 'equals', meta: { minBreakpoint: 'xl' } })
 
   if (!typ.value) {
-    cols.push({ accessorKey: 'art', header: filterableHeader<ZauberLernen>('Art', () => arten.value.map(a => ({ label: a, value: a })), { allLabel: 'Alle Arten' }), filterFn: 'equals' })
+    cols.push({ accessorKey: 'art', header: selectableHeader<ZauberLernen>('Art', () => arten.value.map(a => ({ label: a, value: a })), { allLabel: 'Alle Arten' }), filterFn: 'equals', meta: { minBreakpoint: 'xl' } })
     cols.push({ accessorKey: 'ap', header: sortableHeader<ZauberLernen>('AP') })
   }
 
   return cols
 })
+
+const { columnVisibility } = useResponsiveColumnVisibility(columns)
 
 const globalFilter = ref('')
 
@@ -139,13 +141,14 @@ function exportPdf() {
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
+      :column-visibility="columnVisibility"
       :data="tableData"
       :columns="columns"
       :ui="{
         base: 'table-fixed border-separate border-spacing-0',
         thead: '[&>tr]:bg-elevated/50 [&>tr]:after:content-none',
         tbody: '[&>tr]:last:[&>td]:border-b-0',
-        th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
+        th: 'py-2 align-top first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
         td: 'border-b border-default'
       }"
     >
@@ -172,6 +175,7 @@ function exportPdf() {
           variant="subtle"
           @click="exportPdf"
         />
+        <TableResetFiltersButton :table-api="table?.tableApi" />
       </div>
 
       <UPagination

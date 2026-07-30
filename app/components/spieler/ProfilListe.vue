@@ -4,7 +4,7 @@ import { getPaginationRowModel } from '@tanstack/table-core'
 import type { Spieler } from '~/models'
 
 const { spieler } = useSpielerStore()
-const { sortableHeader } = useSortableColumn()
+const { sortableHeader } = useTableColumnHeader()
 
 const table = useTemplateRef('table')
 

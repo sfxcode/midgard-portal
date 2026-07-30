@@ -14,7 +14,7 @@ const { wesen } = useBestiariumStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { vorkommenToString } = useWesen()
-const { sortableHeader, filterableHeader } = useSortableColumn()
+const { sortableHeader, selectableHeader } = useTableColumnHeader()
 
 const tableData = computed<Wesen[]>(() => wesen.value ?? [])
 
@@ -34,7 +34,7 @@ const columns = computed<TableColumn<Wesen>[]>(() => [
     header: sortableHeader<Wesen>('Name'),
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/dm/npc/bestiarium/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
-  { accessorKey: 'kategorie', header: filterableHeader<Wesen>('Gruppe', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Gruppen' }), filterFn: 'equals' },
+  { accessorKey: 'kategorie', header: selectableHeader<Wesen>('Gruppe', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Gruppen' }), filterFn: 'equals' },
   { accessorKey: 'grad', header: sortableHeader<Wesen>('Grad') },
   { accessorKey: 'gf', header: sortableHeader<Wesen>('Gf') },
   {
@@ -86,7 +86,7 @@ function exportData() {
         base: 'table-fixed border-separate border-spacing-0',
         thead: '[&>tr]:bg-elevated/50 [&>tr]:after:content-none',
         tbody: '[&>tr]:last:[&>td]:border-b-0',
-        th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
+        th: 'py-2 align-top first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
         td: 'border-b border-default'
       }"
     >
@@ -98,13 +98,16 @@ function exportData() {
     </UTable>
 
     <div class="flex items-center justify-between gap-3 border-t border-default pt-4">
-      <UButton
-        label="CSV"
-        icon="i-lucide-download"
-        color="neutral"
-        variant="subtle"
-        @click="exportData"
-      />
+      <div class="flex items-center gap-1.5">
+        <UButton
+          label="CSV"
+          icon="i-lucide-download"
+          color="neutral"
+          variant="subtle"
+          @click="exportData"
+        />
+        <TableResetFiltersButton :table-api="table?.tableApi" />
+      </div>
 
       <UPagination
         :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"

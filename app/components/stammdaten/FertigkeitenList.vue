@@ -22,7 +22,7 @@ const { calculateFertigkeitEpKosten, calculateFertigkeitLernKosten } = useFertig
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportFertigkeitenData } = useFertigkeitenExport()
-const { sortableHeader, filterableHeader } = useSortableColumn()
+const { sortableHeader, selectableHeader } = useTableColumnHeader()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
 
@@ -90,8 +90,8 @@ const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
     cols.push({ accessorKey: 'epKosten', header: sortableHeader<FertigkeitLernen>('EP') })
   }
 
-  cols.push({ accessorKey: 'kategorie', header: filterableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' })
-  cols.push({ accessorKey: 'schwierigkeit', header: filterableHeader<FertigkeitLernen>('Schwierigkeit', () => schwierigkeiten.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Schwierigkeiten' }), filterFn: 'equals' })
+  cols.push({ accessorKey: 'kategorie', header: selectableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' })
+  cols.push({ accessorKey: 'schwierigkeit', header: selectableHeader<FertigkeitLernen>('Schwierigkeit', () => schwierigkeiten.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Schwierigkeiten' }), filterFn: 'equals' })
   cols.push({ accessorKey: 'lerneinheiten', header: sortableHeader<FertigkeitLernen>('LE') })
   cols.push({ accessorKey: 'ungelernt', header: sortableHeader<FertigkeitLernen>('Ungelernt') })
   cols.push({ accessorKey: 'gelernt', header: sortableHeader<FertigkeitLernen>('Gelernt') })
@@ -151,7 +151,7 @@ function exportPdf() {
         base: 'table-fixed border-separate border-spacing-0',
         thead: '[&>tr]:bg-elevated/50 [&>tr]:after:content-none',
         tbody: '[&>tr]:last:[&>td]:border-b-0',
-        th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
+        th: 'py-2 align-top first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
         td: 'border-b border-default'
       }"
     >
@@ -178,6 +178,7 @@ function exportPdf() {
           variant="subtle"
           @click="exportPdf"
         />
+        <TableResetFiltersButton :table-api="table?.tableApi" />
       </div>
 
       <UPagination

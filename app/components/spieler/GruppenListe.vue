@@ -4,7 +4,7 @@ import { getPaginationRowModel } from '@tanstack/table-core'
 import type { Spielergruppe } from '~/models'
 
 const { spielergruppen } = useSpielergruppenStore()
-const { sortableHeader } = useSortableColumn()
+const { sortableHeader } = useTableColumnHeader()
 
 const table = useTemplateRef('table')
 
