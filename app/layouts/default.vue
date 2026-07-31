@@ -6,6 +6,15 @@ const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
 const { isManager } = useMongocampRoles()
 
+const { zauber } = useZauberStore()
+const { fertigkeiten } = useFertigkeitenStore()
+const { typen } = useStammdatenStore()
+const { wesen } = useBestiariumStore()
+const { abenteurer } = useAbenteurerStore()
+const { spieler } = useSpielerStore()
+const { spielergruppen } = useSpielergruppenStore()
+const { kampagnen } = useKampagneStore()
+
 const open = ref(false)
 
 const links = computed(() => [{
@@ -129,6 +138,77 @@ const groups = computed(() => [{
   id: 'links',
   label: 'Go to',
   items: links.value.filter((item: NavigationMenuItem) => item.type !== 'label')
+}, ...(isManager.value
+  ? [{
+      id: 'zauber',
+      label: 'Zauber',
+      items: (zauber.value ?? []).map(z => ({
+        label: z.name,
+        suffix: z.kategorie,
+        icon: 'i-lucide-wand-sparkles',
+        to: `/secured/manager/stamm/zauber/${z.name}`
+      }))
+    }, {
+      id: 'fertigkeiten',
+      label: 'Fertigkeiten',
+      items: (fertigkeiten.value ?? []).map(f => ({
+        label: f.name,
+        suffix: f.kategorie,
+        icon: 'i-lucide-swords',
+        to: `/secured/manager/stamm/fertigkeiten/${f.kategorie}/${f.name}`
+      }))
+    }, {
+      id: 'typen',
+      label: 'Typen',
+      items: (typen.value ?? []).map(t => ({
+        label: t.name,
+        icon: 'i-lucide-shapes',
+        to: `/secured/manager/stamm/typen/${t.name}`
+      }))
+    }, {
+      id: 'spieler',
+      label: 'Spieler',
+      items: (spieler.value ?? []).map(s => ({
+        label: s.name,
+        suffix: s.login,
+        icon: 'i-lucide-user-cog',
+        to: `/secured/manager/spieler/${s.login}`
+      }))
+    }, {
+      id: 'spielergruppen',
+      label: 'Spielergruppen',
+      items: (spielergruppen.value ?? []).map(g => ({
+        label: g.name,
+        icon: 'i-lucide-users',
+        to: `/secured/manager/spielergruppen/${g._id}`
+      }))
+    }]
+  : []), {
+  id: 'wesen',
+  label: 'Bestiarium',
+  items: (wesen.value ?? []).map(w => ({
+    label: w.name,
+    suffix: w.kategorie,
+    icon: 'i-lucide-list',
+    to: `/secured/dm/npc/bestiarium/${w.name}`
+  }))
+}, {
+  id: 'abenteurer',
+  label: 'Abenteurer',
+  items: (abenteurer.value ?? []).map(a => ({
+    label: a.name,
+    suffix: a.spieler,
+    icon: 'i-lucide-user',
+    to: `/secured/spieler/abenteurer/${a._id}`
+  }))
+}, {
+  id: 'kampagnen',
+  label: 'Kampagnen',
+  items: (kampagnen.value ?? []).map(k => ({
+    label: k.name,
+    icon: 'i-lucide-scroll',
+    to: `/secured/dm/kampagnen/${k._id}`
+  }))
 }])
 
 onMounted(async () => {
