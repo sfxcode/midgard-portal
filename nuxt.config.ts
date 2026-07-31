@@ -33,7 +33,33 @@ export default defineNuxtConfig({
     }
   },
 
-  compatibilityDate: '2024-07-11',
+  compatibilityDate: '2026-07-31',
+
+  vite: {
+    optimizeDeps: {
+      include: [
+        'pdfmake/build/pdfmake',
+        'pdfmake/build/vfs_fonts'
+      ]
+    }
+  },
+
+  eslint: {
+    config: {
+      stylistic: {
+        commaDangle: 'never',
+        braceStyle: '1tbs'
+      }
+    }
+  },
+
+  fonts: {
+    families: [
+      { name: 'Cinzel', provider: 'google', global: true, weights: [400, 500, 600, 700, 800] },
+      { name: 'Alegreya', provider: 'google', global: true, weights: [400, 500, 600, 700, 800], styles: ['normal', 'italic'] },
+      { name: 'Alegreya Sans', provider: 'google', global: true, weights: [400, 500, 700], styles: ['normal', 'italic'] }
+    ]
+  },
 
   icon: {
     clientBundle: {
@@ -63,34 +89,9 @@ export default defineNuxtConfig({
     }
   },
 
-  vite: {
-    optimizeDeps: {
-      include: [
-        'pdfmake/build/pdfmake',
-        'pdfmake/build/vfs_fonts'
-      ]
-    }
-  },
-
-  eslint: {
-    config: {
-      stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
-  },
-
-  fonts: {
-    families: [
-      { name: 'Cinzel', provider: 'google', global: true, weights: [400, 500, 600, 700, 800] },
-      { name: 'Alegreya', provider: 'google', global: true, weights: [400, 500, 600, 700, 800], styles: ['normal', 'italic'] },
-      { name: 'Alegreya Sans', provider: 'google', global: true, weights: [400, 500, 700], styles: ['normal', 'italic'] }
-    ]
-  },
-
   mongocamp: {
-    url: 'https://midgard-server.sfxcode.com',
+    url: process.env.MONGOCAMP_URL,
+    apiKey: process.env.MONGOCAMP_API_KEY,
     paginationSize: 1000,
     tokenRefreshInterval: 60 * 1000,
     refreshToken: true

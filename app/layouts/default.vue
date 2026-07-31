@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 
-const route = useRoute()
 const toast = useToast()
 const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
@@ -132,64 +131,6 @@ const links = computed(() => [[{
   onSelect: () => {
     open.value = false
   }
-}, {
-  type: 'label' as const,
-  label: 'Demo Dashboard'
-}, {
-  label: 'Character Sheet',
-  icon: 'i-lucide-user',
-  to: '/secured/demo',
-  exact: true,
-  onSelect: () => {
-    open.value = false
-  }
-}, {
-  label: 'Quest Log',
-  icon: 'i-lucide-scroll',
-  to: '/secured/demo/inbox',
-  badge: '4',
-  onSelect: () => {
-    open.value = false
-  }
-}, {
-  label: 'Party Members',
-  icon: 'i-lucide-users-2',
-  to: '/secured/demo/customers',
-  onSelect: () => {
-    open.value = false
-  }
-}, {
-  label: 'Campaign Config',
-  to: '/secured/demo/settings',
-  icon: 'i-lucide-shield-cog',
-  defaultOpen: true,
-  type: 'trigger' as const,
-  children: [{
-    label: 'Campaign Setup',
-    to: '/secured/demo/settings',
-    exact: true,
-    onSelect: () => {
-      open.value = false
-    }
-  }, {
-    label: 'NPCs & Allies',
-    to: '/secured/demo/settings/members',
-    onSelect: () => {
-      open.value = false
-    }
-  }, {
-    label: 'Game Events',
-    to: '/secured/demo/settings/notifications',
-    onSelect: () => {
-      open.value = false
-    }
-  }, {
-    label: 'Campaign Access',
-    to: '/secured/demo/settings/security',
-    onSelect: () => {
-      open.value = false
-    }
-  }]
 }], [{
   label: 'Discord Community',
   icon: 'i-lucide-message-square',
@@ -206,16 +147,6 @@ const groups = computed(() => [{
   id: 'links',
   label: 'Go to',
   items: links.value.flat().filter((item: NavigationMenuItem) => item.type !== 'label')
-}, {
-  id: 'code',
-  label: 'Code',
-  items: [{
-    id: 'source',
-    label: 'View page source',
-    icon: 'i-simple-icons-github',
-    to: `https://github.com/nuxt-ui-templates/dashboard/blob/main/app/pages${route.path === '/secured/demo' ? '/secured/demo/index' : route.path}.vue`,
-    target: '_blank'
-  }]
 }])
 
 onMounted(async () => {
@@ -254,10 +185,6 @@ onMounted(async () => {
       class="bg-elevated/25"
       :ui="{ footer: 'lg:border-t lg:border-default' }"
     >
-      <template #header="{ collapsed }">
-        <TeamsMenu :collapsed="collapsed" />
-      </template>
-
       <template #default="{ collapsed }">
         <UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-default" />
 
@@ -287,7 +214,5 @@ onMounted(async () => {
     <UDashboardSearch :groups="groups" />
 
     <slot />
-
-    <NotificationsSlideover />
   </UDashboardGroup>
 </template>

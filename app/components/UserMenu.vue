@@ -29,10 +29,6 @@ const items = computed<DropdownMenuItem[][]>(() => ([[{
 }, {
   label: 'Achievements',
   icon: 'i-lucide-award'
-}, {
-  label: 'Campaign Config',
-  icon: 'i-lucide-settings',
-  to: '/secured/demo/settings'
 }], [{
   label: 'Theme',
   icon: 'i-lucide-palette',

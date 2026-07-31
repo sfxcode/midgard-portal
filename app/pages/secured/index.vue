@@ -69,21 +69,6 @@ onMounted(() => {
           />
         </UCard>
 
-        <UCard v-if="false" class="max-w-md">
-          <p class="text-sm text-muted mb-1">
-            Sample content
-          </p>
-          <p class="text-highlighted mb-3">
-            The original dashboard sample lives here, separate from your account.
-          </p>
-          <UButton
-            label="View Demo Dashboard"
-            icon="i-lucide-layout-dashboard"
-            to="/secured/demo"
-            variant="subtle"
-          />
-        </UCard>
-
         <UCard v-if="profile.isAdmin" class="max-w">
           <p class="text-sm text-muted mb-1">
             Administration
