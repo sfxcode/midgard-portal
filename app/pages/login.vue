@@ -3,6 +3,14 @@ definePageMeta({
   layout: 'auth'
 })
 
+const { isLoggedIn } = useMongocampAuth()
+
+onMounted(() => {
+  if (isLoggedIn.value) {
+    navigateTo('/secured')
+  }
+})
+
 useSeoMeta({
   title: 'Sign In'
 })

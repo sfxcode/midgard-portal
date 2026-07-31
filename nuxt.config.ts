@@ -93,7 +93,7 @@ export default defineNuxtConfig({
     url: process.env.MONGOCAMP_URL,
     apiKey: process.env.MONGOCAMP_API_KEY,
     paginationSize: 1000,
-    tokenRefreshInterval: 60 * 1000,
+    tokenRefreshInterval: 60 * 1000 * 10,
     refreshToken: true
   },
 
