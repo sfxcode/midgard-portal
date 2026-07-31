@@ -18,10 +18,18 @@ const props = withDefaults(defineProps<{
 // border-t here is only needed to separate the footer from the empty-state
 // message — with real rows it would just double up the visual line.
 const hasRows = computed(() => (props.tableApi?.getFilteredRowModel().rows.length ?? 0) > 0)
+
+function hasActiveFilters() {
+  return (props.tableApi?.getState().columnFilters.length ?? 0) > 0
+}
+
+function resetFilters() {
+  props.tableApi?.resetColumnFilters()
+}
 </script>
 
 <template>
-  <div class="flex items-center gap-3 pt-4" :class="{ 'border-t border-default': !hasRows }">
+  <div class="flex items-center gap-3 pt-2" :class="{ 'border-t border-default': !hasRows }">
     <div class="flex flex-1 items-center gap-1.5">
       <slot />
     </div>
@@ -34,7 +42,15 @@ const hasRows = computed(() => (props.tableApi?.getFilteredRowModel().rows.lengt
     />
 
     <div class="flex flex-1 items-center justify-end gap-1.5">
-      <TableResetFiltersButton v-if="resettable" :table-api="tableApi" />
+      <UButton
+        v-if="resettable"
+        label="Filter zurücksetzen"
+        icon="i-lucide-filter-x"
+        color="neutral"
+        variant="subtle"
+        :disabled="!hasActiveFilters()"
+        @click="resetFilters"
+      />
     </div>
   </div>
 </template>
