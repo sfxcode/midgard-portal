@@ -1,5 +1,5 @@
 import type { Column, Row } from '@tanstack/table-core'
-import { UButton, UInput, UInputNumber, USelect, USelectMenu } from '#components'
+import { UButton, UInput, USelect, USelectMenu } from '#components'
 import { h, ref } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 
@@ -25,15 +25,6 @@ export interface BooleanHeaderOptions {
   yesLabel?: string
   noLabel?: string
   onFilterChange?: (value: boolean | undefined) => void
-}
-
-export interface NumberRangeHeaderOptions {
-  min?: number
-  max?: number
-  step?: number
-  minPlaceholder?: string
-  maxPlaceholder?: string
-  onFilterChange?: (value: [number | undefined, number | undefined] | undefined) => void
 }
 
 // `multiSelectableHeader` lets a user pick several values to filter a column
@@ -168,65 +159,6 @@ export function useTableColumnHeader() {
     }
   }
 
-  function numberRangeHeader<T>(label: string, options?: NumberRangeHeaderOptions) {
-    return ({ column }: { column: Column<T, unknown> }) => {
-      const filterValue = column.getFilterValue() as [number | undefined, number | undefined] | undefined
-      const min = filterValue?.[0]
-      const max = filterValue?.[1]
-
-      const setMin = (value: number | null) => {
-        const next = value ?? undefined
-        const newValue = next === undefined && max === undefined ? undefined : [next, max]
-        if (options?.onFilterChange) {
-          options.onFilterChange(newValue as [number | undefined, number | undefined] | undefined)
-        }
-        else {
-          column.setFilterValue(newValue)
-        }
-      }
-      const setMax = (value: number | null) => {
-        const next = value ?? undefined
-        const newValue = min === undefined && next === undefined ? undefined : [min, next]
-        if (options?.onFilterChange) {
-          options.onFilterChange(newValue as [number | undefined, number | undefined] | undefined)
-        }
-        else {
-          column.setFilterValue(newValue)
-        }
-      }
-
-      return h('div', { class: 'flex flex-col gap-1' }, [
-        sortToggle(column, label),
-        h('div', { class: 'flex items-center gap-1' }, [
-          h(UInputNumber, {
-            'modelValue': min ?? null,
-            'onUpdate:modelValue': setMin,
-            'min': options?.min,
-            'max': options?.max,
-            'step': options?.step,
-            'placeholder': options?.minPlaceholder ?? 'Min',
-            'size': 'xs',
-            'class': 'flex-1 min-w-0',
-            'onClick': (event: Event) => event.stopPropagation(),
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any),
-          h(UInputNumber, {
-            'modelValue': max ?? null,
-            'onUpdate:modelValue': setMax,
-            'min': options?.min,
-            'max': options?.max,
-            'step': options?.step,
-            'placeholder': options?.maxPlaceholder ?? 'Max',
-            'size': 'xs',
-            'class': 'flex-1 min-w-0',
-            'onClick': (event: Event) => event.stopPropagation(),
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any),
-        ]),
-      ])
-    }
-  }
-
   function searchableHeader<T>(label: string, options?: SearchableHeaderOptions) {
     const localValue = ref('')
     let lastColumnValue: string | undefined
@@ -268,5 +200,5 @@ export function useTableColumnHeader() {
     }
   }
 
-  return { sortableHeader, selectableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader, searchableHeader, multiSelectFilter }
+  return { sortableHeader, selectableHeader, multiSelectableHeader, booleanHeader, searchableHeader, multiSelectFilter }
 }

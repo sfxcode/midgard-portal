@@ -10,7 +10,7 @@ const props = defineProps({
   },
   onSave: {
     type: Function as PropType<(data: Partial<Typ>) => Promise<void> | void>,
-    required: true
+    default: undefined
   }
 })
 
@@ -34,7 +34,7 @@ const editData = computed(() => {
 })
 
 async function handleSave(data: Record<string, unknown>) {
-  await props.onSave(data as Partial<Typ>)
+  await props.onSave?.(data as Partial<Typ>)
   editMode.value = false
 }
 </script>
@@ -46,6 +46,7 @@ async function handleSave(data: Record<string, unknown>) {
         {{ typ.name }}
       </p>
       <UButton
+        v-if="onSave"
         :icon="editMode ? 'i-lucide-eye' : 'i-lucide-pencil'"
         size="xs"
         color="neutral"

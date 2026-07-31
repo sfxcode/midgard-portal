@@ -10,7 +10,7 @@ const table = useTemplateRef('table')
 
 const tableData = computed<Spieler[]>(() => spieler.value ?? [])
 
-const columns: TableColumn<Spieler>[] = [
+const columns = computed<TableColumn<Spieler>[]>(() => withResponsiveBreakpoints([
   {
     accessorKey: 'name',
     header: sortableHeader<Spieler>('Name'),
@@ -19,7 +19,9 @@ const columns: TableColumn<Spieler>[] = [
   { accessorKey: 'login', header: sortableHeader<Spieler>('Login') },
   { accessorKey: 'email', header: sortableHeader<Spieler>('E-Mail') },
   { accessorKey: 'rolle', header: sortableHeader<Spieler>('Rolle') }
-]
+]))
+
+const { columnVisibility } = useResponsiveColumnVisibility(columns)
 
 const globalFilter = defineModel<string>('globalFilter', { default: '' })
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
@@ -32,6 +34,7 @@ const pagination = ref({ pageIndex: 0, pageSize: 10 })
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
+      :column-visibility="columnVisibility"
       :data="tableData"
       :columns="columns"
     >

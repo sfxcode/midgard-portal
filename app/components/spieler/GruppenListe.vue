@@ -10,7 +10,7 @@ const table = useTemplateRef('table')
 
 const tableData = computed<Spielergruppe[]>(() => spielergruppen.value ?? [])
 
-const columns: TableColumn<Spielergruppe>[] = [
+const columns = computed<TableColumn<Spielergruppe>[]>(() => withResponsiveBreakpoints([
   {
     accessorKey: 'name',
     header: sortableHeader<Spielergruppe>('Name'),
@@ -21,7 +21,9 @@ const columns: TableColumn<Spielergruppe>[] = [
     header: 'Mitglieder',
     cell: ({ row }) => row.original.mitglieder.length
   }
-]
+]))
+
+const { columnVisibility } = useResponsiveColumnVisibility(columns)
 
 const globalFilter = defineModel<string>('globalFilter', { default: '' })
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
@@ -34,6 +36,7 @@ const pagination = ref({ pageIndex: 0, pageSize: 10 })
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
+      :column-visibility="columnVisibility"
       :data="tableData"
       :columns="columns"
     >

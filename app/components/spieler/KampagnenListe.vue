@@ -18,7 +18,7 @@ const props = defineProps({
   }
 })
 
-const columns: TableColumn<Kampagne>[] = [
+const columns = computed<TableColumn<Kampagne>[]>(() => withResponsiveBreakpoints([
   {
     accessorKey: 'name',
     header: 'Name',
@@ -30,13 +30,16 @@ const columns: TableColumn<Kampagne>[] = [
     header: 'Spieler',
     cell: ({ row }) => row.original.spieler.length
   }
-]
+]))
+
+const { columnVisibility } = useResponsiveColumnVisibility(columns)
 
 const tableData = computed(() => props.kampagnen)
 </script>
 
 <template>
   <UTable
+    :column-visibility="columnVisibility"
     :data="tableData"
     :columns="columns"
   >

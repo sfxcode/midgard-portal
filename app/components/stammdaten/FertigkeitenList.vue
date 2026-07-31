@@ -22,7 +22,7 @@ const { calculateFertigkeitEpKosten, calculateFertigkeitLernKosten } = useFertig
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportFertigkeitenData } = useFertigkeitenExport()
-const { sortableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader, multiSelectFilter } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, booleanHeader, searchableHeader, multiSelectFilter } = useTableColumnHeader()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
 
@@ -58,6 +58,10 @@ const tableData = computed<FertigkeitLernen[]>(() => {
 
 const kategorien = computed(() => uniqueValues(tableData.value, v => v.kategorie))
 const schwierigkeiten = computed(() => uniqueValues(tableData.value, v => v.schwierigkeit))
+const lerneinheitenWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.lerneinheiten))).sort((a, b) => a - b))
+const kostenWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.kosten))).sort((a, b) => a - b))
+const goldWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.gold))).sort((a, b) => a - b))
+const epKostenWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.epKosten))).sort((a, b) => a - b))
 
 const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
   const cols: TableColumn<FertigkeitLernen>[] = [
@@ -71,30 +75,31 @@ const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
     },
     {
       accessorKey: 'name',
-      header: sortableHeader<FertigkeitLernen>('Name'),
+      header: searchableHeader<FertigkeitLernen>('Name'),
+      filterFn: 'includesString',
       cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/fertigkeiten/${row.original.kategorie}/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
-    }
+    },
+    { accessorKey: 'kategorie', header: multiSelectableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: multiSelectFilter }
   ]
 
   if (typ.value) {
     cols.push({
       accessorKey: 'kosten',
-      header: numberRangeHeader<FertigkeitLernen>('Punkte'),
-      filterFn: 'inNumberRange',
+      header: multiSelectableHeader<FertigkeitLernen>('Punkte', () => kostenWerte.value.map(v => ({ label: String(v), value: String(v) })), { allLabel: 'Alle Punkte', toValue: Number }),
+      filterFn: multiSelectFilter,
       cell: ({ row }) => new Intl.NumberFormat('de-DE').format(row.original.kosten)
     })
     cols.push({
       accessorKey: 'gold',
-      header: numberRangeHeader<FertigkeitLernen>('Gold'),
-      filterFn: 'inNumberRange',
+      header: multiSelectableHeader<FertigkeitLernen>('Gold', () => goldWerte.value.map(v => ({ label: String(v), value: String(v) })), { allLabel: 'Alle Gold', toValue: Number }),
+      filterFn: multiSelectFilter,
       cell: ({ row }) => h('span', { class: 'text-primary' }, new Intl.NumberFormat('de-DE').format(row.original.gold))
     })
-    cols.push({ accessorKey: 'epKosten', header: numberRangeHeader<FertigkeitLernen>('EP'), filterFn: 'inNumberRange' })
+    cols.push({ accessorKey: 'epKosten', header: multiSelectableHeader<FertigkeitLernen>('EP', () => epKostenWerte.value.map(v => ({ label: String(v), value: String(v) })), { allLabel: 'Alle EP', toValue: Number }), filterFn: multiSelectFilter })
   }
 
-  cols.push({ accessorKey: 'kategorie', header: multiSelectableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: multiSelectFilter })
   cols.push({ accessorKey: 'schwierigkeit', header: multiSelectableHeader<FertigkeitLernen>('Schwierigkeit', () => schwierigkeiten.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Schwierigkeiten' }), filterFn: multiSelectFilter })
-  cols.push({ accessorKey: 'lerneinheiten', header: numberRangeHeader<FertigkeitLernen>('LE'), filterFn: 'inNumberRange' })
+  cols.push({ accessorKey: 'lerneinheiten', header: multiSelectableHeader<FertigkeitLernen>('LE', () => lerneinheitenWerte.value.map(v => ({ label: String(v), value: String(v) })), { allLabel: 'Alle LE', toValue: Number }), filterFn: multiSelectFilter })
   cols.push({ accessorKey: 'ungelernt', header: sortableHeader<FertigkeitLernen>('Ungelernt') })
   cols.push({
     id: 'gelerntFlag',
@@ -104,8 +109,10 @@ const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
     cell: ({ row }) => new Intl.NumberFormat('de-DE').format(row.original.gelernt)
   })
 
-  return cols
+  return withResponsiveBreakpoints(cols)
 })
+
+const { columnVisibility } = useResponsiveColumnVisibility(columns)
 
 const globalFilter = defineModel<string>('globalFilter', { default: '' })
 
@@ -142,6 +149,7 @@ function exportPdf() {
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
+      :column-visibility="columnVisibility"
       data-key="uniqueName"
       :data="tableData"
       :columns="columns"

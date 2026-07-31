@@ -14,13 +14,14 @@ const { wesen } = useBestiariumStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { vorkommenToString } = useWesen()
-const { sortableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader, multiSelectFilter } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, booleanHeader, multiSelectFilter } = useTableColumnHeader()
 
 const tableData = computed<Wesen[]>(() => wesen.value ?? [])
 
 const kategorien = computed(() => uniqueValues(tableData.value, v => v.kategorie))
+const gradWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.grad))).sort((a, b) => a - b))
 
-const columns = computed<TableColumn<Wesen>[]>(() => [
+const columns = computed<TableColumn<Wesen>[]>(() => withResponsiveBreakpoints([
   {
     id: 'preview',
     cell: ({ row }) =>
@@ -35,7 +36,7 @@ const columns = computed<TableColumn<Wesen>[]>(() => [
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/dm/npc/bestiarium/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
   { accessorKey: 'kategorie', header: multiSelectableHeader<Wesen>('Gruppe', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Gruppen' }), filterFn: multiSelectFilter },
-  { accessorKey: 'grad', header: numberRangeHeader<Wesen>('Grad'), filterFn: 'inNumberRange' },
+  { accessorKey: 'grad', header: multiSelectableHeader<Wesen>('Grad', () => gradWerte.value.map(v => ({ label: String(v), value: String(v) })), { allLabel: 'Alle Grade', toValue: Number }), filterFn: multiSelectFilter },
   { accessorKey: 'gf', header: sortableHeader<Wesen>('Gf') },
   {
     id: 'fliegend',
@@ -50,7 +51,9 @@ const columns = computed<TableColumn<Wesen>[]>(() => [
     header: sortableHeader<Wesen>('Vorkommen'),
     cell: ({ row }) => vorkommenToString(row.original)
   }
-])
+]))
+
+const { columnVisibility } = useResponsiveColumnVisibility(columns)
 
 const globalFilter = defineModel<string>('globalFilter', { default: '' })
 
@@ -77,6 +80,7 @@ function exportData() {
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
+      :column-visibility="columnVisibility"
       :data="tableData"
       :columns="columns"
       :ui="{ th: 'align-top' }"

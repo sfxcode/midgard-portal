@@ -4,26 +4,41 @@ import { getPaginationRowModel } from '@tanstack/table-core'
 import type { Typ } from '~/models'
 import { useTypenExport } from '~/composables/stamm/useTypenExport'
 
+const UButtonComponent = resolveComponent('UButton')
+const UPopover = resolveComponent('UPopover')
+const TypViewComponent = resolveComponent('StammdatenTypView')
+
 const table = useTemplateRef('table')
 
 const { typen } = useStammdatenStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportTypenData } = useTypenExport()
-const { sortableHeader, multiSelectableHeader, multiSelectFilter } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, searchableHeader, multiSelectFilter } = useTableColumnHeader()
 
 const kategorien = computed(() => uniqueValues(typen.value, v => v.kategorie))
 
-const columns: TableColumn<Typ>[] = [
+const columns = computed<TableColumn<Typ>[]>(() => withResponsiveBreakpoints([
+  {
+    id: 'preview',
+    cell: ({ row }) =>
+      h(UPopover, {}, {
+        default: () => h(UButtonComponent, { icon: 'i-lucide-search', size: 'xs', color: 'neutral', variant: 'subtle' }),
+        content: () => h('div', { class: 'p-4 w-80' }, h(TypViewComponent, { typ: row.original }))
+      })
+  },
   {
     accessorKey: 'name',
-    header: sortableHeader<Typ>('Name'),
+    header: searchableHeader<Typ>('Name'),
+    filterFn: 'includesString',
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/typen/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
-  { accessorKey: 'nameKurz', header: sortableHeader<Typ>('Bez.') },
   { accessorKey: 'kategorie', header: multiSelectableHeader<Typ>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: multiSelectFilter },
+  { accessorKey: 'nameKurz', header: sortableHeader<Typ>('Bez.') },
   { accessorKey: 'buch', header: sortableHeader<Typ>('Buch') }
-]
+]))
+
+const { columnVisibility } = useResponsiveColumnVisibility(columns)
 
 const globalFilter = ref('')
 
@@ -93,6 +108,7 @@ useSeoMeta({
           v-model:global-filter="globalFilter"
           v-model:pagination="pagination"
           :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
+          :column-visibility="columnVisibility"
           :data="typen"
           :columns="columns"
           :ui="{ th: 'align-top' }"

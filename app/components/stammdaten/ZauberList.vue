@@ -23,7 +23,7 @@ const { zauberLernenByTyp } = useZauber()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportZauberData } = useZauberExport()
-const { sortableHeader, multiSelectableHeader, numberRangeHeader, multiSelectFilter } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, searchableHeader, multiSelectFilter } = useTableColumnHeader()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
 
@@ -40,6 +40,9 @@ const prozesse = computed(() => uniqueValues(tableData.value, v => v.prozess))
 const arten = computed(() => uniqueValues(tableData.value, v => v.art))
 const zauberdauern = computed(() => uniqueValues(tableData.value, v => v.zauberdauer))
 const stufen = Array.from({ length: 12 }, (_, i) => String(i + 1))
+const kostenWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.kosten))).sort((a, b) => a - b))
+const goldWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.gold))).sort((a, b) => a - b))
+const epKostenWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.epKosten))).sort((a, b) => a - b))
 
 const columns = computed<TableColumn<ZauberLernen>[]>(() => {
   const cols: TableColumn<ZauberLernen>[] = [
@@ -53,22 +56,24 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
     },
     {
       accessorKey: 'name',
-      header: sortableHeader<ZauberLernen>('Name'),
+      header: searchableHeader<ZauberLernen>('Name'),
+      filterFn: 'includesString',
       cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/zauber/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
-    }
+    },
+    { accessorKey: 'kategorie', header: multiSelectableHeader<ZauberLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: multiSelectFilter }
   ]
 
   if (typ.value) {
     cols.push({
       accessorKey: 'kosten',
-      header: numberRangeHeader<ZauberLernen>('Punkte'),
-      filterFn: 'inNumberRange',
+      header: multiSelectableHeader<ZauberLernen>('Punkte', () => kostenWerte.value.map(v => ({ label: String(v), value: String(v) })), { allLabel: 'Alle Punkte', toValue: Number }),
+      filterFn: multiSelectFilter,
       cell: ({ row }) => new Intl.NumberFormat('de-DE').format(row.original.kosten)
     })
     cols.push({
       accessorKey: 'gold',
-      header: numberRangeHeader<ZauberLernen>('Gold'),
-      filterFn: 'inNumberRange',
+      header: multiSelectableHeader<ZauberLernen>('Gold', () => goldWerte.value.map(v => ({ label: String(v), value: String(v) })), { allLabel: 'Alle Gold', toValue: Number }),
+      filterFn: multiSelectFilter,
       cell: ({ row }) => h('span', { class: 'text-primary' }, new Intl.NumberFormat('de-DE').format(row.original.gold))
     })
   }
@@ -80,19 +85,18 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
   })
 
   if (typ.value) {
-    cols.push({ accessorKey: 'epKosten', header: numberRangeHeader<ZauberLernen>('EP'), filterFn: 'inNumberRange' })
+    cols.push({ accessorKey: 'epKosten', header: multiSelectableHeader<ZauberLernen>('EP', () => epKostenWerte.value.map(v => ({ label: String(v), value: String(v) })), { allLabel: 'Alle EP', toValue: Number }), filterFn: multiSelectFilter })
   }
 
   cols.push({ accessorKey: 'zauberdauer', header: multiSelectableHeader<ZauberLernen>('Dauer', () => zauberdauern.value.map(z => ({ label: z, value: z })), { allLabel: 'Alle Dauern' }), filterFn: multiSelectFilter })
-  cols.push({ accessorKey: 'kategorie', header: multiSelectableHeader<ZauberLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: multiSelectFilter })
-  cols.push({ accessorKey: 'prozess', header: multiSelectableHeader<ZauberLernen>('Prozess', () => prozesse.value.map(p => ({ label: p, value: p })), { allLabel: 'Alle Prozesse' }), filterFn: multiSelectFilter, meta: { minBreakpoint: 'xl' } })
+  cols.push({ accessorKey: 'prozess', header: multiSelectableHeader<ZauberLernen>('Prozess', () => prozesse.value.map(p => ({ label: p, value: p })), { allLabel: 'Alle Prozesse' }), filterFn: multiSelectFilter })
 
   if (!typ.value) {
-    cols.push({ accessorKey: 'art', header: multiSelectableHeader<ZauberLernen>('Art', () => arten.value.map(a => ({ label: a, value: a })), { allLabel: 'Alle Arten' }), filterFn: multiSelectFilter, meta: { minBreakpoint: 'xl' } })
+    cols.push({ accessorKey: 'art', header: multiSelectableHeader<ZauberLernen>('Art', () => arten.value.map(a => ({ label: a, value: a })), { allLabel: 'Alle Arten' }), filterFn: multiSelectFilter })
     cols.push({ accessorKey: 'ap', header: sortableHeader<ZauberLernen>('AP') })
   }
 
-  return cols
+  return withResponsiveBreakpoints(cols)
 })
 
 const { columnVisibility } = useResponsiveColumnVisibility(columns)
