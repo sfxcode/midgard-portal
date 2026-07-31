@@ -42,9 +42,10 @@ export function useTableColumnHeader() {
     return h(UButton, {
       color: 'neutral',
       variant: 'ghost',
+      size: 'xs',
       label,
       icon: isSorted ? (isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow') : 'i-lucide-arrow-up-down',
-      class: '-mx-2.5',
+      class: '-mx-2',
       onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
     })
   }
