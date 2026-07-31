@@ -18,7 +18,7 @@ const { kampagnen } = useKampagneStore()
 const open = ref(false)
 
 const links = computed(() => [{
-  label: 'Account',
+  label: 'Home',
   icon: 'i-lucide-home',
   to: '/secured',
   exact: true,
@@ -42,26 +42,31 @@ const links = computed(() => [{
   onSelect: () => {
     open.value = false
   }
-}, ...(profile.value.isAdmin
-  ? [{
-      type: 'label' as const,
-      label: 'Administration'
-    }, {
-      label: 'Users',
-      icon: 'i-lucide-users',
-      to: '/secured/admin/users',
-      onSelect: () => {
-        open.value = false
-      }
-    }, {
-      label: 'Roles',
-      icon: 'i-lucide-shield',
-      to: '/secured/admin/roles',
-      onSelect: () => {
-        open.value = false
-      }
-    }]
-  : []), ...(isManager.value
+}, {
+  type: 'label' as const,
+  label: 'DM'
+}, {
+  label: 'NPC',
+  icon: 'i-lucide-skull',
+  to: '/secured/dm/npc',
+  defaultOpen: true,
+  type: 'trigger' as const,
+  children: [{
+    label: 'Bestiarium',
+    icon: 'i-lucide-list',
+    to: '/secured/dm/npc/bestiarium',
+    onSelect: () => {
+      open.value = false
+    }
+  }]
+}, {
+  label: 'Kampagnen',
+  icon: 'i-lucide-scroll',
+  to: '/secured/dm/kampagnen',
+  onSelect: () => {
+    open.value = false
+  }
+}, ...(isManager.value
   ? [{
       type: 'label' as const,
       label: 'Management'
@@ -108,31 +113,26 @@ const links = computed(() => [{
         open.value = false
       }
     }]
-  : []), {
-  type: 'label' as const,
-  label: 'DM'
-}, {
-  label: 'NPC',
-  icon: 'i-lucide-skull',
-  to: '/secured/dm/npc',
-  defaultOpen: true,
-  type: 'trigger' as const,
-  children: [{
-    label: 'Bestiarium',
-    icon: 'i-lucide-list',
-    to: '/secured/dm/npc/bestiarium',
-    onSelect: () => {
-      open.value = false
-    }
-  }]
-}, {
-  label: 'Kampagnen',
-  icon: 'i-lucide-scroll',
-  to: '/secured/dm/kampagnen',
-  onSelect: () => {
-    open.value = false
-  }
-}] satisfies NavigationMenuItem[])
+  : []), ...(profile.value.isAdmin
+  ? [{
+      type: 'label' as const,
+      label: 'Administration'
+    }, {
+      label: 'Users',
+      icon: 'i-lucide-users',
+      to: '/secured/admin/users',
+      onSelect: () => {
+        open.value = false
+      }
+    }, {
+      label: 'Roles',
+      icon: 'i-lucide-shield',
+      to: '/secured/admin/roles',
+      onSelect: () => {
+        open.value = false
+      }
+    }]
+  : [])] satisfies NavigationMenuItem[])
 
 const groups = computed(() => [{
   id: 'links',

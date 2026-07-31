@@ -5,10 +5,10 @@ import type { DiceRoll } from '~/types'
 const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
 
-const items = [{ label: 'Account' }]
+const items = [{ label: 'Home' }]
 
 useSeoMeta({
-  title: 'Account'
+  title: 'Home'
 })
 
 const { initDiceBox, roll } = useDiceBox()
@@ -28,7 +28,7 @@ onMounted(() => {
 <template>
   <UDashboardPanel id="secured">
     <template #header>
-      <AppPageHeader title="Account" :items="items" />
+      <AppPageHeader title="Home" :items="items" />
     </template>
 
     <template #body>
