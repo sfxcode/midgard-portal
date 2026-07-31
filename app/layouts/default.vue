@@ -8,7 +8,7 @@ const { isManager } = useMongocampRoles()
 
 const open = ref(false)
 
-const links = computed(() => [[{
+const links = computed(() => [{
   label: 'Account',
   icon: 'i-lucide-home',
   to: '/secured',
@@ -131,22 +131,12 @@ const links = computed(() => [[{
   onSelect: () => {
     open.value = false
   }
-}], [{
-  label: 'Discord Community',
-  icon: 'i-lucide-message-square',
-  to: 'https://github.com/nuxt-ui-templates/dashboard',
-  target: '_blank'
-}, {
-  label: 'Game Manual',
-  icon: 'i-lucide-book',
-  to: 'https://github.com/nuxt-ui-templates/dashboard',
-  target: '_blank'
-}]] satisfies NavigationMenuItem[][])
+}] satisfies NavigationMenuItem[])
 
 const groups = computed(() => [{
   id: 'links',
   label: 'Go to',
-  items: links.value.flat().filter((item: NavigationMenuItem) => item.type !== 'label')
+  items: links.value.filter((item: NavigationMenuItem) => item.type !== 'label')
 }])
 
 onMounted(async () => {
@@ -156,7 +146,7 @@ onMounted(async () => {
   }
 
   toast.add({
-    title: 'We use first-party cookies to enhance your experience on our website.',
+    title: 'The Lost Kingdom keeps a few cookies to remember your seat at the table.',
     duration: 0,
     close: false,
     actions: [{
@@ -190,19 +180,11 @@ onMounted(async () => {
 
         <UNavigationMenu
           :collapsed="collapsed"
-          :items="links[0]"
+          :items="links"
           orientation="vertical"
           tooltip
           popover
           class="font-display"
-        />
-
-        <UNavigationMenu
-          :collapsed="collapsed"
-          :items="links[1]"
-          orientation="vertical"
-          tooltip
-          class="mt-auto font-display"
         />
       </template>
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const items = [{ label: 'Roles' }]
+
 useSeoMeta({
   title: 'Roles'
 })
@@ -12,6 +14,10 @@ useSeoMeta({
           <UDashboardSidebarCollapse />
         </template>
       </UDashboardNavbar>
+
+      <UDashboardToolbar>
+        <UBreadcrumb :items="items" />
+      </UDashboardToolbar>
     </template>
 
     <template #body>

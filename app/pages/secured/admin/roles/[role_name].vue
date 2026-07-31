@@ -2,6 +2,11 @@
 const route = useRoute()
 const roleName = route.params.role_name as string
 
+const items = [
+  { label: 'Roles', icon: 'i-lucide-shield', to: '/secured/admin/roles' },
+  { label: roleName }
+]
+
 useSeoMeta({
   title: `Role: ${roleName}`
 })
@@ -14,17 +19,11 @@ useSeoMeta({
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
-
-        <template #right>
-          <UButton
-            label="Back to Roles"
-            icon="i-lucide-arrow-left"
-            color="neutral"
-            variant="subtle"
-            to="/secured/admin/roles"
-          />
-        </template>
       </UDashboardNavbar>
+
+      <UDashboardToolbar>
+        <UBreadcrumb :items="items" />
+      </UDashboardToolbar>
     </template>
 
     <template #body>
