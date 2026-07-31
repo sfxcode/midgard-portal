@@ -31,15 +31,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`manager-spielergruppe-${idParameter}`">
     <template #header>
-      <UDashboardNavbar :title="gruppe?.name ?? 'Spielergruppe'">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader :title="gruppe?.name ?? 'Spielergruppe'" :items="items" />
     </template>
 
     <template #body>

@@ -14,15 +14,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="spieler-kampagnen">
     <template #header>
-      <UDashboardNavbar title="Kampagnen">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader title="Kampagnen" :items="items" />
     </template>
 
     <template #body>

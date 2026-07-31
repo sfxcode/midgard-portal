@@ -18,15 +18,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`stamm-typ-${param}-zauber`">
     <template #header>
-      <UDashboardNavbar :title="`${param} · Zauber`">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader :title="`${param} · Zauber`" :items="items" />
     </template>
 
     <template #body>

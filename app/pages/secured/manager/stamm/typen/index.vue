@@ -57,15 +57,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="stamm-typen">
     <template #header>
-      <UDashboardNavbar title="Typen">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader title="Typen" :items="items" />
     </template>
 
     <template #body>

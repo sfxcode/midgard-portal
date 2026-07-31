@@ -12,15 +12,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="stamm-fertigkeiten">
     <template #header>
-      <UDashboardNavbar title="Fertigkeiten">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader title="Fertigkeiten" :items="items" />
     </template>
 
     <template #body>

@@ -36,15 +36,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`stamm-zauber-${nameParameter}`">
     <template #header>
-      <UDashboardNavbar :title="nameParameter">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader :title="nameParameter" :items="items" />
     </template>
 
     <template #body>

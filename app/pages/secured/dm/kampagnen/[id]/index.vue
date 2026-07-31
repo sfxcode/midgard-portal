@@ -32,15 +32,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`dm-kampagne-${idParameter}`">
     <template #header>
-      <UDashboardNavbar :title="kampagne?.name ?? 'Kampagne'">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader :title="kampagne?.name ?? 'Kampagne'" :items="items" />
     </template>
 
     <template #body>

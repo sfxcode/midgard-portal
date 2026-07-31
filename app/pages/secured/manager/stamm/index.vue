@@ -7,11 +7,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="stamm">
     <template #header>
-      <UDashboardNavbar title="Stammdaten">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
+      <AppPageHeader title="Stammdaten" />
     </template>
 
     <template #body>

@@ -2,18 +2,14 @@
 import { useDiceBox } from '~/composables/tools/useDiceBox'
 import type { DiceRoll } from '~/types'
 
-const { logout } = useMongocampAuth()
 const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
 
-useSeoMeta({
-  title: 'Secured'
-})
+const items = [{ label: 'Account' }]
 
-function onLogout() {
-  logout()
-  navigateTo('/login')
-}
+useSeoMeta({
+  title: 'Account'
+})
 
 const { initDiceBox, roll } = useDiceBox()
 const defaultRoll = [{ qty: 1, sides: 100 }, { qty: 1, sides: 20 }, { qty: 1, sides: 6 }]
@@ -32,23 +28,7 @@ onMounted(() => {
 <template>
   <UDashboardPanel id="secured">
     <template #header>
-      <UDashboardNavbar title="Secured Area">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-
-        <template #right>
-          <UColorModeSelect />
-
-          <UButton
-            label="Logout"
-            icon="i-lucide-log-out"
-            color="neutral"
-            variant="subtle"
-            @click="onLogout"
-          />
-        </template>
-      </UDashboardNavbar>
+      <AppPageHeader title="Account" :items="items" />
     </template>
 
     <template #body>

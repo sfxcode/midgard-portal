@@ -20,14 +20,6 @@ const links = computed(() => [{
   type: 'label' as const,
   label: 'Spieler'
 }, {
-  label: 'Meine Daten',
-  icon: 'i-lucide-id-card',
-  to: '/secured/spieler',
-  exact: true,
-  onSelect: () => {
-    open.value = false
-  }
-}, {
   label: 'Abenteurer',
   icon: 'i-lucide-user',
   to: '/secured/spieler/abenteurer',

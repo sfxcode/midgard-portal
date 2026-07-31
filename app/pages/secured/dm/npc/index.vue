@@ -9,11 +9,7 @@ const { wesen } = useBestiariumStore()
 <template>
   <UDashboardPanel id="dm-npc">
     <template #header>
-      <UDashboardNavbar title="NPC">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
+      <AppPageHeader title="NPC" />
     </template>
 
     <template #body>

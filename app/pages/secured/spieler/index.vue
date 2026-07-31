@@ -21,15 +21,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="spieler-profil">
     <template #header>
-      <UDashboardNavbar title="Meine Daten">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader title="Meine Daten" :items="items" />
     </template>
 
     <template #body>

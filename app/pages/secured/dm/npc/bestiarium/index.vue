@@ -35,15 +35,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="dm-npc-bestiarium">
     <template #header>
-      <UDashboardNavbar title="Bestiarium">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader title="Bestiarium" :items="items" />
     </template>
 
     <template #body>

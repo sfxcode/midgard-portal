@@ -39,15 +39,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`stamm-fertigkeit-${kategorieParameter}-${fertigkeitParameter}`">
     <template #header>
-      <UDashboardNavbar :title="fertigkeitParameter">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader :title="fertigkeitParameter" :items="items" />
     </template>
 
     <template #body>

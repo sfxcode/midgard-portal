@@ -55,15 +55,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`stamm-typ-${param}`">
     <template #header>
-      <UDashboardNavbar :title="param">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader :title="param" :items="items" />
     </template>
 
     <template #body>

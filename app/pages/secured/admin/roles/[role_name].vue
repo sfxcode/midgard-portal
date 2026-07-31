@@ -15,15 +15,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`admin-role-${roleName}`">
     <template #header>
-      <UDashboardNavbar :title="`Role · ${roleName}`">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader :title="`Role · ${roleName}`" :items="items" />
     </template>
 
     <template #body>

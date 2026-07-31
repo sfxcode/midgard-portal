@@ -9,15 +9,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="admin-users">
     <template #header>
-      <UDashboardNavbar title="Users">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader title="Users" :items="items" />
     </template>
 
     <template #body>

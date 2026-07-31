@@ -29,15 +29,7 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`manager-spieler-${loginParameter}`">
     <template #header>
-      <UDashboardNavbar :title="spielerData?.name ?? 'Spieler'">
-        <template #leading>
-          <UDashboardSidebarCollapse />
-        </template>
-      </UDashboardNavbar>
-
-      <UDashboardToolbar>
-        <UBreadcrumb :items="items" />
-      </UDashboardToolbar>
+      <AppPageHeader :title="spielerData?.name ?? 'Spieler'" :items="items" />
     </template>
 
     <template #body>
