@@ -14,7 +14,7 @@ const { wesen } = useBestiariumStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { vorkommenToString } = useWesen()
-const { sortableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader, multiSelectFilter } = useTableColumnHeader()
 
 const tableData = computed<Wesen[]>(() => wesen.value ?? [])
 
@@ -34,7 +34,7 @@ const columns = computed<TableColumn<Wesen>[]>(() => [
     header: sortableHeader<Wesen>('Name'),
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/dm/npc/bestiarium/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
-  { accessorKey: 'kategorie', header: multiSelectableHeader<Wesen>('Gruppe', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Gruppen' }), filterFn: 'arrIncludesSome' },
+  { accessorKey: 'kategorie', header: multiSelectableHeader<Wesen>('Gruppe', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Gruppen' }), filterFn: multiSelectFilter },
   { accessorKey: 'grad', header: numberRangeHeader<Wesen>('Grad'), filterFn: 'inNumberRange' },
   { accessorKey: 'gf', header: sortableHeader<Wesen>('Gf') },
   {

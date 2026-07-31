@@ -22,7 +22,7 @@ const { calculateFertigkeitEpKosten, calculateFertigkeitLernKosten } = useFertig
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportFertigkeitenData } = useFertigkeitenExport()
-const { sortableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader, multiSelectFilter } = useTableColumnHeader()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
 
@@ -92,8 +92,8 @@ const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
     cols.push({ accessorKey: 'epKosten', header: numberRangeHeader<FertigkeitLernen>('EP'), filterFn: 'inNumberRange' })
   }
 
-  cols.push({ accessorKey: 'kategorie', header: multiSelectableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'arrIncludesSome' })
-  cols.push({ accessorKey: 'schwierigkeit', header: multiSelectableHeader<FertigkeitLernen>('Schwierigkeit', () => schwierigkeiten.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Schwierigkeiten' }), filterFn: 'arrIncludesSome' })
+  cols.push({ accessorKey: 'kategorie', header: multiSelectableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: multiSelectFilter })
+  cols.push({ accessorKey: 'schwierigkeit', header: multiSelectableHeader<FertigkeitLernen>('Schwierigkeit', () => schwierigkeiten.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Schwierigkeiten' }), filterFn: multiSelectFilter })
   cols.push({ accessorKey: 'lerneinheiten', header: numberRangeHeader<FertigkeitLernen>('LE'), filterFn: 'inNumberRange' })
   cols.push({ accessorKey: 'ungelernt', header: sortableHeader<FertigkeitLernen>('Ungelernt') })
   cols.push({

@@ -1,4 +1,4 @@
-import type { Column } from '@tanstack/table-core'
+import type { Column, Row } from '@tanstack/table-core'
 import { UButton, UInput, UInputNumber, USelect, USelectMenu } from '#components'
 import { h, ref } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
@@ -34,6 +34,16 @@ export interface NumberRangeHeaderOptions {
   minPlaceholder?: string
   maxPlaceholder?: string
   onFilterChange?: (value: [number | undefined, number | undefined] | undefined) => void
+}
+
+// `multiSelectableHeader` lets a user pick several values to filter a column
+// whose row values are scalars (a single kategorie/stufe/etc per row), not
+// arrays. TanStack's built-in 'arrIncludesSome' checks row.getValue(id)?.includes(val)
+// — the wrong direction for that shape, and it throws outright for numbers
+// (Number.prototype has no .includes). This checks the other way round:
+// is the row's scalar value one of the selected filter values.
+export function multiSelectFilter<T>(row: Row<T>, columnId: string, filterValue: unknown[]): boolean {
+  return filterValue.includes(row.getValue(columnId))
 }
 
 export function useTableColumnHeader() {
@@ -86,11 +96,21 @@ export function useTableColumnHeader() {
     const toValue = options?.toValue ?? ((value: string) => value)
 
     return ({ column }: { column: Column<T, unknown> }) => {
-      const filterValue = column.getFilterValue() as string[] | undefined
+      const filterValue = column.getFilterValue() as unknown[] | undefined
+      const availableItems = items()
+      // modelValue must stay in the same (raw string) domain as `items`' own
+      // value field so USelectMenu can match its selection against them —
+      // the stored filter value has already gone through `toValue` (e.g.
+      // Number), so feeding it back directly breaks toggle/dedup and lets
+      // the same item be "selected" again as a duplicate.
+      const selectedValues = (filterValue ?? [])
+        .map(fv => availableItems.find(item => toValue(item.value) === fv)?.value)
+        .filter((v): v is string => v !== undefined)
+
       return h('div', { class: 'flex flex-col gap-1' }, [
         sortToggle(column, label),
         h(USelectMenu, {
-          'modelValue': filterValue ?? [],
+          'modelValue': selectedValues,
           'onUpdate:modelValue': (value: string[]) => {
             const newValue = value.length === 0 ? undefined : value.map(toValue)
             if (options?.onFilterChange) {
@@ -100,7 +120,7 @@ export function useTableColumnHeader() {
               column.setFilterValue(newValue)
             }
           },
-          'items': items(),
+          'items': availableItems,
           'valueKey': 'value',
           'multiple': true,
           'placeholder': allLabel,
@@ -248,5 +268,5 @@ export function useTableColumnHeader() {
     }
   }
 
-  return { sortableHeader, selectableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader, searchableHeader }
+  return { sortableHeader, selectableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader, searchableHeader, multiSelectFilter }
 }

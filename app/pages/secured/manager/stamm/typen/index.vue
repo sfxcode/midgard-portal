@@ -10,7 +10,7 @@ const { typen } = useStammdatenStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportTypenData } = useTypenExport()
-const { sortableHeader, multiSelectableHeader } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, multiSelectFilter } = useTableColumnHeader()
 
 const kategorien = computed(() => uniqueValues(typen.value, v => v.kategorie))
 
@@ -21,7 +21,7 @@ const columns: TableColumn<Typ>[] = [
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/stamm/typen/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
   { accessorKey: 'nameKurz', header: sortableHeader<Typ>('Bez.') },
-  { accessorKey: 'kategorie', header: multiSelectableHeader<Typ>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'arrIncludesSome' },
+  { accessorKey: 'kategorie', header: multiSelectableHeader<Typ>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: multiSelectFilter },
   { accessorKey: 'buch', header: sortableHeader<Typ>('Buch') }
 ]
 
