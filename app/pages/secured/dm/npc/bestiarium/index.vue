@@ -11,6 +11,9 @@ const { ensureMetaData } = useMongocampDocument()
 const { createWesen } = useWesen()
 const { refetchWesen } = useBestiariumStore()
 
+const list = useTemplateRef('list')
+const globalFilter = ref('')
+
 const name = ref('')
 const creating = ref(false)
 
@@ -35,7 +38,26 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="dm-npc-bestiarium">
     <template #header>
-      <AppPageHeader title="Bestiarium" :items="items" />
+      <AppPageHeader title="Bestiarium" :items="items">
+        <template #center>
+          <UInput
+            v-model="globalFilter"
+            icon="i-lucide-search"
+            placeholder="Globale Suche"
+            class="max-w-xs"
+          />
+        </template>
+
+        <template #right>
+          <UButton
+            label="CSV"
+            icon="i-lucide-download"
+            color="neutral"
+            variant="subtle"
+            @click="list?.exportData()"
+          />
+        </template>
+      </AppPageHeader>
     </template>
 
     <template #body>
@@ -55,7 +77,7 @@ useSeoMeta({
         />
       </div>
 
-      <DmWesenList />
+      <DmWesenList ref="list" v-model:global-filter="globalFilter" />
     </template>
   </UDashboardPanel>
 </template>

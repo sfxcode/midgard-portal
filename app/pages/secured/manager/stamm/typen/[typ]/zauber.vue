@@ -10,6 +10,9 @@ const items = [
   { label: 'Zauber' }
 ]
 
+const list = useTemplateRef('list')
+const globalFilter = ref('')
+
 useSeoMeta({
   title: `${param} · Zauber`
 })
@@ -18,11 +21,42 @@ useSeoMeta({
 <template>
   <UDashboardPanel :id="`stamm-typ-${param}-zauber`">
     <template #header>
-      <AppPageHeader :title="`${param} · Zauber`" :items="items" />
+      <AppPageHeader :title="`${param} · Zauber`" :items="items">
+        <template #center>
+          <UInput
+            v-model="globalFilter"
+            icon="i-lucide-search"
+            placeholder="Globale Suche"
+            class="max-w-xs"
+          />
+        </template>
+
+        <template #right>
+          <UButton
+            label="CSV"
+            icon="i-lucide-download"
+            color="neutral"
+            variant="subtle"
+            @click="list?.exportData()"
+          />
+          <UButton
+            label="PDF"
+            icon="i-lucide-file-text"
+            color="neutral"
+            variant="subtle"
+            @click="list?.exportPdf()"
+          />
+        </template>
+      </AppPageHeader>
     </template>
 
     <template #body>
-      <StammdatenZauberList :typ-name="param" :is-elf="isElf" />
+      <StammdatenZauberList
+        ref="list"
+        v-model:global-filter="globalFilter"
+        :typ-name="param"
+        :is-elf="isElf"
+      />
     </template>
   </UDashboardPanel>
 </template>

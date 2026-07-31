@@ -57,23 +57,37 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="stamm-typen">
     <template #header>
-      <AppPageHeader title="Typen" :items="items" />
-    </template>
-
-    <template #body>
-      <div class="flex flex-col gap-3">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <p class="text-sm text-muted">
-            {{ typen?.length ?? 0 }} Typen
-          </p>
+      <AppPageHeader title="Typen" :items="items">
+        <template #center>
           <UInput
             v-model="globalFilter"
             icon="i-lucide-search"
             placeholder="Globale Suche"
             class="max-w-xs"
           />
-        </div>
+        </template>
 
+        <template #right>
+          <UButton
+            label="CSV"
+            icon="i-lucide-download"
+            color="neutral"
+            variant="subtle"
+            @click="exportData"
+          />
+          <UButton
+            label="PDF"
+            icon="i-lucide-file-text"
+            color="neutral"
+            variant="subtle"
+            @click="exportPdf"
+          />
+        </template>
+      </AppPageHeader>
+    </template>
+
+    <template #body>
+      <div class="flex flex-col gap-3">
         <UTable
           ref="table"
           v-model:global-filter="globalFilter"
@@ -90,32 +104,11 @@ useSeoMeta({
           </template>
         </UTable>
 
-        <div class="flex items-center justify-between gap-3 border-t border-default pt-4">
-          <div class="flex items-center gap-1.5">
-            <UButton
-              label="CSV"
-              icon="i-lucide-download"
-              color="neutral"
-              variant="subtle"
-              @click="exportData"
-            />
-            <UButton
-              label="PDF"
-              icon="i-lucide-file-text"
-              color="neutral"
-              variant="subtle"
-              @click="exportPdf"
-            />
-            <TableResetFiltersButton :table-api="table?.tableApi" />
-          </div>
-
-          <UPagination
-            :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-            :items-per-page="table?.tableApi?.getState().pagination.pageSize"
-            :total="table?.tableApi?.getFilteredRowModel().rows.length"
-            @update:page="(p: number) => table?.tableApi?.setPageIndex(p - 1)"
-          />
-        </div>
+        <TableFooter :table-api="table?.tableApi">
+          <p class="text-sm text-muted">
+            {{ table?.tableApi?.getFilteredRowModel().rows.length ?? typen?.length ?? 0 }} Typen
+          </p>
+        </TableFooter>
       </div>
     </template>
   </UDashboardPanel>

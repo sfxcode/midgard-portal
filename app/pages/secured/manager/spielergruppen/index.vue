@@ -7,6 +7,8 @@ const { login } = useSpielerStore()
 const { refetchSpielergruppen } = useSpielergruppenStore()
 const { createSpielergruppe, saveSpielergruppe } = useSpielergruppe()
 
+const globalFilter = ref('')
+
 const name = ref('')
 const creating = ref(false)
 
@@ -33,7 +35,16 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="manager-spielergruppen">
     <template #header>
-      <AppPageHeader title="Spielergruppen" :items="items" />
+      <AppPageHeader title="Spielergruppen" :items="items">
+        <template #center>
+          <UInput
+            v-model="globalFilter"
+            icon="i-lucide-search"
+            placeholder="Globale Suche"
+            class="max-w-xs"
+          />
+        </template>
+      </AppPageHeader>
     </template>
 
     <template #body>
@@ -48,7 +59,7 @@ useSeoMeta({
         />
       </div>
 
-      <SpielerGruppenListe />
+      <SpielerGruppenListe v-model:global-filter="globalFilter" />
     </template>
   </UDashboardPanel>
 </template>

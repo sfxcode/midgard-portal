@@ -33,7 +33,17 @@ function onLogout() {
     </template>
   </UDashboardNavbar>
 
-  <UDashboardToolbar v-if="items?.length">
-    <UBreadcrumb :items="items" />
+  <UDashboardToolbar v-if="items?.length || $slots.center || $slots.right">
+    <div class="flex flex-1 items-center gap-1.5">
+      <UBreadcrumb v-if="items?.length" :items="items" />
+    </div>
+
+    <div class="flex items-center gap-1.5">
+      <slot name="center" />
+    </div>
+
+    <div class="flex flex-1 items-center justify-end gap-1.5">
+      <slot name="right" />
+    </div>
   </UDashboardToolbar>
 </template>

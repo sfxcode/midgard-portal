@@ -23,24 +23,12 @@ const columns: TableColumn<Spielergruppe>[] = [
   }
 ]
 
-const globalFilter = ref('')
+const globalFilter = defineModel<string>('globalFilter', { default: '' })
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
 </script>
 
 <template>
   <div class="flex flex-col gap-3">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-      <p class="text-sm text-muted">
-        {{ tableData.length }} Spielergruppen
-      </p>
-      <UInput
-        v-model="globalFilter"
-        icon="i-lucide-search"
-        placeholder="Globale Suche"
-        class="max-w-xs"
-      />
-    </div>
-
     <UTable
       ref="table"
       v-model:global-filter="globalFilter"
@@ -56,13 +44,10 @@ const pagination = ref({ pageIndex: 0, pageSize: 10 })
       </template>
     </UTable>
 
-    <div class="flex items-center justify-end gap-3 border-t border-default pt-4">
-      <UPagination
-        :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-        :items-per-page="table?.tableApi?.getState().pagination.pageSize"
-        :total="table?.tableApi?.getFilteredRowModel().rows.length"
-        @update:page="(p: number) => table?.tableApi?.setPageIndex(p - 1)"
-      />
-    </div>
+    <TableFooter :table-api="table?.tableApi" :resettable="false">
+      <p class="text-sm text-muted">
+        {{ table?.tableApi?.getFilteredRowModel().rows.length ?? tableData.length }} Spielergruppen
+      </p>
+    </TableFooter>
   </div>
 </template>

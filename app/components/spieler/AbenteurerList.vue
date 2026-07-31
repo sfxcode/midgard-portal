@@ -29,6 +29,8 @@ const columns = computed<TableColumn<Abenteurer>[]>(() => [
 
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
 
+defineExpose({ exportData })
+
 function exportData() {
   const rows = (table.value?.tableApi?.getFilteredRowModel().rows ?? []).map(r => r.original)
   exportToCsv(rows, [
@@ -42,10 +44,6 @@ function exportData() {
 
 <template>
   <div class="flex flex-col gap-3">
-    <p class="text-sm text-muted">
-      {{ tableData.length }} Abenteurer
-    </p>
-
     <UTable
       ref="table"
       v-model:pagination="pagination"
@@ -61,24 +59,10 @@ function exportData() {
       </template>
     </UTable>
 
-    <div class="flex items-center justify-between gap-3 border-t border-default pt-4">
-      <div class="flex items-center gap-1.5">
-        <UButton
-          label="CSV"
-          icon="i-lucide-download"
-          color="neutral"
-          variant="subtle"
-          @click="exportData"
-        />
-        <TableResetFiltersButton :table-api="table?.tableApi" />
-      </div>
-
-      <UPagination
-        :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-        :items-per-page="table?.tableApi?.getState().pagination.pageSize"
-        :total="table?.tableApi?.getFilteredRowModel().rows.length"
-        @update:page="(p: number) => table?.tableApi?.setPageIndex(p - 1)"
-      />
-    </div>
+    <TableFooter :table-api="table?.tableApi">
+      <p class="text-sm text-muted">
+        {{ table?.tableApi?.getFilteredRowModel().rows.length ?? tableData.length }} Abenteurer
+      </p>
+    </TableFooter>
   </div>
 </template>

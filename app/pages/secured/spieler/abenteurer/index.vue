@@ -12,6 +12,8 @@ const { createAbenteurer } = useAbenteurer()
 const { refetchAbenteurer } = useAbenteurerStore()
 const { typNamen } = useStammdatenStore()
 
+const list = useTemplateRef('list')
+
 const name = ref('')
 const spieler = ref('')
 const typ = ref('')
@@ -41,7 +43,17 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="spieler-abenteurer">
     <template #header>
-      <AppPageHeader title="Abenteurer" :items="items" />
+      <AppPageHeader title="Abenteurer" :items="items">
+        <template #right>
+          <UButton
+            label="CSV"
+            icon="i-lucide-download"
+            color="neutral"
+            variant="subtle"
+            @click="list?.exportData()"
+          />
+        </template>
+      </AppPageHeader>
     </template>
 
     <template #body>
@@ -63,7 +75,7 @@ useSeoMeta({
         />
       </div>
 
-      <SpielerAbenteurerList />
+      <SpielerAbenteurerList ref="list" />
     </template>
   </UDashboardPanel>
 </template>

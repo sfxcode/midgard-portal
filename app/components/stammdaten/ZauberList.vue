@@ -97,9 +97,11 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
 
 const { columnVisibility } = useResponsiveColumnVisibility(columns)
 
-const globalFilter = ref('')
+const globalFilter = defineModel<string>('globalFilter', { default: '' })
 
 const pagination = ref({ pageIndex: 0, pageSize: 10 })
+
+defineExpose({ exportData, exportPdf })
 
 function exportData() {
   const rows = (table.value?.tableApi?.getFilteredRowModel().rows ?? []).map(r => r.original)
@@ -126,18 +128,6 @@ function exportPdf() {
 
 <template>
   <div class="flex flex-col gap-3">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-      <p class="text-sm text-muted">
-        {{ tableData.length }} Zauber<span v-if="typ"> für Typ {{ typ.name }}</span>
-      </p>
-      <UInput
-        v-model="globalFilter"
-        icon="i-lucide-search"
-        placeholder="Globale Suche"
-        class="max-w-xs"
-      />
-    </div>
-
     <UTable
       ref="table"
       v-model:global-filter="globalFilter"
@@ -155,31 +145,10 @@ function exportPdf() {
       </template>
     </UTable>
 
-    <div class="flex items-center justify-between gap-3 border-t border-default pt-4">
-      <div class="flex items-center gap-1.5">
-        <UButton
-          label="CSV"
-          icon="i-lucide-download"
-          color="neutral"
-          variant="subtle"
-          @click="exportData"
-        />
-        <UButton
-          label="PDF"
-          icon="i-lucide-file-text"
-          color="neutral"
-          variant="subtle"
-          @click="exportPdf"
-        />
-        <TableResetFiltersButton :table-api="table?.tableApi" />
-      </div>
-
-      <UPagination
-        :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-        :items-per-page="table?.tableApi?.getState().pagination.pageSize"
-        :total="table?.tableApi?.getFilteredRowModel().rows.length"
-        @update:page="(p: number) => table?.tableApi?.setPageIndex(p - 1)"
-      />
-    </div>
+    <TableFooter :table-api="table?.tableApi">
+      <p class="text-sm text-muted">
+        {{ table?.tableApi?.getFilteredRowModel().rows.length ?? tableData.length }} Zauber<span v-if="typ"> für Typ {{ typ.name }}</span>
+      </p>
+    </TableFooter>
   </div>
 </template>
