@@ -14,7 +14,7 @@ const { wesen } = useBestiariumStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { vorkommenToString } = useWesen()
-const { sortableHeader, selectableHeader } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader } = useTableColumnHeader()
 
 const tableData = computed<Wesen[]>(() => wesen.value ?? [])
 
@@ -34,9 +34,16 @@ const columns = computed<TableColumn<Wesen>[]>(() => [
     header: sortableHeader<Wesen>('Name'),
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/dm/npc/bestiarium/${row.original.name}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
-  { accessorKey: 'kategorie', header: selectableHeader<Wesen>('Gruppe', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Gruppen' }), filterFn: 'equals' },
-  { accessorKey: 'grad', header: sortableHeader<Wesen>('Grad') },
+  { accessorKey: 'kategorie', header: multiSelectableHeader<Wesen>('Gruppe', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Gruppen' }), filterFn: 'arrIncludesSome' },
+  { accessorKey: 'grad', header: numberRangeHeader<Wesen>('Grad'), filterFn: 'inNumberRange' },
   { accessorKey: 'gf', header: sortableHeader<Wesen>('Gf') },
+  {
+    id: 'fliegend',
+    accessorFn: row => row.fliegend > 0,
+    header: booleanHeader<Wesen>('Fliegend'),
+    filterFn: 'equals',
+    cell: ({ row }) => row.original.fliegend > 0 ? 'Ja' : 'Nein'
+  },
   {
     id: 'vorkommen',
     accessorFn: row => row.vorkommen,

@@ -6,7 +6,7 @@ import type { Abenteurer } from '~/models'
 const { abenteurer } = useAbenteurerStore()
 const { exportToCsv } = useCsvExport()
 const { uniqueValues } = useArrayFunctions()
-const { sortableHeader, selectableHeader, searchableHeader } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, searchableHeader } = useTableColumnHeader()
 
 const table = useTemplateRef('table')
 
@@ -22,8 +22,8 @@ const columns = computed<TableColumn<Abenteurer>[]>(() => [
     filterFn: 'includesString',
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/spieler/abenteurer/${row.original._id}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
-  { accessorKey: 'spieler', header: selectableHeader<Abenteurer>('Spieler', () => spielerNamen.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Spieler' }), filterFn: 'equals' },
-  { accessorKey: 'typ', header: selectableHeader<Abenteurer>('Typ', () => typen.value.map(t => ({ label: t, value: t })), { allLabel: 'Alle Typen' }), filterFn: 'equals' },
+  { accessorKey: 'spieler', header: multiSelectableHeader<Abenteurer>('Spieler', () => spielerNamen.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Spieler' }), filterFn: 'arrIncludesSome' },
+  { accessorKey: 'typ', header: multiSelectableHeader<Abenteurer>('Typ', () => typen.value.map(t => ({ label: t, value: t })), { allLabel: 'Alle Typen' }), filterFn: 'arrIncludesSome' },
   { accessorKey: 'grad', header: sortableHeader<Abenteurer>('Grad') }
 ])
 

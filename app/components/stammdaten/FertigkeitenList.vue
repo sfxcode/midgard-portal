@@ -22,7 +22,7 @@ const { calculateFertigkeitEpKosten, calculateFertigkeitLernKosten } = useFertig
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { exportFertigkeitenData } = useFertigkeitenExport()
-const { sortableHeader, selectableHeader } = useTableColumnHeader()
+const { sortableHeader, multiSelectableHeader, booleanHeader, numberRangeHeader } = useTableColumnHeader()
 
 const typ = computed(() => typen.value?.find(t => t.name === props.typName))
 
@@ -79,22 +79,30 @@ const columns = computed<TableColumn<FertigkeitLernen>[]>(() => {
   if (typ.value) {
     cols.push({
       accessorKey: 'kosten',
-      header: sortableHeader<FertigkeitLernen>('Punkte'),
+      header: numberRangeHeader<FertigkeitLernen>('Punkte'),
+      filterFn: 'inNumberRange',
       cell: ({ row }) => new Intl.NumberFormat('de-DE').format(row.original.kosten)
     })
     cols.push({
       accessorKey: 'gold',
-      header: sortableHeader<FertigkeitLernen>('Gold'),
+      header: numberRangeHeader<FertigkeitLernen>('Gold'),
+      filterFn: 'inNumberRange',
       cell: ({ row }) => h('span', { class: 'text-primary' }, new Intl.NumberFormat('de-DE').format(row.original.gold))
     })
-    cols.push({ accessorKey: 'epKosten', header: sortableHeader<FertigkeitLernen>('EP') })
+    cols.push({ accessorKey: 'epKosten', header: numberRangeHeader<FertigkeitLernen>('EP'), filterFn: 'inNumberRange' })
   }
 
-  cols.push({ accessorKey: 'kategorie', header: selectableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'equals' })
-  cols.push({ accessorKey: 'schwierigkeit', header: selectableHeader<FertigkeitLernen>('Schwierigkeit', () => schwierigkeiten.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Schwierigkeiten' }), filterFn: 'equals' })
-  cols.push({ accessorKey: 'lerneinheiten', header: sortableHeader<FertigkeitLernen>('LE') })
+  cols.push({ accessorKey: 'kategorie', header: multiSelectableHeader<FertigkeitLernen>('Kategorie', () => kategorien.value.map(k => ({ label: k, value: k })), { allLabel: 'Alle Kategorien' }), filterFn: 'arrIncludesSome' })
+  cols.push({ accessorKey: 'schwierigkeit', header: multiSelectableHeader<FertigkeitLernen>('Schwierigkeit', () => schwierigkeiten.value.map(s => ({ label: s, value: s })), { allLabel: 'Alle Schwierigkeiten' }), filterFn: 'arrIncludesSome' })
+  cols.push({ accessorKey: 'lerneinheiten', header: numberRangeHeader<FertigkeitLernen>('LE'), filterFn: 'inNumberRange' })
   cols.push({ accessorKey: 'ungelernt', header: sortableHeader<FertigkeitLernen>('Ungelernt') })
-  cols.push({ accessorKey: 'gelernt', header: sortableHeader<FertigkeitLernen>('Gelernt') })
+  cols.push({
+    id: 'gelerntFlag',
+    accessorFn: row => row.gelernt > 0,
+    header: booleanHeader<FertigkeitLernen>('Gelernt'),
+    filterFn: 'equals',
+    cell: ({ row }) => new Intl.NumberFormat('de-DE').format(row.original.gelernt)
+  })
 
   return cols
 })
