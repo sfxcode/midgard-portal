@@ -1,5 +1,7 @@
 import type { Column } from '@tanstack/table-core'
 import { UButton, UInput, UInputNumber, USelect, USelectMenu } from '#components'
+import { h, ref } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
 
 export interface SelectableHeaderItem {
   label: string
@@ -9,17 +11,20 @@ export interface SelectableHeaderItem {
 export interface SelectableHeaderOptions {
   allLabel?: string
   toValue?: (value: string) => unknown
+  onFilterChange?: (value: unknown | undefined) => void
 }
 
 export interface SearchableHeaderOptions {
   placeholder?: string
   debounce?: number
+  onFilterChange?: (value: string) => void
 }
 
 export interface BooleanHeaderOptions {
   allLabel?: string
   yesLabel?: string
   noLabel?: string
+  onFilterChange?: (value: boolean | undefined) => void
 }
 
 export interface NumberRangeHeaderOptions {
@@ -28,6 +33,7 @@ export interface NumberRangeHeaderOptions {
   step?: number
   minPlaceholder?: string
   maxPlaceholder?: string
+  onFilterChange?: (value: [number | undefined, number | undefined] | undefined) => void
 }
 
 export function useTableColumnHeader() {
@@ -39,12 +45,12 @@ export function useTableColumnHeader() {
       label,
       icon: isSorted ? (isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow') : 'i-lucide-arrow-up-down',
       class: '-mx-2.5',
-      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
     })
   }
 
   function sortableHeader<T>(label: string) {
-    return ({ column }: { column: Column<T, unknown> }) => sortToggle(column, label)
+    return ({ column }: { column: Column<T, unknown> }) => h('div', { class: 'flex flex-col gap-1' }, [sortToggle(column, label), h('div', { class: 'h-6' })])
   }
 
   function selectableHeader<T>(label: string, items: () => SelectableHeaderItem[], options?: SelectableHeaderOptions) {
@@ -57,11 +63,19 @@ export function useTableColumnHeader() {
         sortToggle(column, label),
         h(USelect, {
           'modelValue': filterValue === undefined ? 'all' : String(filterValue),
-          'onUpdate:modelValue': (value: string) => column.setFilterValue(value === 'all' ? undefined : toValue(value)),
+          'onUpdate:modelValue': (value: string) => {
+            const newValue = value === 'all' ? undefined : toValue(value)
+            if (options?.onFilterChange) {
+              options.onFilterChange(newValue)
+            }
+            else {
+              column.setFilterValue(newValue)
+            }
+          },
           'items': [{ label: allLabel, value: 'all' }, ...items()],
           'size': 'xs',
-          'class': 'w-full'
-        })
+          'class': 'flex-1 min-w-0',
+        }),
       ])
     }
   }
@@ -76,16 +90,24 @@ export function useTableColumnHeader() {
         sortToggle(column, label),
         h(USelectMenu, {
           'modelValue': filterValue ?? [],
-          'onUpdate:modelValue': (value: string[]) => column.setFilterValue(value.length === 0 ? undefined : value.map(toValue)),
+          'onUpdate:modelValue': (value: string[]) => {
+            const newValue = value.length === 0 ? undefined : value.map(toValue)
+            if (options?.onFilterChange) {
+              options.onFilterChange(newValue)
+            }
+            else {
+              column.setFilterValue(newValue)
+            }
+          },
           'items': items(),
           'valueKey': 'value',
           'multiple': true,
           'placeholder': allLabel,
           'size': 'xs',
-          'class': 'w-full',
-          'onClick': (event: Event) => event.stopPropagation()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any)
+          'class': 'flex-1 min-w-0',
+          'onClick': (event: Event) => event.stopPropagation(),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any),
       ])
     }
   }
@@ -102,17 +124,25 @@ export function useTableColumnHeader() {
         sortToggle(column, label),
         h(USelect, {
           'modelValue': modelValue,
-          'onUpdate:modelValue': (value: string) => column.setFilterValue(value === 'all' ? undefined : value === 'true'),
+          'onUpdate:modelValue': (value: string) => {
+            const newValue = value === 'all' ? undefined : value === 'true'
+            if (options?.onFilterChange) {
+              options.onFilterChange(newValue)
+            }
+            else {
+              column.setFilterValue(newValue)
+            }
+          },
           'items': [
             { label: allLabel, value: 'all' },
             { label: yesLabel, value: 'true' },
-            { label: noLabel, value: 'false' }
+            { label: noLabel, value: 'false' },
           ],
           'size': 'xs',
-          'class': 'w-full',
-          'onClick': (event: Event) => event.stopPropagation()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any)
+          'class': 'flex-1 min-w-0',
+          'onClick': (event: Event) => event.stopPropagation(),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any),
       ])
     }
   }
@@ -125,11 +155,23 @@ export function useTableColumnHeader() {
 
       const setMin = (value: number | null) => {
         const next = value ?? undefined
-        column.setFilterValue(next === undefined && max === undefined ? undefined : [next, max])
+        const newValue = next === undefined && max === undefined ? undefined : [next, max]
+        if (options?.onFilterChange) {
+          options.onFilterChange(newValue as [number | undefined, number | undefined] | undefined)
+        }
+        else {
+          column.setFilterValue(newValue)
+        }
       }
       const setMax = (value: number | null) => {
         const next = value ?? undefined
-        column.setFilterValue(min === undefined && next === undefined ? undefined : [min, next])
+        const newValue = min === undefined && next === undefined ? undefined : [min, next]
+        if (options?.onFilterChange) {
+          options.onFilterChange(newValue as [number | undefined, number | undefined] | undefined)
+        }
+        else {
+          column.setFilterValue(newValue)
+        }
       }
 
       return h('div', { class: 'flex flex-col gap-1' }, [
@@ -143,9 +185,9 @@ export function useTableColumnHeader() {
             'step': options?.step,
             'placeholder': options?.minPlaceholder ?? 'Min',
             'size': 'xs',
-            'class': 'w-full',
-            'onClick': (event: Event) => event.stopPropagation()
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            'class': 'flex-1 min-w-0',
+            'onClick': (event: Event) => event.stopPropagation(),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } as any),
           h(UInputNumber, {
             'modelValue': max ?? null,
@@ -155,11 +197,11 @@ export function useTableColumnHeader() {
             'step': options?.step,
             'placeholder': options?.maxPlaceholder ?? 'Max',
             'size': 'xs',
-            'class': 'w-full',
-            'onClick': (event: Event) => event.stopPropagation()
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any)
-        ])
+            'class': 'flex-1 min-w-0',
+            'onClick': (event: Event) => event.stopPropagation(),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } as any),
+        ]),
       ])
     }
   }
@@ -169,7 +211,13 @@ export function useTableColumnHeader() {
     let lastColumnValue: string | undefined
 
     const applyFilter = useDebounceFn((column: Column<T, unknown>, value: string) => {
-      column.setFilterValue(value === '' ? undefined : value)
+      // Use server-side callback if provided, otherwise use client-side filtering
+      if (options?.onFilterChange) {
+        options.onFilterChange(value)
+      }
+      else {
+        column.setFilterValue(value === '' ? undefined : value)
+      }
     }, options?.debounce ?? 300)
 
     return ({ column }: { column: Column<T, unknown> }) => {
@@ -191,10 +239,10 @@ export function useTableColumnHeader() {
           },
           'size': 'xs',
           'placeholder': options?.placeholder ?? label,
-          'class': 'w-full',
-          'onClick': (event: Event) => event.stopPropagation()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any)
+          'class': 'flex-1 min-w-0',
+          'onClick': (event: Event) => event.stopPropagation(),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any),
       ])
     }
   }
