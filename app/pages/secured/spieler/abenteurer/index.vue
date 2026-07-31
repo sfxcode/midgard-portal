@@ -14,6 +14,7 @@ const { typNamen } = useStammdatenStore()
 
 const list = useTemplateRef('list')
 
+const isCreateModalOpen = ref(false)
 const name = ref('')
 const spieler = ref('')
 const typ = ref('')
@@ -52,28 +53,36 @@ useSeoMeta({
             variant="subtle"
             @click="list?.exportData()"
           />
+          <UButton
+            icon="i-lucide-plus"
+            aria-label="Abenteurer anlegen"
+            @click="isCreateModalOpen = true"
+          />
         </template>
       </AppPageHeader>
     </template>
 
     <template #body>
-      <div class="mb-6 flex flex-wrap items-center gap-2">
-        <UInput v-model="name" placeholder="Name" class="w-40" />
-        <UInput v-model="spieler" placeholder="Spieler" class="w-40" />
-        <USelect
-          v-model="typ"
-          :items="typNamen"
-          placeholder="Typ"
-          class="w-40"
-        />
-        <UButton
-          label="Abenteurer anlegen"
-          icon="i-lucide-plus"
-          :loading="creating"
-          :disabled="name.trim().length < 2 || spieler.trim().length < 2 || !typ"
-          @click="createNewAbenteurer"
-        />
-      </div>
+      <UModal v-model:open="isCreateModalOpen" title="Abenteurer anlegen">
+        <template #body>
+          <div class="flex flex-col gap-2">
+            <UInput v-model="name" placeholder="Name" />
+            <UInput v-model="spieler" placeholder="Spieler" />
+            <USelect
+              v-model="typ"
+              :items="typNamen"
+              placeholder="Typ"
+            />
+            <UButton
+              label="Abenteurer anlegen"
+              icon="i-lucide-plus"
+              :loading="creating"
+              :disabled="name.trim().length < 2 || spieler.trim().length < 2 || !typ"
+              @click="createNewAbenteurer"
+            />
+          </div>
+        </template>
+      </UModal>
 
       <SpielerAbenteurerList ref="list" />
     </template>

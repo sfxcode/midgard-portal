@@ -10,6 +10,7 @@ const { login } = useSpielerStore()
 const { eigeneKampagnenAlsSpielleiter, refetchEigeneKampagnenAlsSpielleiter } = useKampagneStore()
 const { createKampagne, saveKampagne } = useKampagne()
 
+const isCreateModalOpen = ref(false)
 const name = ref('')
 const beschreibung = ref('')
 const creating = ref(false)
@@ -36,21 +37,33 @@ useSeoMeta({
 <template>
   <UDashboardPanel id="dm-kampagnen">
     <template #header>
-      <AppPageHeader title="Kampagnen" :items="items" />
+      <AppPageHeader title="Kampagnen" :items="items">
+        <template #right>
+          <UButton
+            icon="i-lucide-plus"
+            aria-label="Kampagne anlegen"
+            @click="isCreateModalOpen = true"
+          />
+        </template>
+      </AppPageHeader>
     </template>
 
     <template #body>
-      <div class="mb-6 flex flex-wrap items-center gap-2">
-        <UInput v-model="name" placeholder="Name" class="w-50" />
-        <UInput v-model="beschreibung" placeholder="Beschreibung (optional)" class="w-64" />
-        <UButton
-          label="Kampagne anlegen"
-          icon="i-lucide-plus"
-          :loading="creating"
-          :disabled="name.trim().length < 2"
-          @click="createNewKampagne"
-        />
-      </div>
+      <UModal v-model:open="isCreateModalOpen" title="Kampagne anlegen">
+        <template #body>
+          <div class="flex flex-col gap-2">
+            <UInput v-model="name" placeholder="Name" @keyup.enter="createNewKampagne" />
+            <UInput v-model="beschreibung" placeholder="Beschreibung (optional)" @keyup.enter="createNewKampagne" />
+            <UButton
+              label="Kampagne anlegen"
+              icon="i-lucide-plus"
+              :loading="creating"
+              :disabled="name.trim().length < 2"
+              @click="createNewKampagne"
+            />
+          </div>
+        </template>
+      </UModal>
 
       <SpielerKampagnenListe
         :kampagnen="eigeneKampagnenAlsSpielleiter ?? []"

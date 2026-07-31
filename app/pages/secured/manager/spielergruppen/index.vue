@@ -9,6 +9,7 @@ const { createSpielergruppe, saveSpielergruppe } = useSpielergruppe()
 
 const globalFilter = ref('')
 
+const isCreateModalOpen = ref(false)
 const name = ref('')
 const creating = ref(false)
 
@@ -44,20 +45,32 @@ useSeoMeta({
             class="max-w-xs"
           />
         </template>
+
+        <template #right>
+          <UButton
+            icon="i-lucide-plus"
+            aria-label="Gruppe anlegen"
+            @click="isCreateModalOpen = true"
+          />
+        </template>
       </AppPageHeader>
     </template>
 
     <template #body>
-      <div class="mb-6 flex flex-wrap items-center gap-2">
-        <UInput v-model="name" placeholder="Name" class="w-50" />
-        <UButton
-          label="Gruppe anlegen"
-          icon="i-lucide-plus"
-          :loading="creating"
-          :disabled="name.trim().length < 2"
-          @click="createNewSpielergruppe"
-        />
-      </div>
+      <UModal v-model:open="isCreateModalOpen" title="Gruppe anlegen">
+        <template #body>
+          <div class="flex flex-col gap-2">
+            <UInput v-model="name" placeholder="Name" @keyup.enter="createNewSpielergruppe" />
+            <UButton
+              label="Gruppe anlegen"
+              icon="i-lucide-plus"
+              :loading="creating"
+              :disabled="name.trim().length < 2"
+              @click="createNewSpielergruppe"
+            />
+          </div>
+        </template>
+      </UModal>
 
       <SpielerGruppenListe v-model:global-filter="globalFilter" />
     </template>

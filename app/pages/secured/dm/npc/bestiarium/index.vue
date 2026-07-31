@@ -14,6 +14,7 @@ const { refetchWesen } = useBestiariumStore()
 const list = useTemplateRef('list')
 const globalFilter = ref('')
 
+const isCreateModalOpen = ref(false)
 const name = ref('')
 const creating = ref(false)
 
@@ -56,26 +57,34 @@ useSeoMeta({
             variant="subtle"
             @click="list?.exportData()"
           />
+          <UButton
+            icon="i-lucide-plus"
+            aria-label="Eintrag anlegen"
+            @click="isCreateModalOpen = true"
+          />
         </template>
       </AppPageHeader>
     </template>
 
     <template #body>
-      <div class="mb-6 flex items-center gap-2">
-        <UInput
-          v-model="name"
-          placeholder="Name des neuen Wesens"
-          class="w-50"
-          @keyup.enter="createNewWesen"
-        />
-        <UButton
-          label="Eintrag anlegen"
-          icon="i-lucide-plus"
-          :loading="creating"
-          :disabled="name.trim().length < 2"
-          @click="createNewWesen"
-        />
-      </div>
+      <UModal v-model:open="isCreateModalOpen" title="Eintrag anlegen">
+        <template #body>
+          <div class="flex flex-col gap-2">
+            <UInput
+              v-model="name"
+              placeholder="Name des neuen Wesens"
+              @keyup.enter="createNewWesen"
+            />
+            <UButton
+              label="Eintrag anlegen"
+              icon="i-lucide-plus"
+              :loading="creating"
+              :disabled="name.trim().length < 2"
+              @click="createNewWesen"
+            />
+          </div>
+        </template>
+      </UModal>
 
       <DmWesenList ref="list" v-model:global-filter="globalFilter" />
     </template>
