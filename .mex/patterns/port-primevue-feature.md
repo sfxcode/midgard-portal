@@ -25,7 +25,15 @@ last_updated: 2026-08-03
 
 Data-layer code (Pinia stores, models) is largely UI-framework-agnostic and has mostly already been carried over near-verbatim where it was ported. Every `.vue` component, by contrast, gets rebuilt from scratch using Nuxt UI + UnoCSS.
 
-As of this app's current state, already ported: Stamm reference browsing/editing (`secured/manager/stamm/**`), DM Bestiarium, the 3D dice roller (net-new, not in scratch originally), player Abenteurer/Kampagnen pages (`secured/spieler/**`), and admin (via `@sfxcode/nuxt-ui-mongocamp`'s own components rather than scratch's hand-rolled admin — arguably already superseded, not a gap). Not yet ported: `secured/tools/**` (a calculator page) and the print/PDF-oriented templates (`templates/blueprint.vue`, `templates/print.vue`, `templates/calculator.vue`).
+As of this app's current state (verified 2026-08-03 by diffing `scratch/midgard-portal-nuxt/app/pages` and `/components` directly against this app's, not by trusting older notes), already ported or superseded:
+- Stamm reference browsing/editing (`secured/manager/stamm/**`), including the learning-cost tables — scratch's separate `secured/stamm/lernen/zauber.vue` route is dead PrimeVue placeholder content (unrelated "Products"/"Rollen" demo data), not real functionality to port; the real Lerneinheiten data is already integrated into this app's Zauber/Fertigkeiten/Typen pages via `app/models/lernen.ts`.
+- DM Bestiarium, player Abenteurer/Kampagnen pages (`secured/spieler/**`), Spielergruppen (net-new here, no scratch equivalent).
+- The 3D dice roller on `/secured` — this also covers scratch's `secured/tools/index.vue` ("Würfelgenerator"), which is just a plain dice-roller page, not a calculator despite the route name suggesting otherwise.
+- PDF export for Zauber/Fertigkeiten/Typen (`useZauberExport.ts`/`useFertigkeitenExport.ts`/`useTypenExport.ts`) — already exceeds scratch's `templates/print.vue`, which is a minimal one-spell demo, not a real feature.
+- Admin (via `@sfxcode/nuxt-ui-mongocamp`'s own components) — scratch's own `secured/admin/index.vue` is an empty stub, not a real dashboard to port.
+- `templates/blueprint.vue` is also an empty stub — nothing to port.
+
+**Not yet ported — the one real gap:** the **Basis-Eigenschaften calculator** (`templates/calculator.vue` + `components/calculator/BasisEigenschaft.vue`). A Midgard-specific point-buy character-attribute tool: six base stats (ST/GS/GW/KO/IN/ZT) against a 420-point budget, plus derived combat bonuses (SchB/AnB/AbB/AusB) via game-specific formulas (see the component/page source in scratch for the exact math — it's small but encodes real game rules, so preserve the formulas exactly rather than approximating). Confirmed absent here via `grep -ri eigenschaft app/` (only unrelated character-sheet model fields turn up).
 
 ## Steps
 1. Before designing a requested feature from scratch, check `scratch/midgard-portal-nuxt/app/` for an existing PrimeVue implementation of the same feature — character sheets, bestiary, spell/skill/type browsing, dice rolling, PDF export, and admin are all precedented there.

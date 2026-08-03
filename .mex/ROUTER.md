@@ -38,8 +38,7 @@ Then read this file fully before doing anything else in this session.
 
 **Not yet built:**
 - i18n — German domain terms and English chrome coexist untranslated; no `@nuxtjs/i18n` setup
-- `secured/tools/**` calculator page (exists in the `scratch/` PrimeVue reference, not yet ported)
-- Print/blueprint templates (`templates/blueprint.vue`, `templates/print.vue`, `templates/calculator.vue` in `scratch/`, not yet ported)
+- The Basis-Eigenschaften calculator (`scratch/`'s `templates/calculator.vue` + `components/calculator/BasisEigenschaft.vue`) — a point-buy character attribute tool with real Midgard-specific formulas; the only genuine unported feature (see `patterns/port-primevue-feature.md`). Everything else in `scratch/`'s remaining pages (`secured/tools/**`, `templates/blueprint.vue`, `templates/print.vue`, `secured/admin/index.vue`, `secured/stamm/lernen/zauber.vue`) is either an empty stub, dead placeholder content, or already superseded by a more complete equivalent in this app.
 - No test suite (unit or e2e) — verification is lint + typecheck + manual/Playwright checks only
 - No deployment configured — no known live URL
 
