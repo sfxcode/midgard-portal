@@ -3,6 +3,7 @@ import type { TableColumn } from '@nuxt/ui'
 import { getPaginationRowModel } from '@tanstack/table-core'
 import type { Wesen } from '~/models'
 import { useWesen } from '~/composables/dm/useWesen'
+import { useWesenGenerator } from '~/composables/dm/useWesenGenerator'
 
 const UButton = resolveComponent('UButton')
 const UPopover = resolveComponent('UPopover')
@@ -14,6 +15,7 @@ const { wesen } = useBestiariumStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { vorkommenToString } = useWesen()
+const { generateWesen } = useWesenGenerator()
 const { sortableHeader, multiSelectableHeader, booleanHeader, multiSelectFilter } = useTableColumnHeader()
 
 const tableData = computed<Wesen[]>(() => wesen.value ?? [])
@@ -21,14 +23,28 @@ const tableData = computed<Wesen[]>(() => wesen.value ?? [])
 const kategorien = computed(() => uniqueValues(tableData.value, v => v.kategorie))
 const gradWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.grad))).sort((a, b) => a - b))
 
+function generateWesenFromRow(row: Wesen) {
+  const result = generateWesen({ wesen: row.name, anzahl: 1, anzahlErfahren: 0, anzahlSelten: 0, anzahlLegendaer: 0 })
+  console.log(result)
+}
+
 const columns = computed<TableColumn<Wesen>[]>(() => withResponsiveBreakpoints([
   {
     id: 'preview',
     cell: ({ row }) =>
-      h(UPopover, {}, {
-        default: () => h(UButton, { icon: 'i-lucide-search', size: 'xs', color: 'neutral', variant: 'subtle' }),
-        content: () => h('div', { class: 'p-4 w-80' }, h(WesenViewComponent, { wesen: row.original }))
-      })
+      h('div', { class: 'flex flex-col gap-1' }, [
+        h(UPopover, {}, {
+          default: () => h(UButton, { icon: 'i-lucide-search', size: 'xs', color: 'neutral', variant: 'subtle' }),
+          content: () => h('div', { class: 'p-4 w-80' }, h(WesenViewComponent, { wesen: row.original }))
+        }),
+        h(UButton, {
+          icon: 'i-lucide-dices',
+          size: 'xs',
+          color: 'neutral',
+          variant: 'subtle',
+          onClick: () => generateWesenFromRow(row.original)
+        })
+      ])
   },
   {
     accessorKey: 'name',

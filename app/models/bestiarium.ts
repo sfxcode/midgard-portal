@@ -1,4 +1,5 @@
 import type { MetaData } from '~/models/base'
+import type {Zauber} from "~/models/stamm.ts";
 
 export interface WesenModifikator {
   grad: number
@@ -62,4 +63,27 @@ export interface Wesen {
   legendaer: WesenModifikator
   metaData?: MetaData
   _id?: string
+}
+
+export interface WesenGeneratorRequest {
+  wesen: string,
+  anzahl: number
+  anzahlErfahren: number
+  anzahlSelten: number
+  anzahlLegendaer: number
+}
+
+export interface GeneratedWesenProperties {
+  index: number
+  lp: number
+  ap: number
+}
+
+export interface WesenGeneratorResult {
+  wesen: Wesen,
+  zauber: Array<Zauber>
+  standard: Array<GeneratedWesenProperties>
+  erfahren: Array<GeneratedWesenProperties>
+  selten: Array<GeneratedWesenProperties>
+  legendaer: Array<GeneratedWesenProperties>
 }
