@@ -5,10 +5,10 @@ import { useStammEdit } from '~/composables/stamm/useStammEdit'
 const route = useRoute()
 const nameParameter = `${route.params.name}`
 
-const { wesen, refetchWesen } = useBestiariumStore()
+const { refetchWesen, wesenByName } = useBestiariumStore()
 const { saveStammDocument } = useStammEdit()
 
-const wesenData = computed(() => wesen.value?.find((w: Wesen) => w.name === nameParameter))
+const wesenData = computed(() => wesenByName(nameParameter))
 
 async function handleWesenSave(data: Partial<Wesen>) {
   if (!wesenData.value) return

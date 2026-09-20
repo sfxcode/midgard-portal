@@ -6,11 +6,11 @@ import { useStammEdit } from '~/composables/stamm/useStammEdit'
 const route = useRoute()
 const nameParameter = `${route.params.name}`
 
-const { zauber, refetchZauber } = useZauberStore()
+const { refetchZauber, zauberByName } = useZauberStore()
 const { beschreibung, beschreibungContent, loadBeschreibung, saveBeschreibung } = useBeschreibung()
 const { saveStammDocument } = useStammEdit()
 
-const zauberData = computed(() => zauber.value?.find((z: Zauber) => z.name === nameParameter))
+const zauberData = computed(() => zauberByName(nameParameter))
 
 async function handleZauberSave(data: Partial<Zauber>) {
   if (!zauberData.value) return
