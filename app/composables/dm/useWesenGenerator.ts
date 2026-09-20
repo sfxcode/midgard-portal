@@ -1,5 +1,7 @@
+import type {Content} from 'pdfmake/interfaces'
 import type {GeneratedWesenProperties, Wesen, WesenGeneratorRequest, WesenGeneratorResult, WesenModifikator, Zauber} from '~/models'
 import {useDices} from '~/composables/tools/useDices'
+import {useWesen} from '~/composables/dm/useWesen'
 
 export function useWesenGenerator() {
   const {wesenByName} = useBestiariumStore()
@@ -72,6 +74,131 @@ export function useWesenGenerator() {
     }
   }
 
+  // Reproduces the book's boxed stat block layout (name/kategorie/Grad, LP/AP/
+  // Rüstung, St/Gw/In/B, Abwehr/Resistenz, Angriff/Bes./Zaubern/Vorkommen -
+  // see scratch/pdf/wesen_sample_in_pdf.png) so the generated PDF opens with
+  // the same reference info a DM would look up in the book.
+  function createWesenStatBlock(wesen: Wesen): Content[] {
+    const {angriffeToString, besonderheitenToString, zauberToString, vorkommenToString} = useWesen()
 
-  return { generateWesen }
+    const rows: Content[] = [
+      {text: `${wesen.name} (${wesen.kategorie}, Grad ${wesen.grad})`, style: 'subheader'},
+      {
+        columns: [
+          {text: `LP ${wesen.lp}`},
+          {text: `AP ${wesen.ap}`},
+          {text: wesen.ruestung}
+        ]
+      },
+      {
+        columns: [
+          {text: `St ${wesen.st}`},
+          {text: `Gw ${wesen.gw}`},
+          {text: `In ${wesen.in}`},
+          {text: `B ${wesen.fliegend > 0 ? `${wesen.b}/${wesen.fliegend}` : wesen.b}`}
+        ]
+      },
+      {
+        text: wesen.mw > 0
+          ? `Abwehr+${wesen.abwehr}  Resistenz+${wesen.resistenzGeist}/${wesen.resistenzKoerper}  MW${wesen.mw >= 999 ? ' ∞' : `+${wesen.mw}`}`
+          : `Abwehr+${wesen.abwehr}  Resistenz+${wesen.resistenzGeist}/${wesen.resistenzKoerper}`
+      }
+    ]
+
+    const angriffText = angriffeToString(wesen)
+    if (angriffText) {
+      rows.push({text: [{text: 'Angriff: ', bold: true}, angriffText]})
+    }
+
+    const besText = besonderheitenToString(wesen)
+    if (besText) {
+      rows.push({text: [{text: 'Bes.: ', bold: true}, besText]})
+    }
+
+    const zauberText = zauberToString(wesen)
+    if (zauberText) {
+      rows.push({text: [{text: 'Zaubern: ', bold: true}, zauberText]})
+    }
+
+    const vorkommenText = vorkommenToString(wesen)
+    if (vorkommenText) {
+      rows.push({text: [{text: 'Vorkommen: ', bold: true}, vorkommenText]})
+    }
+
+    return rows
+  }
+
+  function createInstancesSection(title: string, instances: GeneratedWesenProperties[]): Content[] {
+    if (instances.length === 0) {
+      return []
+    }
+    return [
+      { text: title, style: 'subheader' },
+      {
+        layout: 'base',
+        table: {
+          headerRows: 1,
+          dontBreakRows: true,
+          widths: ['auto', 'auto', 'auto'],
+          body: [['#', 'LP', 'AP'], ...instances.map(p => [p.index, p.lp, p.ap])]
+        }
+      }
+    ]
+  }
+
+  function createZauberSection(zauber: Zauber[]): Content[] {
+    if (zauber.length === 0) {
+      return []
+    }
+    return [
+      { text: 'Zauber', style: 'subheader' },
+      {
+        layout: 'base',
+        table: {
+          headerRows: 1,
+          dontBreakRows: true,
+          widths: ['auto', '*', 'auto'],
+          body: [['Stufe', 'Name', 'AP'], ...zauber.map(z => [z.stufe, z.name, z.ap])]
+        }
+      }
+    ]
+  }
+
+  async function exportWesen(request: WesenGeneratorRequest): Promise<void> {
+    const result = generateWesen(request)
+    if (!result) {
+      console.warn(`Failed to generate Wesen for request: ${JSON.stringify(request)}`)
+      return
+    }
+
+    const {defaultStyle, styleLibrary, tableLayouts, footer, pageHeader} = usePdf()
+
+    const content: Content[] = [
+      ...createWesenStatBlock(result.wesen),
+      ...createInstancesSection('Standard', result.standard),
+      ...createInstancesSection('Erfahren', result.erfahren),
+      ...createInstancesSection('Selten', result.selten),
+      ...createInstancesSection('Legendär', result.legendaer),
+      ...createZauberSection(result.zauber)
+    ]
+
+    const pdfMake = usePDFMake()
+    if (!pdfMake) {
+      return
+    }
+
+    pdfMake.createPdf(
+      {
+        header: await pageHeader(),
+        footer: footer(),
+        content,
+        styles: styleLibrary(),
+        defaultStyle: defaultStyle()
+      },
+      tableLayouts()
+    ).open()
+  }
+
+
+  return { generateWesen, exportWesen }
 }

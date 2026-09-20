@@ -15,7 +15,7 @@ const { wesen } = useBestiariumStore()
 const { uniqueValues } = useArrayFunctions()
 const { exportToCsv } = useCsvExport()
 const { vorkommenToString } = useWesen()
-const { generateWesen } = useWesenGenerator()
+const { exportWesen } = useWesenGenerator()
 const { sortableHeader, multiSelectableHeader, booleanHeader, multiSelectFilter } = useTableColumnHeader()
 
 const tableData = computed<Wesen[]>(() => wesen.value ?? [])
@@ -24,8 +24,7 @@ const kategorien = computed(() => uniqueValues(tableData.value, v => v.kategorie
 const gradWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.grad))).sort((a, b) => a - b))
 
 function generateWesenFromRow(row: Wesen) {
-  const result = generateWesen({ wesen: row.name, anzahl: 3, anzahlErfahren: 2, anzahlSelten: 2, anzahlLegendaer: 10, bestOf: 100 })
-  console.log(result)
+  exportWesen({ wesen: row.name, anzahl: 5, anzahlErfahren: 3, anzahlSelten: 2, anzahlLegendaer: 1, bestOf: 2 })
 }
 
 const columns = computed<TableColumn<Wesen>[]>(() => withResponsiveBreakpoints([
