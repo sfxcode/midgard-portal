@@ -56,13 +56,24 @@ export function useWesenGenerator() {
     return result
   }
 
+  function findZauberByName(name: string): Zauber | undefined {
+    const zauber = zauberByName(name)
+    if (!zauber && name.includes('(')) {
+      // Some Zauber names in the data include parenthetical notes (e.g. "Feuerball (Feuer)"),
+      // but the zauberByName function may not recognize them. Try stripping the parentheses.
+      const strippedName = name.replace(/\s*\(.*?\)\s*/g, '').trim()
+      return zauberByName(strippedName)
+    }
+    return zauber
+  }
+
   function generateWesen(request: WesenGeneratorRequest): WesenGeneratorResult | undefined {
     const wesen = wesenByName(request.wesen)
     if (!wesen) {
       console.warn(`Wesen ${request.wesen} not found`)
       return undefined
     }
-    const zauber: Zauber[] = wesen?.zauber.map(z => zauberByName(z.name)).filter(z => z !== undefined) as Zauber[]
+    const zauber: Zauber[] = wesen?.zauber.map(z => findZauberByName(z.name)).filter(z => z !== undefined) as Zauber[]
 
     return {
       wesen,
@@ -83,25 +94,29 @@ export function useWesenGenerator() {
 
     const rows: Content[] = [
       {text: `${wesen.name} (${wesen.kategorie}, Grad ${wesen.grad})`, style: 'subheader'},
+      // A shared 4-column table (rather than two separate `columns` blocks)
+      // so the LP/AP/Rüstung line and the St/Gw/In/B line below it share the
+      // same tab stops - two independent `columns` rows with different item
+      // counts (3 vs 4) each divide the full width on their own and don't
+      // line up.
       {
-        columns: [
-          {text: `LP ${wesen.lp}`},
-          {text: `AP ${wesen.ap}`},
-          {text: wesen.ruestung}
-        ]
+        layout: 'noBorders',
+        table: {
+          widths: [90, 90, 90, '*'],
+          body: [
+            [`LP ${wesen.lp}`, `AP ${wesen.ap}`, wesen.ruestung, ''],
+            [`St ${wesen.st}`, `Gw ${wesen.gw}`, `In ${wesen.in}`, `B ${wesen.fliegend > 0 ? `${wesen.b}/${wesen.fliegend}` : wesen.b}`]
+          ]
+        }
       },
       {
-        columns: [
-          {text: `St ${wesen.st}`},
-          {text: `Gw ${wesen.gw}`},
-          {text: `In ${wesen.in}`},
-          {text: `B ${wesen.fliegend > 0 ? `${wesen.b}/${wesen.fliegend}` : wesen.b}`}
+        text: [
+          {text: 'Abwehr: ', bold: true},
+          `+${wesen.abwehr}  `,
+          {text: 'Resistenz: ', bold: true},
+          `+${wesen.resistenzGeist}/${wesen.resistenzKoerper}`,
+          ...(wesen.mw > 0 ? [`  MW${wesen.mw >= 999 ? ' ∞' : `+${wesen.mw}`}`] : [])
         ]
-      },
-      {
-        text: wesen.mw > 0
-          ? `Abwehr+${wesen.abwehr}  Resistenz+${wesen.resistenzGeist}/${wesen.resistenzKoerper}  MW${wesen.mw >= 999 ? ' ∞' : `+${wesen.mw}`}`
-          : `Abwehr+${wesen.abwehr}  Resistenz+${wesen.resistenzGeist}/${wesen.resistenzKoerper}`
       }
     ]
 
@@ -128,37 +143,67 @@ export function useWesenGenerator() {
     return rows
   }
 
-  function createInstancesSection(title: string, instances: GeneratedWesenProperties[]): Content[] {
-    if (instances.length === 0) {
-      return []
-    }
+  // Number of blank tally boxes drawn after the LP/AP value, for crossing off
+  // damage by hand during play (see scratch/IMG_3819.jpg) - a fixed track
+  // length, not one box per point, matching the sketch.
+  const TRACK_BOXES = 12
+
+  // One small "<Name> N" tracker per generated instance: a 2-row table (LP/AP
+  // label + rolled value) followed by a row of blank boxes.
+  function createInstanceTracker(name: string, instance: GeneratedWesenProperties): Content[] {
+    const boxes = Array.from({length: TRACK_BOXES}, () => '')
     return [
-      { text: title, style: 'subheader' },
+      {text: `${name} ${instance.index}`, bold: true, margin: [0, 6, 0, 2]},
       {
         layout: 'base',
         table: {
-          headerRows: 1,
           dontBreakRows: true,
-          widths: ['auto', 'auto', 'auto'],
-          body: [['#', 'LP', 'AP'], ...instances.map(p => [p.index, p.lp, p.ap])]
+          widths: [30, 30, ...boxes.map(() => 20)],
+          body: [
+            [{text: 'LP', bold: true}, String(instance.lp), ...boxes],
+            [{text: 'AP', bold: true}, String(instance.ap), ...boxes]
+          ]
         }
       }
     ]
   }
 
+  // A smaller, non-'subheader' label for the tier/zauber sections below the
+  // main stat block, so they read as sub-sections rather than competing with
+  // the stat block's own title.
+  function sectionLabel(title: string): Content {
+    return {text: title, bold: true, fontSize: 12, margin: [0, 8, 0, 2]}
+  }
+
+  // `title` is omitted for the "Standard" tier - it's the default case and
+  // doesn't need its own heading above the trackers.
+  function createInstancesSection(title: string | undefined, name: string, instances: GeneratedWesenProperties[]): Content[] {
+    if (instances.length === 0) {
+      return []
+    }
+    return [
+      ...(title ? [sectionLabel(title)] : []),
+      ...instances.flatMap(instance => createInstanceTracker(name, instance))
+    ]
+  }
+
+  // Same columns/widths as useZauberExport's standard section, so a Zauber
+  // table reads the same wherever it's printed in the app.
   function createZauberSection(zauber: Zauber[]): Content[] {
     if (zauber.length === 0) {
       return []
     }
+    const headers = ['Stufe', 'Name', 'AP', 'Reichweite', 'Zauberdauer', 'Wirkungsbereich', 'Wirkungsdauer']
+    const widths = ['auto', '*', 'auto', 'auto', 'auto', 'auto', 'auto']
     return [
-      { text: 'Zauber', style: 'subheader' },
+      sectionLabel('Zauber'),
       {
         layout: 'base',
         table: {
           headerRows: 1,
           dontBreakRows: true,
-          widths: ['auto', '*', 'auto'],
-          body: [['Stufe', 'Name', 'AP'], ...zauber.map(z => [z.stufe, z.name, z.ap])]
+          widths: [...widths],
+          body: [[...headers], ...zauber.map(z => [z.stufe, z.name, z.ap, z.reichweite, z.zauberdauer, z.wirkungsbereich, z.wirkungsdauer])]
         }
       }
     ]
@@ -175,10 +220,10 @@ export function useWesenGenerator() {
 
     const content: Content[] = [
       ...createWesenStatBlock(result.wesen),
-      ...createInstancesSection('Standard', result.standard),
-      ...createInstancesSection('Erfahren', result.erfahren),
-      ...createInstancesSection('Selten', result.selten),
-      ...createInstancesSection('Legendär', result.legendaer),
+      ...createInstancesSection(undefined, result.wesen.name, result.standard),
+      ...createInstancesSection('Erfahren', result.wesen.name, result.erfahren),
+      ...createInstancesSection('Selten', result.wesen.name, result.selten),
+      ...createInstancesSection('Legendär', result.wesen.name, result.legendaer),
       ...createZauberSection(result.zauber)
     ]
 
