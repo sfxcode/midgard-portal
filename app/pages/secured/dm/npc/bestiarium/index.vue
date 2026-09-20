@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Wesen } from '~/models'
 import { useWesen } from '~/composables/dm/useWesen'
 
 const items = [
@@ -9,7 +10,7 @@ const items = [
 const { documentApi } = useMongocampApi()
 const { ensureMetaData } = useMongocampDocument()
 const { createWesen } = useWesen()
-const { refetchWesen } = useBestiariumStore()
+const { wesen, refetchWesen } = useBestiariumStore()
 
 const list = useTemplateRef('list')
 const globalFilter = ref('')
@@ -31,6 +32,29 @@ async function createNewWesen() {
   }
 }
 
+async function loadWesenFromData() {
+  const bestiarium_json = await import('../../../../../../data/bestiarium.json')
+  const wesenList = bestiarium_json.default as unknown as Wesen[]
+  const existingWesen = wesen.value ?? []
+  const existingWesenNames = existingWesen.map(w => w.name)
+
+  for (const entry of wesenList) {
+    if (existingWesenNames.includes(entry.name)) {
+      console.log(`Wesen ${entry.name} already exists, skipping...`)
+      continue
+    }
+    try {
+      const requestBody = ensureMetaData(entry) as unknown as Record<string, string>
+      await documentApi.insert({collectionName: 'ms_bestiarium', requestBody})
+    }
+    catch (error) {
+      console.error('error', error)
+    }
+  }
+  await refetchWesen()
+}
+
+
 useSeoMeta({
   title: 'Bestiarium'
 })
@@ -50,6 +74,14 @@ useSeoMeta({
         </template>
 
         <template #right>
+          <UButton
+            v-if="true"
+            label="JSON"
+            icon="i-lucide-upload"
+            color="neutral"
+            variant="subtle"
+            @click="loadWesenFromData"
+          />
           <UButton
             label="CSV"
             icon="i-lucide-download"

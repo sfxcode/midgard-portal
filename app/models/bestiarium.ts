@@ -35,7 +35,8 @@ export interface WesenZauber {
 
 export interface Wesen {
   name: string
-  besitzer: string
+  system: boolean
+  buch: string
   kategorie: string
   grad: number
   gf: number

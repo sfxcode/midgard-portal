@@ -52,7 +52,8 @@ export function useWesen() {
   function createWesen(name: string): Wesen {
     return {
       name,
-      besitzer: '',
+      system: true,
+      buch: '',
       kategorie: 'Hunde',
       grad: 1,
       gf: 1,
