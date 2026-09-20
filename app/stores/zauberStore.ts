@@ -29,6 +29,10 @@ export function useZauberStore() {
     return zauber.value.filter((z: Zauber) => names.includes(z.name))
   }
 
+  function zauberByName(name: string): Zauber | undefined {
+    return zauber.value?.find(z => z.name === name)
+  }
+
   const zauberNamen = computed(() => {
     if (zauber.value) {
       return Array.from(new Set(zauber.value.map(t => t.name))).sort()
@@ -52,5 +56,5 @@ export function useZauberStore() {
     }), 'kategorie')
   }
 
-  return { zauber, refetchZauber, zauberNamen, filterZauberByName, filterZauberByNames, zauberLerneinheiten, refetchZauberLerneinheiten, zauberLerneinheitenByTyp }
+  return { zauber, refetchZauber, zauberNamen, filterZauberByName, filterZauberByNames, zauberByName, zauberLerneinheiten, refetchZauberLerneinheiten, zauberLerneinheitenByTyp }
 }

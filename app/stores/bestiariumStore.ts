@@ -10,5 +10,9 @@ export function useBestiariumStore() {
     staleTime
   })
 
-  return { wesen, refetchWesen }
+  function wesenByName(name: string): Wesen | undefined {
+    return wesen.value?.find(w => w.name === name)
+  }
+
+  return { wesen, refetchWesen, wesenByName }
 }
