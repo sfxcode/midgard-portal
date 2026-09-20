@@ -4,7 +4,7 @@ import type { Zauber } from '~/models'
 type ZauberRow = Array<string | number>
 
 export function useZauberExport() {
-  const { defaultStyle, styleLibrary, tableLayouts, smallMargin } = usePdf()
+  const { defaultStyle, styleLibrary, tableLayouts, footer, pageHeader, smallMargin } = usePdf()
 
   function filterZauberByDauer(zauberData: Zauber[], zauberdauer: string): ZauberRow[] {
     const filtered = zauberData.filter(z => z.zauberdauer === zauberdauer)
@@ -43,14 +43,20 @@ export function useZauberExport() {
       {
         layout: 'base',
         table: {
-          widths,
-          body: [headers, ...data]
+          headerRows: 1,
+          dontBreakRows: true,
+          // pdfmake mutates cells/widths in place while measuring a table, so reusing
+          // the same array reference across multiple sections (standardHeaders/
+          // standardWidths are shared by three sections below) silently breaks the
+          // header row on every reuse after the first - clone per section instead.
+          widths: [...widths],
+          body: [[...headers], ...data]
         }
       }
     ]
   }
 
-  function exportZauberData(filterZauber: string[], title: string = 'Zauber Blatt') {
+  async function exportZauberData(filterZauber: string[], title: string = 'Zauber Blatt') {
     const standardWidths = ['auto', '*', 'auto', 'auto', 'auto', 'auto', 'auto']
     const sonstigeWidths = ['auto', 'auto', '*', 'auto', 'auto', 'auto', 'auto', 'auto']
     const standardHeaders = ['Stufe', 'Name', 'AP', 'Reichweite', 'Kategorie', 'Wirkungsbereich', 'Wirkungsdauer']
@@ -74,9 +80,8 @@ export function useZauberExport() {
 
     pdfMake.createPdf(
       {
-        footer(currentPage: number, pageCount: number) {
-          return `${currentPage} of ${pageCount}`
-        },
+        header: await pageHeader(),
+        footer: footer(),
         content,
         styles: styleLibrary(),
         defaultStyle: defaultStyle()

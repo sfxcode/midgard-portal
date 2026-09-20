@@ -4,7 +4,7 @@ import type { Fertigkeit } from '~/models'
 type FertigkeitRow = Array<string | number>
 
 export function useFertigkeitenExport() {
-  const { defaultStyle, styleLibrary, tableLayouts, smallMargin } = usePdf()
+  const { defaultStyle, styleLibrary, tableLayouts, footer, pageHeader, smallMargin } = usePdf()
 
   function toRow(f: Fertigkeit): FertigkeitRow {
     return [f.name, f.leitwert, f.art, f.schwierigkeit, f.lerneinheiten, f.ungelernt, f.gelernt]
@@ -20,6 +20,8 @@ export function useFertigkeitenExport() {
       {
         layout: 'base',
         table: {
+          headerRows: 1,
+          dontBreakRows: true,
           widths: ['*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
           body: [['Name', 'Leitwert', 'Art', 'Schwierigkeit', 'LE', 'Ungelernt', 'Gelernt'], ...data.map(toRow)]
         }
@@ -27,7 +29,7 @@ export function useFertigkeitenExport() {
     ]
   }
 
-  function exportFertigkeitenData(fertigkeiten: Fertigkeit[], title: string = 'Fertigkeiten Blatt') {
+  async function exportFertigkeitenData(fertigkeiten: Fertigkeit[], title: string = 'Fertigkeiten Blatt') {
     const kategorien = Array.from(new Set(fertigkeiten.map(f => f.kategorie))).sort()
 
     const content: Content[] = [
@@ -43,9 +45,8 @@ export function useFertigkeitenExport() {
 
     pdfMake.createPdf(
       {
-        footer(currentPage: number, pageCount: number) {
-          return `${currentPage} of ${pageCount}`
-        },
+        header: await pageHeader(),
+        footer: footer(),
         content,
         styles: styleLibrary(),
         defaultStyle: defaultStyle()

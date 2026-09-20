@@ -4,7 +4,7 @@ import type { Typ } from '~/models'
 type TypRow = Array<string>
 
 export function useTypenExport() {
-  const { defaultStyle, styleLibrary, tableLayouts, smallMargin } = usePdf()
+  const { defaultStyle, styleLibrary, tableLayouts, footer, pageHeader, smallMargin } = usePdf()
 
   function toRow(t: Typ): TypRow {
     return [t.name, t.nameKurz, t.buch]
@@ -20,6 +20,8 @@ export function useTypenExport() {
       {
         layout: 'base',
         table: {
+          headerRows: 1,
+          dontBreakRows: true,
           widths: ['*', 'auto', 'auto'],
           body: [['Name', 'Bez.', 'Buch'], ...data.map(toRow)]
         }
@@ -27,7 +29,7 @@ export function useTypenExport() {
     ]
   }
 
-  function exportTypenData(typen: Typ[], title: string = 'Typen Blatt') {
+  async function exportTypenData(typen: Typ[], title: string = 'Typen Blatt') {
     const kategorien = Array.from(new Set(typen.map(t => t.kategorie))).sort()
 
     const content: Content[] = [
@@ -43,9 +45,8 @@ export function useTypenExport() {
 
     pdfMake.createPdf(
       {
-        footer(currentPage: number, pageCount: number) {
-          return `${currentPage} of ${pageCount}`
-        },
+        header: await pageHeader(),
+        footer: footer(),
         content,
         styles: styleLibrary(),
         defaultStyle: defaultStyle()
