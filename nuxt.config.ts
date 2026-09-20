@@ -39,7 +39,21 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: [
         'pdfmake/build/pdfmake',
-        'pdfmake/build/vfs_fonts'
+        'pdfmake/build/vfs_fonts',
+        // @dice-roller/rpg-dice-roller pulls in mathjs -> typed-function.
+        // typed-function's package.json declares "type": "module" at the root
+        // but ships a UMD build as main/browser (with a nested lib/umd/package.json
+        // overriding it back to "commonjs", which Node respects but Vite's raw
+        // @fs/ file-serving does not always honor). Listing only the top-level
+        // package wasn't enough to pull typed-function into the same pre-bundle,
+        // so it's listed explicitly too - this only started surfacing once
+        // useWesenGenerator actually called useDices() for the first time.
+        '@dice-roller/rpg-dice-roller',
+        // pnpm's strict node_modules layout doesn't hoist transitive deps to the
+        // root, so a bare 'mathjs'/'typed-function' entry fails to resolve here -
+        // Vite's "parent > child" syntax reaches them through their actual chain.
+        '@dice-roller/rpg-dice-roller > mathjs',
+        '@dice-roller/rpg-dice-roller > mathjs > typed-function'
       ]
     }
   },

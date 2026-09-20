@@ -71,6 +71,7 @@ export interface WesenGeneratorRequest {
   anzahlErfahren: number
   anzahlSelten: number
   anzahlLegendaer: number
+  bestOf: number
 }
 
 export interface GeneratedWesenProperties {

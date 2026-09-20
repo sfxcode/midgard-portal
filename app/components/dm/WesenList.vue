@@ -24,7 +24,7 @@ const kategorien = computed(() => uniqueValues(tableData.value, v => v.kategorie
 const gradWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.grad))).sort((a, b) => a - b))
 
 function generateWesenFromRow(row: Wesen) {
-  const result = generateWesen({ wesen: row.name, anzahl: 1, anzahlErfahren: 0, anzahlSelten: 0, anzahlLegendaer: 0 })
+  const result = generateWesen({ wesen: row.name, anzahl: 3, anzahlErfahren: 2, anzahlSelten: 2, anzahlLegendaer: 10, bestOf: 100 })
   console.log(result)
 }
 
