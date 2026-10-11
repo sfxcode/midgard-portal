@@ -27,7 +27,7 @@
     "@tanstack/table-core": "^8.21.3",
     "@vueuse/core": "^15.0.0",
     "@vueuse/nuxt": "^15.0.0",
-    "nuxt": "^4.5.2",
+    "nuxt": "^4.6.1",
     "nuxt-pdfmake": "^0.1.1",
     "vue": "^3.5.43",
     "zod": "^4.6.5"
