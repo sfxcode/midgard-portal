@@ -7,4 +7,5 @@ allowBuilds:
   unrs-resolver: false
   vue-demi: false
 minimumReleaseAgeExclude:
-  - '@sfxcode/'
+  - '@sfxcode/nuxt-ui-formkit@1.3.6'
+  - '@sfxcode/nuxt-ui-mongocamp@1.2.7'
