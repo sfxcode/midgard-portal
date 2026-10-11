@@ -24,7 +24,7 @@ const kategorien = computed(() => uniqueValues(tableData.value, v => v.kategorie
 const gradWerte = computed(() => Array.from(new Set(tableData.value.map(v => v.grad))).sort((a, b) => a - b))
 
 function generateWesenFromRow(row: Wesen) {
-  exportWesen({ wesen: row.name, anzahl: 5, anzahlErfahren: 0, anzahlSelten: 0, anzahlLegendaer: 1, bestOf: 2 })
+  exportWesen({ wesen: row.name, anzahl: 5, anzahlErfahren: 2, anzahlSelten: 1, anzahlLegendaer: 0, bestOf: 2 })
 }
 
 const columns = computed<TableColumn<Wesen>[]>(() => withResponsiveBreakpoints([
