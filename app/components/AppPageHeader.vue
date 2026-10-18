@@ -34,6 +34,7 @@ const crumbs = computed(() => props.items?.map(item => ({
 
 const { logout } = useMongocampAuth()
 const colorMode = useColorMode()
+const diceOpen = useState('dice-drawer', () => false)
 
 const colorModes = [
   { label: 'Tag', value: 'light', icon: 'i-lucide-sun' },
@@ -55,6 +56,15 @@ function onLogout() {
 
     <template #right>
       <div class="flex items-center gap-1.5 print:hidden">
+        <UTooltip text="Würfeltisch (W)">
+          <UButton
+            icon="i-game-icons-rolling-dices"
+            color="neutral"
+            variant="subtle"
+            aria-label="Würfeltisch öffnen"
+            @click="diceOpen = !diceOpen"
+          />
+        </UTooltip>
         <USelect
           v-model="colorMode.preference"
           :items="colorModes"

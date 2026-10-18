@@ -10,6 +10,7 @@ const DEFAULT_EXPRESSION = 'W100 + W20 + W6'
 const MAX_DICE = 12
 
 const { initDiceBox, roll } = useDiceBox()
+const boxId = `dice-box-${useId()}`
 const { history, addEntry, clearHistory } = useDiceHistory()
 
 const result = ref<DiceRoll[]>()
@@ -81,7 +82,7 @@ function onRollComplete(groups: { rolls: DiceRoll[] }[]) {
 }
 
 onMounted(() => {
-  initDiceBox('#dice-box', 12, onRollComplete, { theme: 'smooth', themeColor: '#EFE3C2' })
+  initDiceBox(`#${boxId}`, 12, onRollComplete, { theme: 'smooth', themeColor: '#EFE3C2' })
 })
 </script>
 
@@ -139,7 +140,7 @@ onMounted(() => {
     </div>
 
     <div class="relative">
-      <div id="dice-box" class="rpg-tray h-64 w-full" @click="rollExpression(currentExpression)" />
+      <div :id="boxId" class="rpg-tray h-64 w-full" @click="rollExpression(currentExpression)" />
       <div
         v-if="!result"
         class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-center text-[#EFE3C2]"

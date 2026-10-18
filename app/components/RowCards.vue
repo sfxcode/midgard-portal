@@ -18,6 +18,19 @@ const props = withDefaults(defineProps<{
 
 const filtersOpen = ref(false)
 
+// Sorting for the card list: the title column plus every listed field whose column can sort
+const sortOptions = computed(() => [
+  { label: 'Name', value: props.titleKey },
+  ...shownFields.value.map(field => ({ label: field.label, value: field.key }))
+].filter(option => props.tableApi?.getColumn(option.value)?.getCanSort()))
+
+const sortKey = computed(() => props.tableApi?.getState().sorting[0]?.id)
+const sortDesc = computed(() => props.tableApi?.getState().sorting[0]?.desc ?? false)
+
+function setSort(id: string | undefined, desc = sortDesc.value) {
+  props.tableApi?.setSorting(id ? [{ id, desc }] : [])
+}
+
 // Renders a TanStack cell/header render result (VNode or string) inside the template
 const Render = (renderProps: { render: () => unknown }) => renderProps.render() as never
 
@@ -54,7 +67,7 @@ function displayValue(row: Row<T>, field: Field) {
 
 <template>
   <div class="flex flex-col gap-3">
-    <div v-if="filterColumns.length" class="flex items-center gap-2">
+    <div v-if="filterColumns.length || sortOptions.length" class="flex items-center gap-2">
       <UButton
         :label="filtersOpen ? 'Filter ausblenden' : 'Filter & Sortierung'"
         icon="i-lucide-sliders-horizontal"
@@ -72,6 +85,28 @@ function displayValue(row: Row<T>, field: Field) {
     </div>
 
     <div v-if="filtersOpen" class="rpg-stat flex flex-col gap-3 p-3">
+      <div v-if="sortOptions.length" class="flex items-end gap-2">
+        <div class="flex min-w-0 flex-1 flex-col gap-1">
+          <span class="rpg-stat-label">Sortieren nach</span>
+          <USelect
+            :model-value="sortKey ?? undefined"
+            :items="sortOptions"
+            placeholder="Standard"
+            size="sm"
+            @update:model-value="(value: string) => setSort(value)"
+          />
+        </div>
+        <UButton
+          :icon="sortDesc ? 'i-lucide-arrow-up-z-a' : 'i-lucide-arrow-down-a-z'"
+          :aria-label="sortDesc ? 'Absteigend' : 'Aufsteigend'"
+          color="neutral"
+          variant="subtle"
+          size="sm"
+          :disabled="!sortKey"
+          @click="setSort(sortKey, !sortDesc)"
+        />
+      </div>
+
       <div v-for="column in filterColumns" :key="column.id">
         <Render :render="() => renderHeader(column)" />
       </div>

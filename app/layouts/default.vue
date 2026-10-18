@@ -148,11 +148,14 @@ const shortcutTargets = computed(() => [
     : [])
 ])
 
+const diceOpen = useState('dice-drawer', () => false)
+
 defineShortcuts(Object.fromEntries([
   ...['g-h', 'g-a', 'g-k', 'g-b', 'g-z', 'g-f', 'g-t'].map(keys => [keys, () => {
     const target = shortcutTargets.value.find(t => t.keys === keys)
     if (target) navigateTo(target.to)
-  }])
+  }]),
+  ['w', () => { diceOpen.value = !diceOpen.value }]
 ]))
 
 // Recently visited detail pages, for the palette (per-viewer convenience, kept in localStorage)
@@ -301,6 +304,19 @@ const groups = computed(() => [...(recent.value.length
     </UDashboardSidebar>
 
     <UDashboardSearch :groups="groups" />
+
+    <!-- Dice table available on every page; stays mounted after the first open so the 3D scene is only built once -->
+    <USlideover
+      v-model:open="diceOpen"
+      title="Würfeltisch"
+      side="right"
+      :unmount-on-hide="false"
+      class="print:hidden"
+    >
+      <template #body>
+        <DiceTable />
+      </template>
+    </USlideover>
 
     <slot />
   </UDashboardGroup>

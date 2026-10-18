@@ -5,6 +5,18 @@ useSeoMeta({
   title: 'Credits'
 })
 
+const shortcuts = [
+  { keys: ['⌘/Strg', 'K'], text: 'Suche und Schnellsprung öffnen' },
+  { keys: ['W'], text: 'Würfeltisch ein- und ausblenden' },
+  { keys: ['G', 'H'], text: 'Startseite' },
+  { keys: ['G', 'A'], text: 'Abenteurer' },
+  { keys: ['G', 'K'], text: 'Meine Kampagnen' },
+  { keys: ['G', 'B'], text: 'Bestiarium' },
+  { keys: ['G', 'Z'], text: 'Zauber (Verwaltung)' },
+  { keys: ['G', 'F'], text: 'Fertigkeiten (Verwaltung)' },
+  { keys: ['G', 'T'], text: 'Typen (Verwaltung)' }
+]
+
 const credits = [
   {
     name: 'game-icons.net',
@@ -40,6 +52,23 @@ const credits = [
     </template>
 
     <template #body>
+      <div class="rpg-frame p-6 lg:max-w-3xl">
+        <p class="rpg-section-title mb-4">
+          Tastenkürzel
+        </p>
+        <ul class="grid gap-2 sm:grid-cols-2">
+          <li v-for="shortcut in shortcuts" :key="shortcut.text" class="flex items-center gap-3 text-base">
+            <span class="flex shrink-0 items-center gap-1">
+              <UKbd v-for="key in shortcut.keys" :key="key" :value="key" />
+            </span>
+            <span class="text-muted">{{ shortcut.text }}</span>
+          </li>
+        </ul>
+        <p class="mt-3 text-sm text-muted">
+          Kürzel mit G: erst G, dann die zweite Taste drücken.
+        </p>
+      </div>
+
       <div class="rpg-frame p-6 lg:max-w-3xl">
         <p class="rpg-section-title mb-4">
           Mit Dank an

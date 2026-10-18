@@ -35,6 +35,7 @@ const groups = computed(() => [
       { label: 'Abwehr', value: props.wesen.abwehr },
       { label: 'Resistenz Geist', value: props.wesen.resistenzGeist },
       { label: 'Resistenz Körper', value: props.wesen.resistenzKoerper },
+      ...(props.wesen.mw > 0 ? [{ label: 'MW', value: props.wesen.mw >= 999 ? '∞' : `+${props.wesen.mw}` }] : []),
       { label: 'Gefahrenstufe', value: props.wesen.gf }
     ]
   },
