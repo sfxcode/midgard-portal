@@ -32,12 +32,13 @@ interface DiceBoxInstance {
 export function useDiceBox() {
   let diceBox: DiceBoxInstance
 
-  async function initDiceBox(container: string, scale: number = 8, onRollComplete?: (groups: RollGroup[]) => void) {
+  async function initDiceBox(container: string, scale: number = 8, onRollComplete?: (groups: RollGroup[]) => void, options: { theme?: string, themeColor?: string } = {}) {
     diceBox = new DiceBox({
       container,
       assetPath: '/dice-box/',
       scale,
-      theme: 'rock',
+      theme: options.theme ?? 'rock',
+      ...(options.themeColor ? { themeColor: options.themeColor } : {}),
       settleTimeout: 3000,
       onRollComplete
     })

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useDiceBox } from '~/composables/tools/useDiceBox'
-import type { DiceRoll } from '~/types'
-
 const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
 
@@ -9,25 +6,6 @@ const items = [{ label: 'Startseite' }]
 
 useSeoMeta({
   title: 'Startseite'
-})
-
-const { initDiceBox, roll } = useDiceBox()
-const defaultRoll = [{ qty: 1, sides: 100 }, { qty: 1, sides: 20 }, { qty: 1, sides: 6 }]
-const result = ref<DiceRoll[]>()
-const rolling = ref(false)
-async function rollDice() {
-  rolling.value = true
-  try {
-    await roll(defaultRoll)
-  } finally {
-    rolling.value = false
-  }
-}
-
-onMounted(() => {
-  initDiceBox('#dice-box', 12, (groups: { rolls: DiceRoll[] }[]) => {
-    result.value = groups.flatMap(group => group.rolls)
-  })
 })
 </script>
 
@@ -116,35 +94,13 @@ onMounted(() => {
           </UCard>
 
           <UCard class="rpg-frame sm:col-span-2">
-            <div class="flex items-center justify-between gap-3 mb-3">
-              <p class="rpg-section-title flex-1">
-                Würfeltisch
-              </p>
-              <UButton
-                label="Würfeln"
-                icon="i-game-icons-rolling-dices"
-                :loading="rolling"
-                @click="rollDice"
-              />
-            </div>
-            <p class="text-sm text-muted mb-3">
-              W100, W20 und W6 &ndash; per Klick auf den Tisch oder auf &bdquo;Würfeln&ldquo;.
+            <p class="rpg-section-title mb-3">
+              Würfeltisch
             </p>
-            <div class="min-h-9 mb-3">
-              <DiceResultDisplay v-if="result" :results="result" />
-            </div>
-            <div id="dice-box" class="rpg-tray h-64 w-full" @click="rollDice" />
+            <DiceTable />
           </UCard>
         </div>
       </div>
     </template>
   </UDashboardPanel>
 </template>
-
-<style>
-.dice-box-canvas {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-</style>
