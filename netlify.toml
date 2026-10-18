@@ -1,0 +1,38 @@
+# Netlify configuration for midgard-portal (Nuxt 4 + Nitro, pnpm).
+#
+# Nitro detects Netlify during the build (NETLIFY=true) and picks its `netlify` preset by itself:
+# static assets go to `dist/`, server rendering (/, /login, /logout) runs as a Netlify Function.
+# /secured/** is rendered client-side only (see routeRules in nuxt.config.ts).
+#
+# Environment variables are set in the Netlify UI (Site configuration -> Environment variables),
+# never in this file:
+#   MONGOCAMP_URL           required. https URL of the MongoCamp server. It is read at build time
+#                           (nuxt.config.ts) and used by the browser at runtime, so give it the
+#                           scopes "Builds" and "Runtime". That server must allow this site's origin
+#                           in its CORS settings, because the browser calls it directly.
+#   MONGOCAMP_API_KEY       optional, server-only (useMongocampApi(event)); mark it as a secret.
+#   NUXT_PUBLIC_SITE_URL    optional, public site URL (used for OG image URLs).
+
+[build]
+  command = "pnpm run build"
+  publish = "dist"
+
+[build.environment]
+  # CI runs on Node 22; pnpm itself comes from "packageManager" in package.json (via corepack)
+  NODE_VERSION = "22"
+  NUXT_TELEMETRY_DISABLED = "1"
+
+# Baseline security headers for every response
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+
+# 3D dice assets (physics wasm, models, themes) are large and have stable names: cache them for a week
+[[headers]]
+  for = "/dice-box/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

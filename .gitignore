@@ -30,3 +30,6 @@ logs
 
 # VSC
 .history
+
+# local seed data (never committed or packaged)
+/data/

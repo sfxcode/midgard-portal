@@ -32,7 +32,12 @@ async function createNewWesen() {
   }
 }
 
+// The seed file (data/bestiarium.json) is not committed and must not ship to production:
+// a dynamic import would bundle it into a public client chunk, so the import is dev-only.
+const isDev = import.meta.dev
+
 async function loadWesenFromData() {
+  if (!import.meta.dev) return
   const bestiarium_json = await import('../../../../../../data/bestiarium.json')
   const wesenList = bestiarium_json.default as unknown as Wesen[]
   const existingWesen = wesen.value ?? []
@@ -73,7 +78,7 @@ useSeoMeta({
 
         <template #right>
           <UButton
-            v-if="true"
+            v-if="isDev"
             label="JSON"
             icon="i-lucide-upload"
             color="neutral"
