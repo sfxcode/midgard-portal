@@ -18,7 +18,7 @@ withDefaults(defineProps<{
       />
 
       <template #content>
-        <div class="p-4 w-80">
+        <div class="p-4 w-[min(36rem,calc(100vw-2rem))] max-h-[80vh] overflow-y-auto">
           <slot />
         </div>
       </template>

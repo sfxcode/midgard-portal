@@ -3,7 +3,6 @@ import type { PropType } from 'vue'
 import type { Wesen } from '~/models'
 import { useWesenSchema } from '~/composables/dm/useWesenSchema'
 import { useBestiarium } from '~/composables/dm/useBestiarium'
-import { useWesen } from '~/composables/dm/useWesen'
 
 const props = defineProps({
   wesen: {
@@ -18,7 +17,6 @@ const props = defineProps({
 
 const { wesenSchema } = useWesenSchema()
 const { gruppen, regionen, ruestungen } = useBestiarium()
-const { angriffeToString, besonderheitenToString, zauberToString, vorkommenToString } = useWesen()
 
 const editMode = ref(false)
 
@@ -41,19 +39,6 @@ async function handleSave(data: Record<string, unknown>) {
   await props.onSave?.(data as Partial<Wesen>)
   editMode.value = false
 }
-
-const facts = computed(() => [
-  { label: 'LP', value: props.wesen.lp },
-  { label: 'AP', value: props.wesen.ap },
-  { label: 'Rüstung', value: props.wesen.ruestung },
-  { label: 'Gf', value: props.wesen.gf },
-  { label: 'St', value: props.wesen.st },
-  { label: 'Gw', value: props.wesen.gw },
-  { label: 'In', value: props.wesen.in },
-  { label: 'Bewegung', wide: true, value: `${props.wesen.b}${props.wesen.fliegend ? ` (${props.wesen.fliegend})` : ''}` },
-  { label: 'Abwehr', value: props.wesen.abwehr },
-  { label: 'Resistenz', wide: true, value: `${props.wesen.resistenzGeist} / ${props.wesen.resistenzKoerper}` }
-])
 </script>
 
 <template>
@@ -80,20 +65,7 @@ const facts = computed(() => [
         {{ wesen.kategorie }}
       </p>
 
-      <FactGrid class="mb-4" :facts="facts" />
-
-      <div class="text-sm mb-2">
-        <span class="font-medium text-toned mr-2">Angriff:</span>{{ angriffeToString(wesen) }}
-      </div>
-      <div v-if="wesen.besonderheiten.length > 0" class="text-sm mb-2">
-        <span class="font-medium text-toned mr-2">Bes.:</span>{{ besonderheitenToString(wesen) }}
-      </div>
-      <div v-if="wesen.zauber.length > 0" class="text-sm mb-2">
-        <span class="font-medium text-toned mr-2">Zauber:</span>{{ zauberToString(wesen) }}
-      </div>
-      <div class="text-sm mb-2">
-        <span class="font-medium text-toned mr-2">Vorkommen:</span>{{ vorkommenToString(wesen) }}
-      </div>
+      <DmWesenStatBlock :wesen="wesen" />
     </div>
 
     <FUDataEdit
