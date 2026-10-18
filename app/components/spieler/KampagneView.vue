@@ -52,6 +52,7 @@ async function handleSave(data: Record<string, unknown>) {
         color="neutral"
         variant="subtle"
         :aria-label="editMode ? 'Ansicht' : 'Bearbeiten'"
+        :label="editMode ? 'Ansicht' : 'Bearbeiten'"
         @click="toggleEditMode"
       />
     </div>
@@ -61,21 +62,13 @@ async function handleSave(data: Record<string, unknown>) {
         {{ kampagne.beschreibung || '–' }}
       </p>
 
-      <dl class="grid grid-cols-2 gap-1 text-sm mb-3">
-        <dt class="font-medium text-toned">
-          Spielleiter
-        </dt>
-        <dd class="text-highlighted">
-          {{ kampagne.spielleiter }}
-        </dd>
-      </dl>
-
-      <p class="font-medium text-toned text-sm mb-1">
-        Spieler
-      </p>
-      <p class="text-sm text-highlighted">
-        {{ kampagne.spieler.join(', ') || '–' }}
-      </p>
+      <FactGrid
+        class="mb-3"
+        :facts="[
+          { label: 'Spielleiter', value: kampagne.spielleiter },
+          { label: 'Spieler', value: kampagne.spieler.join(', ') }
+        ]"
+      />
     </template>
 
     <FUDataEdit

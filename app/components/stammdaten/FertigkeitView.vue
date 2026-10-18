@@ -62,6 +62,7 @@ const facts = computed(() => [
         color="neutral"
         variant="subtle"
         :aria-label="editMode ? 'Ansicht' : 'Bearbeiten'"
+        :label="editMode ? 'Ansicht' : 'Bearbeiten'"
         @click="toggleEditMode"
       />
     </div>
@@ -71,16 +72,7 @@ const facts = computed(() => [
         {{ fertigkeit.kategorie }}
       </p>
 
-      <dl class="grid grid-cols-2 gap-1 text-sm">
-        <template v-for="fact in facts" :key="fact.label">
-          <dt class="font-medium text-toned">
-            {{ fact.label }}
-          </dt>
-          <dd class="text-highlighted">
-            {{ fact.value }}
-          </dd>
-        </template>
-      </dl>
+      <FactGrid :facts="facts" />
     </template>
 
     <FUDataEdit

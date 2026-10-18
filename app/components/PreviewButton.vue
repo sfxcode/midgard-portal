@@ -8,10 +8,10 @@ withDefaults(defineProps<{
 
 <template>
   <UTooltip :text="label">
-    <UPopover>
+    <UPopover :content="{ side: 'right', align: 'start' }">
       <UButton
         icon="i-lucide-search"
-        size="xs"
+        size="sm"
         color="neutral"
         variant="subtle"
         :aria-label="label"

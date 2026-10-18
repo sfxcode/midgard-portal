@@ -13,12 +13,13 @@ const tableData = computed<Spielergruppe[]>(() => spielergruppen.value ?? [])
 const columns = computed<TableColumn<Spielergruppe>[]>(() => withResponsiveBreakpoints([
   {
     accessorKey: 'name',
-    header: sortableHeader<Spielergruppe>('Name'),
+    header: sortableHeader<Spielergruppe>('Name', { spacer: false }),
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/spielergruppen/${row.original._id}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
   {
     id: 'mitgliederAnzahl',
-    header: 'Mitglieder',
+    accessorFn: row => row.mitglieder.length,
+    header: sortableHeader<Spielergruppe>('Mitglieder', { spacer: false }),
     cell: ({ row }) => row.original.mitglieder.length
   }
 ]))

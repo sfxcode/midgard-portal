@@ -47,25 +47,19 @@ async function handleSave(data: Record<string, unknown>) {
         color="neutral"
         variant="subtle"
         :aria-label="editMode ? 'Ansicht' : 'Bearbeiten'"
+        :label="editMode ? 'Ansicht' : 'Bearbeiten'"
         @click="toggleEditMode"
       />
     </div>
 
     <template v-if="!editMode">
-      <dl class="grid grid-cols-2 gap-1 text-sm mb-3">
-        <dt class="font-medium text-toned">
-          Login
-        </dt>
-        <dd class="text-highlighted">
-          {{ spieler.login }}
-        </dd>
-        <dt class="font-medium text-toned">
-          E-Mail
-        </dt>
-        <dd class="text-highlighted">
-          {{ spieler.email || '–' }}
-        </dd>
-      </dl>
+      <FactGrid
+        class="mb-3"
+        :facts="[
+          { label: 'Login', value: spieler.login },
+          { label: 'E-Mail', value: spieler.email }
+        ]"
+      />
     </template>
 
     <FUDataEdit

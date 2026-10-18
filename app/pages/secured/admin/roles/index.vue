@@ -13,7 +13,9 @@ useSeoMeta({
     </template>
 
     <template #body>
-      <MongocampRoles grants-path="/secured/admin/roles" />
+      <div class="rpg-frame rpg-module p-4">
+        <MongocampRoles grants-path="/secured/admin/roles" />
+      </div>
     </template>
   </UDashboardPanel>
 </template>

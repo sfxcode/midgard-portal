@@ -25,13 +25,13 @@ const zauberLE = computed(() => (zauberLerneinheiten.value ? zauberLerneinheiten
 const fertigkeitenLE = computed(() => (fertigkeitenLerneinheiten.value ? fertigkeitenLerneinheitenByTyp(param) : []))
 
 const fertigkeitenLernkostenColumns = [
-  { accessorKey: 'kategorie', header: sortableHeader<FertigkeitLerneinheit>('Kategorie') },
-  { accessorKey: 'kosten', header: sortableHeader<FertigkeitLerneinheit>('Kosten') }
+  { accessorKey: 'kategorie', header: sortableHeader<FertigkeitLerneinheit>('Kategorie', { spacer: false }) },
+  { accessorKey: 'kosten', header: sortableHeader<FertigkeitLerneinheit>('Kosten', { spacer: false }) }
 ]
 
 const zauberLernkostenColumns = [
-  { accessorKey: 'kategorie', header: sortableHeader<ZauberLerneinheit>('Kategorie') },
-  { accessorKey: 'kosten', header: sortableHeader<ZauberLerneinheit>('Kosten') }
+  { accessorKey: 'kategorie', header: sortableHeader<ZauberLerneinheit>('Kategorie', { spacer: false }) },
+  { accessorKey: 'kosten', header: sortableHeader<ZauberLerneinheit>('Kosten', { spacer: false }) }
 ]
 
 onMounted(async () => {

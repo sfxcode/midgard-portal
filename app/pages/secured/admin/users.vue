@@ -13,7 +13,9 @@ useSeoMeta({
     </template>
 
     <template #body>
-      <MongocampUsers />
+      <div class="rpg-frame rpg-module p-4">
+        <MongocampUsers />
+      </div>
     </template>
   </UDashboardPanel>
 </template>

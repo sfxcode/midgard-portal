@@ -2,25 +2,16 @@
 useSeoMeta({
   title: 'NPC'
 })
-
-const { wesen } = useBestiariumStore()
 </script>
 
 <template>
   <UDashboardPanel id="dm-npc">
     <template #header>
-      <AppPageHeader title="NPC" />
+      <AppPageHeader title="NPC" :items="[{ label: 'DM' }, { label: 'NPC' }]" />
     </template>
 
     <template #body>
-      <AdvertiseBox
-        v-if="wesen"
-        header="Bestiarium"
-        icon="i-lucide-skull"
-        to="/secured/dm/npc/bestiarium"
-      >
-        {{ wesen.length ?? 0 }}
-      </AdvertiseBox>
+      <DMBox class="lg:max-w-3xl" />
     </template>
   </UDashboardPanel>
 </template>

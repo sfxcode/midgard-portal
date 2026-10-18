@@ -13,12 +13,11 @@ const tableData = computed<Spieler[]>(() => spieler.value ?? [])
 const columns = computed<TableColumn<Spieler>[]>(() => withResponsiveBreakpoints([
   {
     accessorKey: 'name',
-    header: sortableHeader<Spieler>('Name'),
+    header: sortableHeader<Spieler>('Name', { spacer: false }),
     cell: ({ row }) => h(resolveComponent('NuxtLink'), { to: `/secured/manager/spieler/${row.original.login}`, class: 'text-primary hover:underline' }, () => row.original.name)
   },
-  { accessorKey: 'login', header: sortableHeader<Spieler>('Login') },
-  { accessorKey: 'email', header: sortableHeader<Spieler>('E-Mail') },
-  { accessorKey: 'rolle', header: sortableHeader<Spieler>('Rolle') }
+  { accessorKey: 'login', header: sortableHeader<Spieler>('Login', { spacer: false }) },
+  { accessorKey: 'email', header: sortableHeader<Spieler>('E-Mail', { spacer: false }), cell: ({ row }) => row.original.email || '–' }
 ]))
 
 const { columnVisibility } = useResponsiveColumnVisibility(columns)

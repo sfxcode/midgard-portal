@@ -80,15 +80,23 @@ async function handleSave() {
         color="neutral"
         variant="subtle"
         :aria-label="editMode ? 'Ansicht' : 'Bearbeiten'"
+        :label="editMode ? 'Ansicht' : 'Bearbeiten'"
         @click="toggleEditMode"
       />
     </div>
 
     <template v-if="!editMode">
       <div v-if="!isEmpty" class="beschreibung-content font-serif text-highlighted" v-html="beschreibung?.content" />
-      <p v-else class="text-sm text-muted italic">
-        Noch keine Beschreibung vorhanden.
-      </p>
+      <EmptyState v-else title="Noch keine Beschreibung vorhanden.">
+        <UButton
+          label="Beschreibung verfassen"
+          icon="i-lucide-pencil"
+          size="xs"
+          color="neutral"
+          variant="subtle"
+          @click="toggleEditMode"
+        />
+      </EmptyState>
     </template>
 
     <template v-else>
@@ -119,6 +127,16 @@ async function handleSave() {
 </template>
 
 <style scoped>
+/* Illuminated initial */
+.beschreibung-content :deep(> p:first-of-type)::first-letter {
+  float: left;
+  margin: 0.1em 0.12em 0 0;
+  font-family: var(--font-display);
+  font-size: 2.6em;
+  line-height: 0.85;
+  color: var(--ui-primary);
+}
+
 .beschreibung-content :deep(p) {
   margin-bottom: 0.75rem;
   line-height: 1.6;

@@ -32,12 +32,12 @@ const columns = computed<TableColumn<Wesen>[]>(() => withResponsiveBreakpoints([
   {
     id: 'preview',
     cell: ({ row }) =>
-      h('div', { class: 'flex flex-col gap-1' }, [
+      h('div', { class: 'flex items-center gap-1' }, [
         h(PreviewButton, {}, () => h(WesenViewComponent, { wesen: row.original })),
         h(UTooltip, { text: 'Wesen-Bogen als PDF erzeugen' }, () =>
           h(UButton, {
             icon: 'i-lucide-dices',
-            size: 'xs',
+            size: 'sm',
             color: 'neutral',
             variant: 'subtle',
             ariaLabel: 'Wesen-Bogen als PDF erzeugen',

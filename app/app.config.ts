@@ -6,6 +6,11 @@ export default defineAppConfig({
       success: 'moss',
       error: 'crimson'
     },
+    card: {
+      slots: {
+        root: 'rpg-frame'
+      }
+    },
     table: {
       slots: {
         base: 'table-fixed border-separate border-spacing-0',

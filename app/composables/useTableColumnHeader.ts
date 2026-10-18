@@ -51,8 +51,10 @@ export function useTableColumnHeader() {
     })
   }
 
-  function sortableHeader<T>(label: string) {
-    return ({ column }: { column: Column<T, unknown> }) => h('div', { class: 'flex flex-col gap-1' }, [sortToggle(column, label), h('div', { class: 'h-6' })])
+  // `spacer` reserves the filter row's height so headers line up in tables that have filters;
+  // pass `{ spacer: false }` for tables without any filter
+  function sortableHeader<T>(label: string, options?: { spacer?: boolean }) {
+    return ({ column }: { column: Column<T, unknown> }) => h('div', { class: 'flex flex-col gap-1' }, [sortToggle(column, label), ...(options?.spacer === false ? [] : [h('div', { class: 'h-6' })])])
   }
 
   function selectableHeader<T>(label: string, items: () => SelectableHeaderItem[], options?: SelectableHeaderOptions) {

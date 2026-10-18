@@ -50,9 +50,9 @@ const facts = computed(() => [
   { label: 'St', value: props.wesen.st },
   { label: 'Gw', value: props.wesen.gw },
   { label: 'In', value: props.wesen.in },
-  { label: 'Bewegung', value: `${props.wesen.b}${props.wesen.fliegend ? ` (${props.wesen.fliegend})` : ''}` },
+  { label: 'Bewegung', wide: true, value: `${props.wesen.b}${props.wesen.fliegend ? ` (${props.wesen.fliegend})` : ''}` },
   { label: 'Abwehr', value: props.wesen.abwehr },
-  { label: 'Resistenz', value: `${props.wesen.resistenzGeist} / ${props.wesen.resistenzKoerper}` }
+  { label: 'Resistenz', wide: true, value: `${props.wesen.resistenzGeist} / ${props.wesen.resistenzKoerper}` }
 ])
 </script>
 
@@ -60,7 +60,8 @@ const facts = computed(() => [
   <div>
     <div class="flex items-center justify-between mb-1">
       <p class="font-display text-xl text-highlighted">
-        {{ wesen.name }} <span class="text-sm text-muted">(Grad {{ wesen.grad }})</span>
+        {{ wesen.name }}
+        <span class="rpg-seal ml-1.5 align-middle" title="Grad">{{ wesen.grad }}</span>
       </p>
       <UButton
         v-if="onSave"
@@ -79,16 +80,7 @@ const facts = computed(() => [
         {{ wesen.kategorie }}
       </p>
 
-      <div class="grid grid-cols-3 gap-2 mb-4">
-        <div v-for="fact in facts" :key="fact.label" class="rpg-stat p-2 text-center">
-          <p class="rpg-stat-label">
-            {{ fact.label }}
-          </p>
-          <p class="text-lg font-semibold text-highlighted leading-tight">
-            {{ fact.value }}
-          </p>
-        </div>
-      </div>
+      <FactGrid class="mb-4" :facts="facts" />
 
       <div class="text-sm mb-2">
         <span class="font-medium text-toned mr-2">Angriff:</span>{{ angriffeToString(wesen) }}

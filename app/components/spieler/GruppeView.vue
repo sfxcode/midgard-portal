@@ -51,6 +51,7 @@ async function handleSave(data: Record<string, unknown>) {
         color="neutral"
         variant="subtle"
         :aria-label="editMode ? 'Ansicht' : 'Bearbeiten'"
+        :label="editMode ? 'Ansicht' : 'Bearbeiten'"
         @click="toggleEditMode"
       />
     </div>

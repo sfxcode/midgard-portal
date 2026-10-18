@@ -40,7 +40,7 @@ const credits = [
     </template>
 
     <template #body>
-      <div class="rpg-frame p-5 lg:max-w-2xl">
+      <div class="rpg-frame p-6 lg:max-w-3xl">
         <p class="rpg-section-title mb-4">
           Mit Dank an
         </p>
@@ -56,12 +56,12 @@ const credits = [
               size="sm"
               class="ml-2"
             />
-            <p class="text-sm text-muted">
+            <p class="text-base text-muted">
               {{ credit.text }}
             </p>
           </li>
         </ul>
-        <p class="text-xs text-muted mt-5">
+        <p class="text-sm text-muted mt-5">
           Inoffizielles Fan-Werkzeug für das Rollenspiel Midgard.
         </p>
       </div>

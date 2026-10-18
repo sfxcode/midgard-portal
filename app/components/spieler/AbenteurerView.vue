@@ -64,16 +64,16 @@ const combatFacts = computed(() => [
 const basisFacts = computed(() => {
   const basis = props.abenteurer.basis
   return [
-    { label: 'St', value: basis.st },
-    { label: 'Gs', value: basis.gs },
-    { label: 'Gw', value: basis.gw },
-    { label: 'Ko', value: basis.ko },
-    { label: 'In', value: basis.in },
-    { label: 'Zt', value: basis.zt },
-    { label: 'Au', value: basis.au },
-    { label: 'pA', value: basis.pa },
-    { label: 'Wk', value: basis.wk },
-    { label: 'B', value: basis.b }
+    { label: 'St', title: 'Stärke', value: basis.st },
+    { label: 'Gs', title: 'Geschicklichkeit', value: basis.gs },
+    { label: 'Gw', title: 'Gewandtheit', value: basis.gw },
+    { label: 'Ko', title: 'Konstitution', value: basis.ko },
+    { label: 'In', title: 'Intelligenz', value: basis.in },
+    { label: 'Zt', title: 'Zaubertalent', value: basis.zt },
+    { label: 'Au', title: 'Aussehen', value: basis.au },
+    { label: 'pA', title: 'Persönliche Ausstrahlung', value: basis.pa },
+    { label: 'Wk', title: 'Willenskraft', value: basis.wk },
+    { label: 'B', title: 'Bewegungsweite', value: basis.b }
   ]
 })
 </script>
@@ -82,7 +82,8 @@ const basisFacts = computed(() => {
   <div>
     <div class="flex items-center justify-between mb-1">
       <p class="font-display text-xl text-highlighted">
-        {{ abenteurer.name }} <span class="text-sm text-muted">(Grad {{ abenteurer.grad }})</span>
+        {{ abenteurer.name }}
+        <span class="rpg-seal ml-1.5 align-middle" title="Grad">{{ abenteurer.grad }}</span>
       </p>
       <UButton
         v-if="onSave"
@@ -143,7 +144,12 @@ const basisFacts = computed(() => {
         Basis-Eigenschaften
       </p>
       <div class="grid grid-cols-5 gap-2 mb-4">
-        <div v-for="fact in basisFacts" :key="fact.label" class="rpg-stat p-2 text-center">
+        <div
+          v-for="fact in basisFacts"
+          :key="fact.label"
+          class="rpg-stat p-2 text-center"
+          :title="fact.title"
+        >
           <p class="rpg-stat-label">
             {{ fact.label }}
           </p>

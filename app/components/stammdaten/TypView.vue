@@ -52,6 +52,7 @@ async function handleSave(data: Record<string, unknown>) {
         color="neutral"
         variant="subtle"
         :aria-label="editMode ? 'Ansicht' : 'Bearbeiten'"
+        :label="editMode ? 'Ansicht' : 'Bearbeiten'"
         @click="toggleEditMode"
       />
     </div>
@@ -61,14 +62,7 @@ async function handleSave(data: Record<string, unknown>) {
         {{ typ.kategorie }}
       </p>
 
-      <dl class="grid grid-cols-2 gap-1 text-sm">
-        <dt class="font-medium text-toned">
-          Name kurz
-        </dt>
-        <dd class="text-highlighted">
-          {{ typ.nameKurz }}
-        </dd>
-      </dl>
+      <FactGrid :facts="[{ label: 'Name kurz', value: typ.nameKurz }]" />
     </template>
 
     <FUDataEdit
