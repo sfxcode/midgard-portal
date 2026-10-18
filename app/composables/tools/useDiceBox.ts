@@ -32,13 +32,15 @@ interface DiceBoxInstance {
 export function useDiceBox() {
   let diceBox: DiceBoxInstance
 
-  async function initDiceBox(container: string, scale: number = 8, onRollComplete?: (groups: RollGroup[]) => void, options: { theme?: string, themeColor?: string } = {}) {
+  async function initDiceBox(container: string, scale: number = 8, onRollComplete?: (groups: RollGroup[]) => void, options: { theme?: string, themeColor?: string, size?: number } = {}) {
     diceBox = new DiceBox({
       container,
       assetPath: '/dice-box/',
       scale,
       theme: options.theme ?? 'rock',
       ...(options.themeColor ? { themeColor: options.themeColor } : {}),
+      // physics arena size (library default 9.5): the camera is fixed, so a smaller arena keeps dice away from the visible edge
+      ...(options.size ? { size: options.size } : {}),
       settleTimeout: 3000,
       onRollComplete
     })

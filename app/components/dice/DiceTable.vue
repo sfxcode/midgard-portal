@@ -89,11 +89,12 @@ function onRollComplete(groups: { rolls: DiceRoll[] }[]) {
   addEntry({ expression: currentExpression, total, detail })
 }
 
-watch(containerWidth, (width) => {
+// Debounced so the scene is built from the settled layout width, not a transitional one
+watchDebounced(containerWidth, (width) => {
   if (width > 0 && !boxReady) {
-    boxReady = initDiceBox(`#${boxId}`, 12, onRollComplete, { theme: 'smooth', themeColor: '#EFE3C2' })
+    boxReady = initDiceBox(`#${boxId}`, 8, onRollComplete, { theme: 'smooth', themeColor: '#EFE3C2', size: 7.2 })
   }
-}, { immediate: true })
+}, { debounce: 300, immediate: true })
 </script>
 
 <template>
@@ -153,12 +154,12 @@ watch(containerWidth, (width) => {
       <div
         :id="boxId"
         ref="container"
-        class="rpg-tray h-64 w-full"
+        class="rpg-tray h-80 w-full"
         @click="rollExpression(currentExpression)"
       />
       <div
         v-if="!result"
-        class="pointer-events-none absolute inset-x-0 bottom-3 flex flex-col items-center gap-0.5 text-center text-[#EFE3C2]"
+        class="pointer-events-none absolute inset-x-0 bottom-9 flex flex-col items-center gap-0.5 text-center text-[#EFE3C2]"
       >
         <p class="font-display tracking-wide">
           Tippe auf den Tisch, um zu würfeln

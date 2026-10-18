@@ -294,15 +294,24 @@
     mask: url('~/assets/icons/empty-scroll.svg') center / contain no-repeat;
   }
 
-  /* Dice tray — felt-green table with a wooden rim */
+  /* Dice tray — green felt inside a wooden rim with a beveled inner wall */
   .rpg-tray {
-    border: 6px solid var(--ui-color-parchment-700);
-    border-radius: 0.5rem;
-    /* soft dragon watermark in the middle, over the felt gradient */
+    border: 22px solid transparent;
+    border-radius: 0.9rem;
     background:
-      url('~/assets/icons/dragon-watermark.svg') center / auto 62% no-repeat,
-      radial-gradient(120% 120% at 50% 30%, var(--ui-color-success-700), var(--ui-color-success-900));
-    box-shadow: inset 0 2px 10px rgb(0 0 0 / 0.35);
+      /* soft dragon watermark in the middle */
+      url('~/assets/icons/dragon-watermark.svg') center / auto 70% no-repeat padding-box,
+      /* felt */
+      radial-gradient(120% 120% at 50% 30%, var(--ui-color-success-700), var(--ui-color-success-900)) padding-box,
+      /* wooden rim: fine grain over a warm walnut gradient, lit from the top */
+      repeating-linear-gradient(90deg, rgb(0 0 0 / 0.07) 0 2px, transparent 2px 9px, rgb(255 255 255 / 0.04) 9px 10px, transparent 10px 17px) border-box,
+      linear-gradient(180deg, #9a6a38 0%, #7a4f26 45%, #5e3a1c 100%) border-box;
+    box-shadow:
+      inset 0 8px 14px rgb(0 0 0 / 0.6), /* felt sits below the rim, darkest under the top wall */
+      inset 0 0 26px rgb(0 0 0 / 0.55), /* the walls are tall: deep shadow along every side */
+      inset 0 0 0 2px rgb(0 0 0 / 0.25), /* crisp edge where the lip ends */
+      0 0 0 1px #3b2410, /* dark outer edge of the wood */
+      0 4px 10px rgb(60 36 12 / 0.35);
   }
 }
 
