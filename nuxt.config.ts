@@ -16,6 +16,9 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css', '~/assets/css/formkit.css'],
 
+  // Shown instead of a blank white page while the client-only /secured/** routes boot
+  spaLoadingTemplate: true,
+
   build: {
     transpile: ['@3d-dice/dice-box', '@dice-roller/rpg-dice-roller']
   },
@@ -75,6 +78,13 @@ export default defineNuxtConfig({
     ]
   },
 
+  // @nuxtjs/i18n comes in via nuxt-ui-mongocamp (en/de strings for its own components); the app UI is German
+  i18n: {
+    defaultLocale: 'de',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: false
+  },
+
   icon: {
     clientBundle: {
       // Nav icons are assembled dynamically (computed array of objects), so
@@ -82,6 +92,20 @@ export default defineNuxtConfig({
       // List them explicitly to avoid a runtime API fetch (and the
       // "[Icon] failed to load icon" warning it produces on a cold cache).
       icons: [
+        'game-icons:hood',
+        'game-icons:scroll-unfurled',
+        'game-icons:dragon-head',
+        'game-icons:wizard-staff',
+        'game-icons:crossed-swords',
+        'game-icons:open-book',
+        'game-icons:three-friends',
+        'game-icons:rolling-dices',
+        'game-icons:dice-twenty-faces-twenty',
+        'game-icons:castle',
+        'game-icons:round-shield',
+        'game-icons:skull-crossed-bones',
+        'game-icons:tavern-sign',
+        'lucide:heart-handshake',
         'lucide:book',
         'lucide:database',
         'lucide:home',

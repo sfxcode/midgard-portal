@@ -11,6 +11,7 @@ node_modules
 
 brain
 scratch
+.mex
 
 # Logs
 logs
@@ -29,3 +30,6 @@ logs
 
 # VSC
 .history
+
+# mex scaffold (local only)
+.mex
