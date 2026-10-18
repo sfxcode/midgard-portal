@@ -97,6 +97,7 @@ function exportData() {
       ref="table"
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
+      class="max-sm:hidden"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
       :column-visibility="columnVisibility"
       :data="tableData"
@@ -109,6 +110,18 @@ function exportData() {
         </p>
       </template>
     </UTable>
+
+    <RowCards
+      class="sm:hidden"
+      :table-api="table?.tableApi"
+      :fields="[
+        { key: 'kategorie', label: 'Gruppe' },
+        { key: 'grad', label: 'Grad' },
+        { key: 'gf', label: 'Gf' },
+        { key: 'fliegend', label: 'Fliegend', format: v => v ? 'Ja' : 'Nein' },
+        { key: 'vorkommen', label: 'Vorkommen' }
+      ]"
+    />
 
     <TableFooter :table-api="table?.tableApi">
       <p class="text-sm text-muted">

@@ -103,6 +103,7 @@ useSeoMeta({
           ref="table"
           v-model:global-filter="globalFilter"
           v-model:pagination="pagination"
+          class="max-sm:hidden"
           :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
           :column-visibility="columnVisibility"
           :data="typen"
@@ -115,6 +116,16 @@ useSeoMeta({
             </p>
           </template>
         </UTable>
+
+        <RowCards
+          class="sm:hidden"
+          :table-api="table?.tableApi"
+          :fields="[
+            { key: 'kategorie', label: 'Kategorie' },
+            { key: 'nameKurz', label: 'Bez.' },
+            { key: 'buch', label: 'Buch' }
+          ]"
+        />
 
         <TableFooter :table-api="table?.tableApi">
           <p class="text-sm text-muted">

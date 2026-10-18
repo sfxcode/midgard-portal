@@ -132,6 +132,7 @@ function exportPdf() {
       ref="table"
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
+      class="max-sm:hidden"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
       :column-visibility="columnVisibility"
       :data="tableData"
@@ -144,6 +145,22 @@ function exportPdf() {
         </p>
       </template>
     </UTable>
+
+    <RowCards
+      class="sm:hidden"
+      :table-api="table?.tableApi"
+      :fields="[
+        { key: 'kategorie', label: 'Kategorie' },
+        { key: 'stufe', label: 'Stufe' },
+        { key: 'zauberdauer', label: 'Dauer' },
+        { key: 'prozess', label: 'Prozess' },
+        { key: 'art', label: 'Art' },
+        { key: 'ap', label: 'AP' },
+        { key: 'kosten', label: 'Punkte' },
+        { key: 'gold', label: 'Gold' },
+        { key: 'epKosten', label: 'EP' }
+      ]"
+    />
 
     <TableFooter :table-api="table?.tableApi">
       <p class="text-sm text-muted">

@@ -49,6 +49,7 @@ function exportData() {
     <UTable
       ref="table"
       v-model:pagination="pagination"
+      class="max-sm:hidden"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
       :column-visibility="columnVisibility"
       :data="tableData"
@@ -61,6 +62,16 @@ function exportData() {
         </p>
       </template>
     </UTable>
+
+    <RowCards
+      class="sm:hidden"
+      :table-api="table?.tableApi"
+      :fields="[
+        { key: 'spieler', label: 'Spieler' },
+        { key: 'typ', label: 'Typ' },
+        { key: 'grad', label: 'Grad' }
+      ]"
+    />
 
     <TableFooter :table-api="table?.tableApi">
       <p class="text-sm text-muted">
