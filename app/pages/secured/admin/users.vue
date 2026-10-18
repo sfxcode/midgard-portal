@@ -1,15 +1,15 @@
 <script setup lang="ts">
-const items = [{ label: 'Users' }]
+const items = [{ label: 'Benutzer' }]
 
 useSeoMeta({
-  title: 'Users'
+  title: 'Benutzer'
 })
 </script>
 
 <template>
   <UDashboardPanel id="admin-users">
     <template #header>
-      <AppPageHeader title="Users" :items="items" />
+      <AppPageHeader title="Benutzer" :items="items" />
     </template>
 
     <template #body>

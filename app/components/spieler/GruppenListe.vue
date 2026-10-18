@@ -42,7 +42,7 @@ const pagination = ref({ pageIndex: 0, pageSize: 10 })
     >
       <template #empty>
         <p class="py-6 text-center text-sm text-muted">
-          Keine Daten gefunden.
+          Keine Spielergruppen gefunden.
         </p>
       </template>
     </UTable>

@@ -6,7 +6,8 @@ import { useWesen } from '~/composables/dm/useWesen'
 import { useWesenGenerator } from '~/composables/dm/useWesenGenerator'
 
 const UButton = resolveComponent('UButton')
-const UPopover = resolveComponent('UPopover')
+const UTooltip = resolveComponent('UTooltip')
+const PreviewButton = resolveComponent('PreviewButton')
 const WesenViewComponent = resolveComponent('DmWesenView')
 
 const table = useTemplateRef('table')
@@ -32,17 +33,16 @@ const columns = computed<TableColumn<Wesen>[]>(() => withResponsiveBreakpoints([
     id: 'preview',
     cell: ({ row }) =>
       h('div', { class: 'flex flex-col gap-1' }, [
-        h(UPopover, {}, {
-          default: () => h(UButton, { icon: 'i-lucide-search', size: 'xs', color: 'neutral', variant: 'subtle' }),
-          content: () => h('div', { class: 'p-4 w-80' }, h(WesenViewComponent, { wesen: row.original }))
-        }),
-        h(UButton, {
-          icon: 'i-lucide-dices',
-          size: 'xs',
-          color: 'neutral',
-          variant: 'subtle',
-          onClick: () => generateWesenFromRow(row.original)
-        })
+        h(PreviewButton, {}, () => h(WesenViewComponent, { wesen: row.original })),
+        h(UTooltip, { text: 'Wesen-Bogen als PDF erzeugen' }, () =>
+          h(UButton, {
+            icon: 'i-lucide-dices',
+            size: 'xs',
+            color: 'neutral',
+            variant: 'subtle',
+            ariaLabel: 'Wesen-Bogen als PDF erzeugen',
+            onClick: () => generateWesenFromRow(row.original)
+          }))
       ])
   },
   {
@@ -64,7 +64,10 @@ const columns = computed<TableColumn<Wesen>[]>(() => withResponsiveBreakpoints([
     id: 'vorkommen',
     accessorFn: row => row.vorkommen,
     header: sortableHeader<Wesen>('Vorkommen'),
-    cell: ({ row }) => vorkommenToString(row.original)
+    cell: ({ row }) => {
+      const text = vorkommenToString(row.original)
+      return h('span', { class: 'line-clamp-2 whitespace-normal', title: text }, text)
+    }
   }
 ]))
 
@@ -102,7 +105,7 @@ function exportData() {
     >
       <template #empty>
         <p class="py-6 text-center text-sm text-muted">
-          Keine Daten gefunden.
+          Keine Wesen gefunden.
         </p>
       </template>
     </UTable>

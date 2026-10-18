@@ -69,6 +69,7 @@ const facts = computed(() => [
         color="neutral"
         variant="subtle"
         :aria-label="editMode ? 'Ansicht' : 'Bearbeiten'"
+        :label="editMode ? 'Ansicht' : 'Bearbeiten'"
         @click="toggleEditMode"
       />
     </div>
@@ -78,16 +79,16 @@ const facts = computed(() => [
         {{ wesen.kategorie }}
       </p>
 
-      <dl class="grid grid-cols-2 gap-1 text-sm mb-3">
-        <template v-for="fact in facts" :key="fact.label">
-          <dt class="font-medium text-toned">
+      <div class="grid grid-cols-3 gap-2 mb-4">
+        <div v-for="fact in facts" :key="fact.label" class="rpg-stat p-2 text-center">
+          <p class="rpg-stat-label">
             {{ fact.label }}
-          </dt>
-          <dd class="text-highlighted">
+          </p>
+          <p class="text-lg font-semibold text-highlighted leading-tight">
             {{ fact.value }}
-          </dd>
-        </template>
-      </dl>
+          </p>
+        </div>
+      </div>
 
       <div class="text-sm mb-2">
         <span class="font-medium text-toned mr-2">Angriff:</span>{{ angriffeToString(wesen) }}

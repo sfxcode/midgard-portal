@@ -150,3 +150,90 @@
     color: var(--ui-color-neutral-50);
   }
 }
+
+@layer components {
+  /* Ornamental surface — double rule with brass corner studs, like a framed sheet */
+  .rpg-frame {
+    position: relative;
+    border: 1px solid var(--ui-border-accented);
+    background: var(--ui-bg-elevated);
+    box-shadow: inset 0 0 0 3px var(--ui-bg), inset 0 0 0 4px var(--ui-border);
+  }
+
+  .rpg-frame::before,
+  .rpg-frame::after {
+    content: '';
+    position: absolute;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--ui-color-primary-500);
+    opacity: 0.7;
+    top: 0.45rem;
+  }
+
+  .rpg-frame::before { left: 0.45rem; }
+  .rpg-frame::after { right: 0.45rem; }
+
+  /* Stat tile on a character sheet */
+  .rpg-stat {
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius);
+    background: var(--ui-bg-elevated);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .rpg-stat-label {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ui-text-muted);
+  }
+
+  /* Section title with a trailing rule */
+  .rpg-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ui-text-toned);
+  }
+
+  .rpg-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--ui-border-accented), transparent);
+  }
+
+  /* Empty table: an unfurled scroll above the message */
+  td[data-slot='empty'] {
+    padding-block: 2.5rem;
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+  }
+
+  td[data-slot='empty']::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0 auto 0.75rem;
+    background-color: var(--ui-color-primary-400);
+    opacity: 0.8;
+    -webkit-mask: url('~/assets/icons/empty-scroll.svg') center / contain no-repeat;
+    mask: url('~/assets/icons/empty-scroll.svg') center / contain no-repeat;
+  }
+
+  /* Dice tray — felt-green table with a wooden rim */
+  .rpg-tray {
+    border: 6px solid var(--ui-color-parchment-700);
+    border-radius: 0.5rem;
+    background: radial-gradient(120% 120% at 50% 30%, var(--ui-color-success-600), var(--ui-color-success-800));
+    box-shadow: inset 0 2px 10px rgb(0 0 0 / 0.35);
+  }
+}

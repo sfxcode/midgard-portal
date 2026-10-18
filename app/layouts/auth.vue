@@ -21,7 +21,7 @@
     -->
     <div class="relative flex flex-col items-center gap-3 text-center">
       <h1 class="font-display font-semibold text-3xl text-[#2E1D0A] tracking-[0.05em]">
-        The Lost Kingdom
+        SFX-Code RPG
       </h1>
       <div
         class="flex items-center gap-2.5"
@@ -32,7 +32,7 @@
         <span class="block h-px w-12 bg-gradient-to-r from-[#96691F]/80 to-transparent" />
       </div>
       <p class="font-display text-[0.6875rem] uppercase tracking-[0.32em] text-[#63421A]">
-        Campaign Manager
+        Rollenspiel Tools
       </p>
     </div>
 

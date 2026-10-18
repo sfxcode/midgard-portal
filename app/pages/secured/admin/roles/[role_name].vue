@@ -3,12 +3,12 @@ const route = useRoute()
 const roleName = route.params.role_name as string
 
 const items = [
-  { label: 'Roles', icon: 'i-lucide-shield', to: '/secured/admin/roles' },
+  { label: 'Rollen', icon: 'i-lucide-shield', to: '/secured/admin/roles' },
   { label: roleName }
 ]
 
 useSeoMeta({
-  title: `Role: ${roleName}`
+  title: `Rolle: ${roleName}`
 })
 </script>
 

@@ -45,18 +45,20 @@ async function handleSave(data: Record<string, unknown>) {
   editMode.value = false
 }
 
-const facts = computed(() => [
-  { label: 'Spieler', value: props.abenteurer.spieler },
-  { label: 'Typ', value: props.abenteurer.typ },
-  { label: 'LP', value: props.abenteurer.lp },
-  { label: 'AP', value: props.abenteurer.ap },
-  { label: 'GG', value: props.abenteurer.gg },
-  { label: 'SG', value: props.abenteurer.sg },
+const vitalFacts = computed(() => [
+  { label: 'LP', title: 'Lebenspunkte', value: props.abenteurer.lp, icon: 'i-lucide-heart' },
+  { label: 'AP', title: 'Ausdauerpunkte', value: props.abenteurer.ap, icon: 'i-lucide-zap' },
+  { label: 'GG', title: 'Göttliche Gnade', value: props.abenteurer.gg, icon: 'i-lucide-sun' },
+  { label: 'SG', title: 'Schicksalsgunst', value: props.abenteurer.sg, icon: 'i-lucide-sparkles' }
+])
+
+const combatFacts = computed(() => [
   { label: 'Angriff', value: props.abenteurer.angriff },
   { label: 'Raufen', value: props.abenteurer.raufen },
   { label: 'Abwehr', value: props.abenteurer.abwehr },
   { label: 'Zaubern', value: props.abenteurer.zaubern },
-  { label: 'Resistenz', value: `${props.abenteurer.resistenzGeist} / ${props.abenteurer.resistenzKoerper}` }
+  { label: 'Resistenz Geist', value: props.abenteurer.resistenzGeist },
+  { label: 'Resistenz Körper', value: props.abenteurer.resistenzKoerper }
 ])
 
 const basisFacts = computed(() => {
@@ -89,39 +91,75 @@ const basisFacts = computed(() => {
         color="neutral"
         variant="subtle"
         :aria-label="editMode ? 'Ansicht' : 'Bearbeiten'"
+        :label="editMode ? 'Ansicht' : 'Bearbeiten'"
         @click="toggleEditMode"
       />
     </div>
 
-    <div v-if="!editMode" class="lg:max-w-2xl">
-      <dl class="grid grid-cols-2 gap-1 text-sm mb-3">
-        <template v-for="fact in facts" :key="fact.label">
-          <dt class="font-medium text-toned">
-            {{ fact.label }}
-          </dt>
-          <dd class="text-highlighted">
-            {{ fact.value }}
-          </dd>
-        </template>
-      </dl>
+    <div v-if="!editMode" class="lg:max-w-3xl">
+      <p class="text-sm text-muted mb-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+        <span class="inline-flex items-center gap-1.5">
+          <UIcon name="i-game-icons-hood" class="size-4 text-primary" />{{ abenteurer.typ }}
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <UIcon name="i-lucide-user" class="size-4 text-primary" />{{ abenteurer.spieler }}
+        </span>
+      </p>
 
-      <p class="font-medium text-toned text-sm mb-1">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+        <div
+          v-for="fact in vitalFacts"
+          :key="fact.label"
+          class="rpg-stat flex items-center gap-3 p-3"
+          :title="fact.title"
+        >
+          <UIcon :name="fact.icon" class="size-5 text-primary shrink-0" />
+          <div>
+            <p class="rpg-stat-label">
+              {{ fact.label }}
+            </p>
+            <p class="text-2xl font-semibold text-highlighted leading-none">
+              {{ fact.value }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p class="rpg-section-title mb-2">
+        Kampf &amp; Magie
+      </p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+        <div v-for="fact in combatFacts" :key="fact.label" class="rpg-stat p-2.5">
+          <p class="rpg-stat-label">
+            {{ fact.label }}
+          </p>
+          <p class="text-xl font-semibold text-highlighted leading-tight">
+            {{ fact.value }}
+          </p>
+        </div>
+      </div>
+
+      <p class="rpg-section-title mb-2">
         Basis-Eigenschaften
       </p>
-      <dl class="grid grid-cols-5 gap-1 text-sm mb-3">
-        <template v-for="fact in basisFacts" :key="fact.label">
-          <dt class="font-medium text-toned">
+      <div class="grid grid-cols-5 gap-2 mb-4">
+        <div v-for="fact in basisFacts" :key="fact.label" class="rpg-stat p-2 text-center">
+          <p class="rpg-stat-label">
             {{ fact.label }}
-          </dt>
-          <dd class="text-highlighted">
+          </p>
+          <p class="text-xl font-semibold text-highlighted leading-tight">
             {{ fact.value }}
-          </dd>
-        </template>
-      </dl>
+          </p>
+        </div>
+      </div>
 
-      <NuxtLink :to="`/secured/spieler/abenteurer/${abenteurer._id}/zauber`" class="text-sm text-primary hover:underline">
-        {{ abenteurer.zauber.length }} Zauber
-      </NuxtLink>
+      <UButton
+        :to="`/secured/spieler/abenteurer/${abenteurer._id}/zauber`"
+        icon="i-game-icons-wizard-staff"
+        color="neutral"
+        variant="subtle"
+        :label="`${abenteurer.zauber.length} Zauber ansehen`"
+      />
     </div>
 
     <FUDataEdit

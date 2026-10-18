@@ -1,12 +1,12 @@
-import type {Content} from 'pdfmake/interfaces'
-import type {GeneratedWesenProperties, Wesen, WesenGeneratorRequest, WesenGeneratorResult, WesenModifikator, Zauber} from '~/models'
-import {useDices} from '~/composables/tools/useDices'
-import {useWesen} from '~/composables/dm/useWesen'
+import type { Content } from 'pdfmake/interfaces'
+import type { GeneratedWesenProperties, Wesen, WesenGeneratorRequest, WesenGeneratorResult, WesenModifikator, Zauber } from '~/models'
+import { useDices } from '~/composables/tools/useDices'
+import { useWesen } from '~/composables/dm/useWesen'
 
 export function useWesenGenerator() {
-  const {wesenByName} = useBestiariumStore()
-  const {zauberByName} = useZauberStore()
-  const {diceRollResult} = useDices()
+  const { wesenByName } = useBestiariumStore()
+  const { zauberByName } = useZauberStore()
+  const { diceRollResult } = useDices()
 
   // Wesen lp/ap data was extracted from a PDF and sometimes carries stray
   // characters (footnote text, "*"/"∞" placeholders, stray spaces) alongside
@@ -90,10 +90,10 @@ export function useWesenGenerator() {
   // see scratch/pdf/wesen_sample_in_pdf.png) so the generated PDF opens with
   // the same reference info a DM would look up in the book.
   function createWesenStatBlock(wesen: Wesen): Content[] {
-    const {angriffeToString, besonderheitenToString, zauberToString, vorkommenToString} = useWesen()
+    const { angriffeToString, besonderheitenToString, zauberToString, vorkommenToString } = useWesen()
 
     const rows: Content[] = [
-      {text: `${wesen.name} (${wesen.kategorie}, Grad ${wesen.grad})`, style: 'subheader'},
+      { text: `${wesen.name} (${wesen.kategorie}, Grad ${wesen.grad})`, style: 'subheader' },
       // A shared 4-column table (rather than two separate `columns` blocks)
       // so the LP/AP/Rüstung line and the St/Gw/In/B line below it share the
       // same tab stops - two independent `columns` rows with different item
@@ -111,9 +111,9 @@ export function useWesenGenerator() {
       },
       {
         text: [
-          {text: 'Abwehr: ', bold: true},
+          { text: 'Abwehr: ', bold: true },
           `+${wesen.abwehr}  `,
-          {text: 'Resistenz: ', bold: true},
+          { text: 'Resistenz: ', bold: true },
           `+${wesen.resistenzGeist}/${wesen.resistenzKoerper}`,
           ...(wesen.mw > 0 ? [`  MW${wesen.mw >= 999 ? ' ∞' : `+${wesen.mw}`}`] : [])
         ]
@@ -122,22 +122,22 @@ export function useWesenGenerator() {
 
     const angriffText = angriffeToString(wesen)
     if (angriffText) {
-      rows.push({text: [{text: 'Angriff: ', bold: true}, angriffText]})
+      rows.push({ text: [{ text: 'Angriff: ', bold: true }, angriffText] })
     }
 
     const besText = besonderheitenToString(wesen)
     if (besText) {
-      rows.push({text: [{text: 'Bes.: ', bold: true}, besText]})
+      rows.push({ text: [{ text: 'Bes.: ', bold: true }, besText] })
     }
 
     const zauberText = zauberToString(wesen)
     if (zauberText) {
-      rows.push({text: [{text: 'Zaubern: ', bold: true}, zauberText]})
+      rows.push({ text: [{ text: 'Zaubern: ', bold: true }, zauberText] })
     }
 
     const vorkommenText = vorkommenToString(wesen)
     if (vorkommenText) {
-      rows.push({text: [{text: 'Vorkommen: ', bold: true}, vorkommenText]})
+      rows.push({ text: [{ text: 'Vorkommen: ', bold: true }, vorkommenText] })
     }
 
     return rows
@@ -151,17 +151,17 @@ export function useWesenGenerator() {
   // One small "<Name> N" tracker per generated instance: a 2-row table (LP/AP
   // label + rolled value) followed by a row of blank boxes.
   function createInstanceTracker(name: string, instance: GeneratedWesenProperties): Content[] {
-    const boxes = Array.from({length: TRACK_BOXES}, () => '')
+    const boxes = Array.from({ length: TRACK_BOXES }, () => '')
     return [
-      {text: `${name} ${instance.index}`, bold: true, margin: [0, 6, 0, 2]},
+      { text: `${name} ${instance.index}`, bold: true, margin: [0, 6, 0, 2] },
       {
         layout: 'base',
         table: {
           dontBreakRows: true,
           widths: [30, 30, ...boxes.map(() => 20)],
           body: [
-            [{text: 'LP', bold: true}, String(instance.lp), ...boxes],
-            [{text: 'AP', bold: true}, String(instance.ap), ...boxes]
+            [{ text: 'LP', bold: true }, String(instance.lp), ...boxes],
+            [{ text: 'AP', bold: true }, String(instance.ap), ...boxes]
           ]
         }
       }
@@ -172,7 +172,7 @@ export function useWesenGenerator() {
   // main stat block, so they read as sub-sections rather than competing with
   // the stat block's own title.
   function sectionLabel(title: string): Content {
-    return {text: title, bold: true, fontSize: 12, margin: [0, 8, 0, 2]}
+    return { text: title, bold: true, fontSize: 12, margin: [0, 8, 0, 2] }
   }
 
   // `title` is omitted for the "Standard" tier - it's the default case and
@@ -216,7 +216,7 @@ export function useWesenGenerator() {
       return
     }
 
-    const {defaultStyle, styleLibrary, tableLayouts, footer, pageHeader} = usePdf()
+    const { defaultStyle, styleLibrary, tableLayouts, footer, pageHeader } = usePdf()
 
     const content: Content[] = [
       ...createWesenStatBlock(result.wesen),
@@ -243,7 +243,6 @@ export function useWesenGenerator() {
       tableLayouts()
     ).open()
   }
-
 
   return { generateWesen, exportWesen }
 }

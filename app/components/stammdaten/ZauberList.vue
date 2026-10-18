@@ -11,8 +11,7 @@ const props = defineProps<{
   zauberFilter?: string[]
 }>()
 
-const UButton = resolveComponent('UButton')
-const UPopover = resolveComponent('UPopover')
+const PreviewButton = resolveComponent('PreviewButton')
 const ZauberViewComponent = resolveComponent('StammdatenZauberView')
 
 const table = useTemplateRef('table')
@@ -49,10 +48,7 @@ const columns = computed<TableColumn<ZauberLernen>[]>(() => {
     {
       id: 'preview',
       cell: ({ row }) =>
-        h(UPopover, {}, {
-          default: () => h(UButton, { icon: 'i-lucide-search', size: 'xs', color: 'neutral', variant: 'subtle' }),
-          content: () => h('div', { class: 'p-4 w-80' }, h(ZauberViewComponent, { zauber: row.original.zauber }))
-        })
+        h(PreviewButton, {}, () => h(ZauberViewComponent, { zauber: row.original.zauber }))
     },
     {
       accessorKey: 'name',
@@ -144,7 +140,7 @@ function exportPdf() {
     >
       <template #empty>
         <p class="py-6 text-center text-sm text-muted">
-          Keine Daten gefunden.
+          Keine Zauber gefunden.
         </p>
       </template>
     </UTable>

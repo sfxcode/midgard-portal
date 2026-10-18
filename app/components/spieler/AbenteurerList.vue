@@ -57,7 +57,7 @@ function exportData() {
     >
       <template #empty>
         <p class="py-6 text-center text-sm text-muted">
-          Keine Daten gefunden.
+          Keine Abenteurer gefunden.
         </p>
       </template>
     </UTable>

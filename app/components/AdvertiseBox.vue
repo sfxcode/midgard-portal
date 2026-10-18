@@ -25,7 +25,7 @@ defineProps({
       container: 'p-4 sm:p-4 gap-y-1.5',
       wrapper: 'items-start',
       leading: 'p-2.5 rounded-full bg-primary/10 ring ring-inset ring-primary/25 flex-col',
-      title: 'font-normal text-muted text-xs uppercase'
+      title: 'font-normal text-muted text-[0.65rem] uppercase truncate'
     }"
   >
     <span class="text-2xl font-semibold text-highlighted">

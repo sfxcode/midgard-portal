@@ -45,15 +45,13 @@ async function loadWesenFromData() {
     }
     try {
       const requestBody = ensureMetaData(entry) as unknown as Record<string, string>
-      await documentApi.insert({collectionName: 'ms_bestiarium', requestBody})
-    }
-    catch (error) {
+      await documentApi.insert({ collectionName: 'ms_bestiarium', requestBody })
+    } catch (error) {
       console.error('error', error)
     }
   }
   await refetchWesen()
 }
-
 
 useSeoMeta({
   title: 'Bestiarium'

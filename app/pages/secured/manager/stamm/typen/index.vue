@@ -4,8 +4,7 @@ import { getPaginationRowModel } from '@tanstack/table-core'
 import type { Typ } from '~/models'
 import { useTypenExport } from '~/composables/stamm/useTypenExport'
 
-const UButtonComponent = resolveComponent('UButton')
-const UPopover = resolveComponent('UPopover')
+const PreviewButton = resolveComponent('PreviewButton')
 const TypViewComponent = resolveComponent('StammdatenTypView')
 
 const table = useTemplateRef('table')
@@ -22,10 +21,7 @@ const columns = computed<TableColumn<Typ>[]>(() => withResponsiveBreakpoints([
   {
     id: 'preview',
     cell: ({ row }) =>
-      h(UPopover, {}, {
-        default: () => h(UButtonComponent, { icon: 'i-lucide-search', size: 'xs', color: 'neutral', variant: 'subtle' }),
-        content: () => h('div', { class: 'p-4 w-80' }, h(TypViewComponent, { typ: row.original }))
-      })
+      h(PreviewButton, {}, () => h(TypViewComponent, { typ: row.original }))
   },
   {
     accessorKey: 'name',
@@ -115,7 +111,7 @@ useSeoMeta({
         >
           <template #empty>
             <p class="py-6 text-center text-sm text-muted">
-              Keine Daten gefunden.
+              Keine Typen gefunden.
             </p>
           </template>
         </UTable>

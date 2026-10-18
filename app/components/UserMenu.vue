@@ -31,10 +31,10 @@ const items = computed<DropdownMenuItem[][]>(() => ([[{
   icon: 'i-lucide-id-card',
   to: '/secured/spieler'
 }, {
-  label: 'Appearance',
+  label: 'Darstellung',
   icon: 'i-lucide-sun-moon',
   children: [{
-    label: 'Light',
+    label: 'Tag',
     icon: 'i-lucide-sun',
     type: 'checkbox',
     checked: colorMode.value === 'light',
@@ -44,7 +44,7 @@ const items = computed<DropdownMenuItem[][]>(() => ([[{
       colorMode.preference = 'light'
     }
   }, {
-    label: 'Dark',
+    label: 'Nacht',
     icon: 'i-lucide-moon',
     type: 'checkbox',
     checked: colorMode.value === 'dark',
@@ -58,7 +58,11 @@ const items = computed<DropdownMenuItem[][]>(() => ([[{
     }
   }]
 }], [{
-  label: 'Log Out',
+  label: 'Credits',
+  icon: 'i-lucide-heart-handshake',
+  to: '/secured/credits'
+}, {
+  label: 'Abmelden',
   icon: 'i-lucide-log-out',
   onSelect: onLogout
 }]]))

@@ -26,7 +26,7 @@ useSeoMeta({
     -->
     <div class="text-center mb-6">
       <h2 class="font-display text-xl text-[#2E1D0A] tracking-wide">
-        Enter the Kingdom
+        Enter Campaign Management
       </h2>
       <p class="mt-1.5 text-sm text-[#4E4130] font-serif italic">
         Sign in with your adventurer credentials to continue.

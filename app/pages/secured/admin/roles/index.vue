@@ -1,15 +1,15 @@
 <script setup lang="ts">
-const items = [{ label: 'Roles' }]
+const items = [{ label: 'Rollen' }]
 
 useSeoMeta({
-  title: 'Roles'
+  title: 'Rollen'
 })
 </script>
 
 <template>
   <UDashboardPanel id="admin-roles">
     <template #header>
-      <AppPageHeader title="Roles" :items="items" />
+      <AppPageHeader title="Rollen" :items="items" />
     </template>
 
     <template #body>

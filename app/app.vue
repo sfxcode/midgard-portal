@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { de } from '@nuxt/ui/locale'
+
 const colorMode = useColorMode()
+const locale = extendLocale(de, {
+  messages: { table: { noData: 'Keine Einträge gefunden' } }
+})
 
 const color = computed(() => colorMode.value === 'dark' ? '#1b140d' : '#faf5ea')
 
@@ -34,7 +39,7 @@ useHead({
     { rel: 'icon', href: '/favicon.ico' }
   ],
   htmlAttrs: {
-    lang: 'en'
+    lang: 'de'
   }
 })
 
@@ -52,13 +57,13 @@ useSeoMeta({
 </script>
 
 <template>
-  <UApp>
+  <UApp :locale="locale">
     <NuxtLoadingIndicator color="var(--ui-primary)" />
 
     <div v-if="checkingAuth" class="min-h-screen flex items-center justify-center">
       <UIcon name="i-lucide-loader-circle" class="size-8 animate-spin text-muted" />
     </div>
-    <NuxtLayout v-else>
+    <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
   </UApp>

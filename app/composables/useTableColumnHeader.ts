@@ -47,7 +47,7 @@ export function useTableColumnHeader() {
       label,
       icon: isSorted ? (isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow') : 'i-lucide-arrow-up-down',
       class: '-mx-2',
-      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
     })
   }
 
@@ -69,15 +69,14 @@ export function useTableColumnHeader() {
             const newValue = value === 'all' ? undefined : toValue(value)
             if (options?.onFilterChange) {
               options.onFilterChange(newValue)
-            }
-            else {
+            } else {
               column.setFilterValue(newValue)
             }
           },
           'items': [{ label: allLabel, value: 'all' }, ...items()],
           'size': 'xs',
-          'class': 'flex-1 min-w-0',
-        }),
+          'class': 'flex-1 min-w-0'
+        })
       ])
     }
   }
@@ -106,8 +105,7 @@ export function useTableColumnHeader() {
             const newValue = value.length === 0 ? undefined : value.map(toValue)
             if (options?.onFilterChange) {
               options.onFilterChange(newValue)
-            }
-            else {
+            } else {
               column.setFilterValue(newValue)
             }
           },
@@ -117,9 +115,9 @@ export function useTableColumnHeader() {
           'placeholder': allLabel,
           'size': 'xs',
           'class': 'flex-1 min-w-0',
-          'onClick': (event: Event) => event.stopPropagation(),
+          'onClick': (event: Event) => event.stopPropagation()
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any),
+        } as any)
       ])
     }
   }
@@ -140,21 +138,20 @@ export function useTableColumnHeader() {
             const newValue = value === 'all' ? undefined : value === 'true'
             if (options?.onFilterChange) {
               options.onFilterChange(newValue)
-            }
-            else {
+            } else {
               column.setFilterValue(newValue)
             }
           },
           'items': [
             { label: allLabel, value: 'all' },
             { label: yesLabel, value: 'true' },
-            { label: noLabel, value: 'false' },
+            { label: noLabel, value: 'false' }
           ],
           'size': 'xs',
           'class': 'flex-1 min-w-0',
-          'onClick': (event: Event) => event.stopPropagation(),
+          'onClick': (event: Event) => event.stopPropagation()
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any),
+        } as any)
       ])
     }
   }
@@ -167,8 +164,7 @@ export function useTableColumnHeader() {
       // Use server-side callback if provided, otherwise use client-side filtering
       if (options?.onFilterChange) {
         options.onFilterChange(value)
-      }
-      else {
+      } else {
         column.setFilterValue(value === '' ? undefined : value)
       }
     }, options?.debounce ?? 300)
@@ -193,9 +189,9 @@ export function useTableColumnHeader() {
           'size': 'xs',
           'placeholder': options?.placeholder ?? label,
           'class': 'flex-1 min-w-0',
-          'onClick': (event: Event) => event.stopPropagation(),
+          'onClick': (event: Event) => event.stopPropagation()
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any),
+        } as any)
       ])
     }
   }

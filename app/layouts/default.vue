@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 
-const toast = useToast()
 const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
 const { isManager } = useMongocampRoles()
@@ -18,7 +17,7 @@ const { kampagnen } = useKampagneStore()
 const open = ref(false)
 
 const links = computed(() => [{
-  label: 'Home',
+  label: 'Startseite',
   icon: 'i-lucide-home',
   to: '/secured',
   exact: true,
@@ -30,14 +29,14 @@ const links = computed(() => [{
   label: 'Spieler'
 }, {
   label: 'Abenteurer',
-  icon: 'i-lucide-user',
+  icon: 'i-game-icons-hood',
   to: '/secured/spieler/abenteurer',
   onSelect: () => {
     open.value = false
   }
 }, {
-  label: 'Kampagnen',
-  icon: 'i-lucide-scroll',
+  label: 'Meine Kampagnen',
+  icon: 'i-game-icons-scroll-unfurled',
   to: '/secured/spieler/kampagnen',
   onSelect: () => {
     open.value = false
@@ -47,21 +46,21 @@ const links = computed(() => [{
   label: 'DM'
 }, {
   label: 'NPC',
-  icon: 'i-lucide-skull',
+  icon: 'i-game-icons-skull-crossed-bones',
   to: '/secured/dm/npc',
   defaultOpen: true,
   type: 'trigger' as const,
   children: [{
     label: 'Bestiarium',
-    icon: 'i-lucide-list',
+    icon: 'i-game-icons-dragon-head',
     to: '/secured/dm/npc/bestiarium',
     onSelect: () => {
       open.value = false
     }
   }]
 }, {
-  label: 'Kampagnen',
-  icon: 'i-lucide-scroll',
+  label: 'Spielleiter-Kampagnen',
+  icon: 'i-game-icons-castle',
   to: '/secured/dm/kampagnen',
   onSelect: () => {
     open.value = false
@@ -78,21 +77,21 @@ const links = computed(() => [{
       type: 'trigger' as const,
       children: [{
         label: 'Zauber',
-        icon: 'i-lucide-wand-sparkles',
+        icon: 'i-game-icons-wizard-staff',
         to: '/secured/manager/stamm/zauber',
         onSelect: () => {
           open.value = false
         }
       }, {
         label: 'Fertigkeiten',
-        icon: 'i-lucide-swords',
+        icon: 'i-game-icons-crossed-swords',
         to: '/secured/manager/stamm/fertigkeiten',
         onSelect: () => {
           open.value = false
         }
       }, {
         label: 'Typen',
-        icon: 'i-lucide-shapes',
+        icon: 'i-game-icons-open-book',
         to: '/secured/manager/stamm/typen',
         onSelect: () => {
           open.value = false
@@ -107,7 +106,7 @@ const links = computed(() => [{
       }
     }, {
       label: 'Spielergruppen',
-      icon: 'i-lucide-users',
+      icon: 'i-game-icons-three-friends',
       to: '/secured/manager/spielergruppen',
       onSelect: () => {
         open.value = false
@@ -118,15 +117,15 @@ const links = computed(() => [{
       type: 'label' as const,
       label: 'Administration'
     }, {
-      label: 'Users',
+      label: 'Benutzer',
       icon: 'i-lucide-users',
       to: '/secured/admin/users',
       onSelect: () => {
         open.value = false
       }
     }, {
-      label: 'Roles',
-      icon: 'i-lucide-shield',
+      label: 'Rollen',
+      icon: 'i-game-icons-round-shield',
       to: '/secured/admin/roles',
       onSelect: () => {
         open.value = false
@@ -136,7 +135,7 @@ const links = computed(() => [{
 
 const groups = computed(() => [{
   id: 'links',
-  label: 'Go to',
+  label: 'Gehe zu',
   items: links.value.filter((item: NavigationMenuItem) => item.type !== 'label')
 }, ...(isManager.value
   ? [{
@@ -145,7 +144,7 @@ const groups = computed(() => [{
       items: (zauber.value ?? []).map(z => ({
         label: z.name,
         suffix: z.kategorie,
-        icon: 'i-lucide-wand-sparkles',
+        icon: 'i-game-icons-wizard-staff',
         to: `/secured/manager/stamm/zauber/${z.name}`
       }))
     }, {
@@ -154,7 +153,7 @@ const groups = computed(() => [{
       items: (fertigkeiten.value ?? []).map(f => ({
         label: f.name,
         suffix: f.kategorie,
-        icon: 'i-lucide-swords',
+        icon: 'i-game-icons-crossed-swords',
         to: `/secured/manager/stamm/fertigkeiten/${f.kategorie}/${f.name}`
       }))
     }, {
@@ -162,7 +161,7 @@ const groups = computed(() => [{
       label: 'Typen',
       items: (typen.value ?? []).map(t => ({
         label: t.name,
-        icon: 'i-lucide-shapes',
+        icon: 'i-game-icons-open-book',
         to: `/secured/manager/stamm/typen/${t.name}`
       }))
     }, {
@@ -179,7 +178,7 @@ const groups = computed(() => [{
       label: 'Spielergruppen',
       items: (spielergruppen.value ?? []).map(g => ({
         label: g.name,
-        icon: 'i-lucide-users',
+        icon: 'i-game-icons-three-friends',
         to: `/secured/manager/spielergruppen/${g._id}`
       }))
     }]
@@ -189,7 +188,7 @@ const groups = computed(() => [{
   items: (wesen.value ?? []).map(w => ({
     label: w.name,
     suffix: w.kategorie,
-    icon: 'i-lucide-list',
+    icon: 'i-game-icons-dragon-head',
     to: `/secured/dm/npc/bestiarium/${w.name}`
   }))
 }, {
@@ -198,7 +197,7 @@ const groups = computed(() => [{
   items: (abenteurer.value ?? []).map(a => ({
     label: a.name,
     suffix: a.spieler,
-    icon: 'i-lucide-user',
+    icon: 'i-game-icons-hood',
     to: `/secured/spieler/abenteurer/${a._id}`
   }))
 }, {
@@ -206,35 +205,10 @@ const groups = computed(() => [{
   label: 'Kampagnen',
   items: (kampagnen.value ?? []).map(k => ({
     label: k.name,
-    icon: 'i-lucide-scroll',
+    icon: 'i-game-icons-castle',
     to: `/secured/dm/kampagnen/${k._id}`
   }))
 }])
-
-onMounted(async () => {
-  const cookie = useCookie('cookie-consent')
-  if (cookie.value === 'accepted') {
-    return
-  }
-
-  toast.add({
-    title: 'The Lost Kingdom keeps a few cookies to remember your seat at the table.',
-    duration: 0,
-    close: false,
-    actions: [{
-      label: 'Accept',
-      color: 'neutral',
-      variant: 'outline',
-      onClick: () => {
-        cookie.value = 'accepted'
-      }
-    }, {
-      label: 'Opt out',
-      color: 'neutral',
-      variant: 'ghost'
-    }]
-  })
-})
 </script>
 
 <template>

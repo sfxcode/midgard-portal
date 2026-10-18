@@ -1,0 +1,41 @@
+<div class="midgard-splash" role="status" aria-label="Lade Midgard">
+  <div class="midgard-splash__seal"></div>
+  <p class="midgard-splash__text">Midgard erwacht &hellip;</p>
+</div>
+<style>
+  .midgard-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    background: radial-gradient(120% 90% at 50% 0%, #f3ead2, #faf5ea 60%);
+    color: #7a5219;
+  }
+  .midgard-splash__seal {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 3px double #b4883b;
+    border-top-color: transparent;
+    animation: midgard-spin 1.1s linear infinite;
+  }
+  .midgard-splash__text {
+    margin: 0;
+    font-family: 'Cinzel', Georgia, serif;
+    letter-spacing: 0.08em;
+    font-size: 1rem;
+    animation: midgard-pulse 2s ease-in-out infinite;
+  }
+  @media (prefers-color-scheme: dark) {
+    .midgard-splash {
+      background: radial-gradient(110% 70% at 50% 0%, #2a211a, #1b140d 65%);
+      color: #c9a254;
+    }
+  }
+  @keyframes midgard-spin { to { transform: rotate(360deg); } }
+  @keyframes midgard-pulse { 50% { opacity: 0.55; } }
+</style>

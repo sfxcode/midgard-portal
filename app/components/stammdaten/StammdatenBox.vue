@@ -5,14 +5,14 @@ const { fertigkeiten } = useFertigkeitenStore()
 </script>
 
 <template>
-  <div class="grid gap-2 sm:grid-cols-3">
-    <AdvertiseBox header="Zauber" icon="i-lucide-wand-sparkles" to="/secured/manager/stamm/zauber">
+  <div class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(6.25rem,1fr))]">
+    <AdvertiseBox header="Zauber" icon="i-game-icons-wizard-staff" to="/secured/manager/stamm/zauber">
       {{ zauber?.length ?? 0 }}
     </AdvertiseBox>
-    <AdvertiseBox header="Fertigkeiten" icon="i-lucide-swords" to="/secured/manager/stamm/fertigkeiten">
+    <AdvertiseBox header="Fertigkeiten" icon="i-game-icons-crossed-swords" to="/secured/manager/stamm/fertigkeiten">
       {{ fertigkeiten?.length ?? 0 }}
     </AdvertiseBox>
-    <AdvertiseBox header="Typen" icon="i-lucide-shapes" to="/secured/manager/stamm/typen">
+    <AdvertiseBox header="Typen" icon="i-game-icons-open-book" to="/secured/manager/stamm/typen">
       {{ typen?.length ?? 0 }}
     </AdvertiseBox>
   </div>
