@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui'
+import type { CommandPaletteItem, NavigationMenuItem } from '@nuxt/ui'
 
 const mongocampStorage = useMongocampStorage()
 const profile = computed(() => mongocampStorage.value.profile)
@@ -133,10 +133,71 @@ const links = computed(() => [{
     }]
   : [])] satisfies NavigationMenuItem[])
 
-const groups = computed(() => [{
+// Chained shortcuts: press G, then the second key (shown as hints in the palette's "Gehe zu" group)
+const shortcutTargets = computed(() => [
+  { keys: 'g-h', to: '/secured' },
+  { keys: 'g-a', to: '/secured/spieler/abenteurer' },
+  { keys: 'g-k', to: '/secured/spieler/kampagnen' },
+  { keys: 'g-b', to: '/secured/dm/npc/bestiarium' },
+  ...(isManager.value
+    ? [
+        { keys: 'g-z', to: '/secured/manager/stamm/zauber' },
+        { keys: 'g-f', to: '/secured/manager/stamm/fertigkeiten' },
+        { keys: 'g-t', to: '/secured/manager/stamm/typen' }
+      ]
+    : [])
+])
+
+defineShortcuts(Object.fromEntries([
+  ...['g-h', 'g-a', 'g-k', 'g-b', 'g-z', 'g-f', 'g-t'].map(keys => [keys, () => {
+    const target = shortcutTargets.value.find(t => t.keys === keys)
+    if (target) navigateTo(target.to)
+  }])
+]))
+
+// Recently visited detail pages, for the palette (per-viewer convenience, kept in localStorage)
+const route = useRoute()
+const recent = useLocalStorage<{ label: string, to: string, icon: string }[]>('midgard-recent', [])
+
+function describeRoute(path: string) {
+  const segments = path.split('/').map(decodeURIComponent)
+  const last = segments.at(-1) ?? ''
+  if (/^\/secured\/dm\/npc\/bestiarium\/[^/]+$/.test(path)) return { label: last, icon: 'i-game-icons-dragon-head' }
+  if (/^\/secured\/manager\/stamm\/zauber\/[^/]+$/.test(path)) return { label: last, icon: 'i-game-icons-wizard-staff' }
+  if (/^\/secured\/manager\/stamm\/fertigkeiten\/[^/]+\/[^/]+$/.test(path)) return { label: last, icon: 'i-game-icons-crossed-swords' }
+  if (/^\/secured\/manager\/stamm\/typen\/[^/]+$/.test(path)) return { label: last, icon: 'i-game-icons-open-book' }
+  if (/^\/secured\/spieler\/abenteurer\/[^/]+$/.test(path)) {
+    const name = abenteurer.value?.find(a => a._id === last)?.name
+    return name ? { label: name, icon: 'i-game-icons-hood' } : null
+  }
+  if (/^\/secured\/dm\/kampagnen\/[^/]+$/.test(path)) {
+    const name = kampagnen.value?.find(k => k._id === last)?.name
+    return name ? { label: name, icon: 'i-game-icons-castle' } : null
+  }
+  return null
+}
+
+watch(() => route.path, (path) => {
+  const info = describeRoute(path)
+  if (!info) return
+  recent.value = [{ ...info, to: path }, ...recent.value.filter(item => item.to !== path)].slice(0, 6)
+}, { immediate: true })
+
+const groups = computed(() => [...(recent.value.length
+  ? [{
+      id: 'recent',
+      label: 'Zuletzt besucht',
+      items: recent.value
+    }]
+  : []), {
   id: 'links',
   label: 'Gehe zu',
-  items: links.value.filter((item: NavigationMenuItem) => item.type !== 'label')
+  items: links.value
+    .filter((item: NavigationMenuItem) => item.type !== 'label')
+    .map((item: NavigationMenuItem) => {
+      const keys = shortcutTargets.value.find(t => t.to === item.to)?.keys
+      return keys ? { ...item, kbds: keys.split('-').map(key => key.toUpperCase()) } : item
+    }) as CommandPaletteItem[]
 }, ...(isManager.value
   ? [{
       id: 'zauber',
