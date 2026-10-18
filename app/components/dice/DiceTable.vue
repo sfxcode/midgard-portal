@@ -11,6 +11,12 @@ const MAX_DICE = 12
 
 const { initDiceBox, roll } = useDiceBox()
 const boxId = `dice-box-${useId()}`
+const container = useTemplateRef<HTMLElement>('container')
+const { width: containerWidth } = useElementSize(container)
+
+// The 3D scene sizes its canvas from the container when it is created, so create it only once the
+// container is actually visible (the drawer's copy is mounted while hidden at 0x0)
+let boxReady: Promise<unknown> | undefined
 const { history, addEntry, clearHistory } = useDiceHistory()
 
 const result = ref<DiceRoll[]>()
@@ -46,6 +52,7 @@ function parseExpression(text: string): { dice: DieSpec[], modifier: number } | 
 }
 
 async function rollExpression(expression: string) {
+  if (!boxReady) return
   const parsed = parseExpression(expression)
   if (!parsed) {
     errorMessage.value = `Ungültiger Wurf. Beispiele: W20, 3W6+2, W100 + W20 (höchstens ${MAX_DICE} Würfel).`
@@ -56,6 +63,7 @@ async function rollExpression(expression: string) {
   modifier.value = parsed.modifier
   rolling.value = true
   try {
+    await boxReady
     await roll(parsed.dice)
   } finally {
     rolling.value = false
@@ -81,9 +89,11 @@ function onRollComplete(groups: { rolls: DiceRoll[] }[]) {
   addEntry({ expression: currentExpression, total, detail })
 }
 
-onMounted(() => {
-  initDiceBox(`#${boxId}`, 12, onRollComplete, { theme: 'smooth', themeColor: '#EFE3C2' })
-})
+watch(containerWidth, (width) => {
+  if (width > 0 && !boxReady) {
+    boxReady = initDiceBox(`#${boxId}`, 12, onRollComplete, { theme: 'smooth', themeColor: '#EFE3C2' })
+  }
+}, { immediate: true })
 </script>
 
 <template>
@@ -140,7 +150,12 @@ onMounted(() => {
     </div>
 
     <div class="relative">
-      <div :id="boxId" class="rpg-tray h-64 w-full" @click="rollExpression(currentExpression)" />
+      <div
+        :id="boxId"
+        ref="container"
+        class="rpg-tray h-64 w-full"
+        @click="rollExpression(currentExpression)"
+      />
       <div
         v-if="!result"
         class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-center text-[#EFE3C2]"
