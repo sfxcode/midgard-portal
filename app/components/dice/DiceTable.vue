@@ -158,12 +158,8 @@ watch(containerWidth, (width) => {
       />
       <div
         v-if="!result"
-        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-center text-[#EFE3C2]"
+        class="pointer-events-none absolute inset-x-0 bottom-3 flex flex-col items-center gap-0.5 text-center text-[#EFE3C2]"
       >
-        <div class="flex gap-3">
-          <UIcon name="i-game-icons-dice-twenty-faces-twenty" class="size-10 opacity-80" />
-          <UIcon name="i-game-icons-rolling-dices" class="size-10 opacity-80" />
-        </div>
         <p class="font-display tracking-wide">
           Tippe auf den Tisch, um zu würfeln
         </p>
