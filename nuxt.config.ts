@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import pkg from './package.json'
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
@@ -33,6 +35,12 @@ export default defineNuxtConfig({
     // reload. Rendering these routes client-only avoids that mismatch.
     '/secured/**': {
       ssr: false
+    }
+  },
+
+  runtimeConfig: {
+    public: {
+      appVersion: pkg.version
     }
   },
 

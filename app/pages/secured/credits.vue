@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const items = [{ label: 'Credits' }]
 
+const { public: { appVersion } } = useRuntimeConfig()
+
 useSeoMeta({
   title: 'Credits'
 })
@@ -91,7 +93,7 @@ const credits = [
           </li>
         </ul>
         <p class="text-sm text-muted mt-5">
-          Inoffizielles Fan-Werkzeug für das Rollenspiel Midgard.
+          Inoffizielles Fan-Werkzeug für das Rollenspiel Midgard · Version {{ appVersion }}
         </p>
       </div>
     </template>
