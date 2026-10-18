@@ -21,6 +21,8 @@
   # CI runs on Node 22; pnpm itself comes from "packageManager" in package.json (via corepack)
   NODE_VERSION = "22"
   NUXT_TELEMETRY_DISABLED = "1"
+  # The production build needs about 3 GB of Node heap (2 GB runs out of memory, measured); 4 GB leaves headroom
+  NODE_OPTIONS = "--max-old-space-size=4096"
 
 # Baseline security headers for every response
 [[headers]]
