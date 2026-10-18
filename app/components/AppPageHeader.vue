@@ -50,31 +50,33 @@ function onLogout() {
 <template>
   <UDashboardNavbar :title="title" :ui="{ title: 'rpg-page-title' }">
     <template #leading>
-      <UDashboardSidebarCollapse />
+      <UDashboardSidebarCollapse class="print:hidden" />
     </template>
 
     <template #right>
-      <USelect
-        v-model="colorMode.preference"
-        :items="colorModes"
-        value-key="value"
-        class="w-28"
-        aria-label="Darstellung"
-      />
+      <div class="flex items-center gap-1.5 print:hidden">
+        <USelect
+          v-model="colorMode.preference"
+          :items="colorModes"
+          value-key="value"
+          class="w-28"
+          aria-label="Darstellung"
+        />
 
-      <UButton
-        label="Abmelden"
-        icon="i-lucide-log-out"
-        color="neutral"
-        variant="subtle"
-        class="max-sm:[&>span:not(.iconify)]:hidden"
-        aria-label="Abmelden"
-        @click="onLogout"
-      />
+        <UButton
+          label="Abmelden"
+          icon="i-lucide-log-out"
+          color="neutral"
+          variant="subtle"
+          class="max-sm:[&>span:not(.iconify)]:hidden"
+          aria-label="Abmelden"
+          @click="onLogout"
+        />
+      </div>
     </template>
   </UDashboardNavbar>
 
-  <UDashboardToolbar v-if="items?.length || $slots.center || $slots.right" class="flex-wrap gap-y-2">
+  <UDashboardToolbar v-if="items?.length || $slots.center || $slots.right" class="flex-wrap gap-y-2 print:hidden">
     <div class="flex flex-1 items-center gap-1.5 min-w-0">
       <UBreadcrumb
         v-if="crumbs?.length"

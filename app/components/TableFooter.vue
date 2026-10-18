@@ -35,13 +35,14 @@ function resetFilters() {
     </div>
 
     <UPagination
+      class="print:hidden"
       :default-page="(tableApi?.getState().pagination.pageIndex || 0) + 1"
       :items-per-page="tableApi?.getState().pagination.pageSize"
       :total="tableApi?.getFilteredRowModel().rows.length"
       @update:page="(p: number) => tableApi?.setPageIndex(p - 1)"
     />
 
-    <div class="flex flex-1 items-center justify-end gap-1.5">
+    <div class="flex flex-1 items-center justify-end gap-1.5 print:hidden">
       <UButton
         v-if="resettable"
         label="Filter zurücksetzen"

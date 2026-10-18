@@ -77,7 +77,7 @@ export function useTableColumnHeader() {
           },
           'items': [{ label: allLabel, value: 'all' }, ...items()],
           'size': 'xs',
-          'class': 'flex-1 min-w-0'
+          'class': 'flex-1 min-w-0 print:hidden'
         })
       ])
     }
@@ -116,7 +116,7 @@ export function useTableColumnHeader() {
           'multiple': true,
           'placeholder': allLabel,
           'size': 'xs',
-          'class': 'flex-1 min-w-0',
+          'class': 'flex-1 min-w-0 print:hidden',
           'onClick': (event: Event) => event.stopPropagation()
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
@@ -150,7 +150,7 @@ export function useTableColumnHeader() {
             { label: noLabel, value: 'false' }
           ],
           'size': 'xs',
-          'class': 'flex-1 min-w-0',
+          'class': 'flex-1 min-w-0 print:hidden',
           'onClick': (event: Event) => event.stopPropagation()
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
@@ -190,7 +190,7 @@ export function useTableColumnHeader() {
           },
           'size': 'xs',
           'placeholder': options?.placeholder ?? label,
-          'class': 'flex-1 min-w-0',
+          'class': 'flex-1 min-w-0 print:hidden',
           'onClick': (event: Event) => event.stopPropagation()
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)

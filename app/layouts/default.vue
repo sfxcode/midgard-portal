@@ -273,13 +273,13 @@ const groups = computed(() => [...(recent.value.length
 </script>
 
 <template>
-  <UDashboardGroup unit="rem">
+  <UDashboardGroup unit="rem" class="rpg-app">
     <UDashboardSidebar
       id="default"
       v-model:open="open"
       collapsible
       resizable
-      class="bg-elevated/25"
+      class="bg-elevated/25 print:hidden"
       :ui="{ footer: 'lg:border-t lg:border-default' }"
     >
       <template #default="{ collapsed }">

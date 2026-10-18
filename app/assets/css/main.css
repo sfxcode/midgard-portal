@@ -308,3 +308,91 @@
   outline: 2px solid var(--ui-primary);
   outline-offset: 2px;
 }
+
+/* Print: black on white, no chrome, content flows across pages instead of being clipped by the app shell */
+@page {
+  margin: 14mm;
+}
+
+@media print {
+  html,
+  html.dark {
+    --ui-bg: #fff;
+    --ui-bg-muted: #fff;
+    --ui-bg-elevated: #fff;
+    --ui-bg-accented: #f3f3f3;
+    --ui-border: #bbb;
+    --ui-border-muted: #ddd;
+    --ui-border-accented: #999;
+    --ui-text: #000;
+    --ui-text-highlighted: #000;
+    --ui-text-toned: #222;
+    --ui-text-muted: #444;
+    --ui-text-dimmed: #555;
+    --ui-primary: #000;
+    background: #fff !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  body::before,
+  body::after,
+  .rpg-frame::before,
+  .rpg-frame::after,
+  .rpg-section-title::after,
+  .rpg-tray,
+  .nuxt-loading-indicator,
+  [role='status'] {
+    display: none !important;
+  }
+
+  /* The dashboard shell is fixed and clipped on screen; let it grow on paper */
+  .rpg-app {
+    position: static !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .rpg-app [data-slot='body'],
+  .rpg-app main,
+  .rpg-app [id] {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .rpg-frame,
+  .rpg-stat {
+    background: #fff !important;
+    box-shadow: none !important;
+    border: 1px solid #999 !important;
+    break-inside: avoid;
+  }
+
+  .rpg-page-title {
+    text-decoration-color: #999;
+  }
+
+  .rpg-seal {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1.5px solid #000;
+    box-shadow: none !important;
+  }
+
+  /* Interactive controls are meaningless on paper */
+  button[aria-label='Bearbeiten'],
+  button[aria-label='Ansicht'],
+  button[aria-label='Vorschau'],
+  button[aria-label='Wesen-Bogen als PDF erzeugen'] {
+    display: none !important;
+  }
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}
